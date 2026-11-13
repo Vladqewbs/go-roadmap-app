@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#00ADD8">
-  <meta name="description" content="Личный трекер роадмапа по Go: этапы, прогресс, заметки, чек-лист минимума и синхронизация через GitHub Gist.">
+  <meta name="theme-color" content="#0f9488">
+  <meta name="description" content="Уютный трекер роадмапа по Go: этапы, практика LeetCode по темам, ачивки, заметки, чек-лист и синхронизация через GitHub Gist.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -31,53 +31,74 @@
   <style>
     :root {
       color-scheme: light;
-      --bg: #f2f8fa;
-      --bg-glow: #d9f5fc;
-      --surface: #ffffff;
-      --surface-2: #f7fbfc;
-      --surface-3: #eef7fa;
-      --text: #102a33;
-      --text-soft: #46616b;
-      --muted: #718992;
-      --border: #d8e8ee;
-      --border-strong: #bfd7df;
-      --accent: #00add8;
-      --accent-deep: #007d9c;
-      --accent-ink: #00647e;
-      --accent-soft: #e4f8fd;
-      --success: #0b8a66;
-      --danger: #c24141;
-      --danger-soft: #fdeeee;
-      --shadow: 0 18px 46px rgba(6, 62, 78, .09);
-      --shadow-sm: 0 7px 22px rgba(6, 62, 78, .06);
-      --header-bg: rgba(242, 248, 250, .88);
-      --focus: rgba(0, 173, 216, .34);
-      --radius: 20px;
-      --radius-sm: 14px;
+      --bg: #f7f1e6;
+      --bg-glow: #ffe6c0;
+      --bg-glow-2: #d8f2ec;
+      --surface: #fffdf8;
+      --surface-2: #fbf5ea;
+      --surface-3: #f3e9d8;
+      --text: #2e2921;
+      --text-soft: #5d5446;
+      --muted: #8b7f6d;
+      --border: #ebdfcb;
+      --border-strong: #d9c9af;
+      --accent: #0f9488;
+      --accent-deep: #0b746a;
+      --accent-ink: #0a5f57;
+      --accent-soft: #e0f4f0;
+      --warm: #dd854c;
+      --warm-deep: #c06f3a;
+      --warm-soft: #fcecdf;
+      --gold: #c9922f;
+      --gold-soft: #fbf0d6;
+      --success: #2f9b6e;
+      --success-soft: #e4f6ec;
+      --danger: #bf5248;
+      --danger-soft: #fbeae7;
+      --easy: #2f9b6e;
+      --medium: #b07d1c;
+      --hard: #bf5248;
+      --shadow: 0 20px 44px rgba(93, 70, 36, .10);
+      --shadow-sm: 0 8px 20px rgba(93, 70, 36, .07);
+      --header-bg: rgba(247, 241, 230, .86);
+      --focus: rgba(15, 148, 136, .32);
+      --radius: 22px;
+      --radius-sm: 15px;
+      --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
     }
     :root[data-theme="dark"] {
       color-scheme: dark;
-      --bg: #081418;
-      --bg-glow: #0d3440;
-      --surface: #0f1e24;
-      --surface-2: #13262e;
-      --surface-3: #17303a;
-      --text: #e8f5f8;
-      --text-soft: #abc2ca;
-      --muted: #829ca6;
-      --border: #213942;
-      --border-strong: #32525e;
-      --accent: #2ac9ec;
-      --accent-deep: #0098ba;
-      --accent-ink: #8ee8fa;
-      --accent-soft: #0c3440;
-      --success: #47d3a3;
-      --danger: #ff8585;
-      --danger-soft: #391d1d;
-      --shadow: 0 22px 54px rgba(0, 0, 0, .32);
-      --shadow-sm: 0 8px 24px rgba(0, 0, 0, .2);
-      --header-bg: rgba(8, 20, 24, .86);
-      --focus: rgba(42, 201, 236, .4);
+      --bg: #15120e;
+      --bg-glow: #33281a;
+      --bg-glow-2: #0f2b27;
+      --surface: #201b15;
+      --surface-2: #262019;
+      --surface-3: #2e271e;
+      --text: #f4ecdf;
+      --text-soft: #cdc0ac;
+      --muted: #9d9180;
+      --border: #382f24;
+      --border-strong: #4e4231;
+      --accent: #35c4b2;
+      --accent-deep: #1c988a;
+      --accent-ink: #8ce6da;
+      --accent-soft: #12332f;
+      --warm: #f0a97a;
+      --warm-deep: #d98c5b;
+      --warm-soft: #3a2a1d;
+      --gold: #e0b25c;
+      --gold-soft: #342a18;
+      --success: #56d3a0;
+      --success-soft: #14352a;
+      --danger: #ff9a90;
+      --danger-soft: #3a2321;
+      --easy: #56d3a0;
+      --medium: #e0b25c;
+      --hard: #ff9a90;
+      --shadow: 0 22px 50px rgba(0, 0, 0, .38);
+      --shadow-sm: 0 8px 22px rgba(0, 0, 0, .24);
+      --header-bg: rgba(21, 18, 14, .86);
+      --focus: rgba(53, 196, 178, .38);
     }
     * { box-sizing: border-box; }
     html { min-height: 100%; scroll-behavior: smooth; }
@@ -86,13 +107,17 @@
       min-height: 100dvh;
       margin: 0;
       overflow-x: hidden;
-      background:
-        radial-gradient(900px 420px at 88% -12%, var(--bg-glow), transparent 70%),
-        var(--bg);
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(900px 430px at 88% -10%, var(--bg-glow), transparent 70%),
+        radial-gradient(720px 380px at -8% 0%, var(--bg-glow-2), transparent 65%),
+        radial-gradient(rgba(120, 95, 60, .05) 1px, transparent 1px);
+      background-size: auto, auto, 18px 18px;
+      background-attachment: fixed, fixed, scroll;
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
       font-size: 16px;
-      line-height: 1.5;
+      line-height: 1.55;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
     }
@@ -123,14 +148,15 @@
       backdrop-filter: blur(16px);
     }
     .topbar-inner {
-      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
       min-height: 70px; padding-top: calc(10px + env(safe-area-inset-top)); padding-bottom: 10px;
     }
     .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
     .brand-mark {
       flex: none; display: grid; place-items: center; width: 46px; height: 46px;
-      border-radius: 15px; color: #fff; background: linear-gradient(145deg, var(--accent), var(--accent-deep));
-      box-shadow: 0 8px 20px rgba(0, 173, 216, .28);
+      border-radius: 16px; color: #fff;
+      background: linear-gradient(145deg, #19a99b, #0b6f66 72%);
+      box-shadow: 0 9px 20px rgba(11, 111, 102, .28), inset 0 1px 0 rgba(255, 255, 255, .28);
       font-size: 17px; font-weight: 850; letter-spacing: -.04em;
     }
     .brand-copy { min-width: 0; }
@@ -141,7 +167,7 @@
     .brand p { margin-top: 2px; color: var(--muted); font-size: 12px; }
     .top-actions { display: flex; align-items: center; gap: 8px; flex: none; }
     .sync-chip {
-      display: inline-flex; align-items: center; gap: 8px; max-width: 230px; min-height: 36px;
+      display: inline-flex; align-items: center; gap: 8px; max-width: 220px; min-height: 36px;
       padding: 6px 11px; border: 1px solid var(--border); border-radius: 999px;
       background: var(--surface); color: var(--text-soft); font-size: 12px; font-weight: 650;
     }
@@ -151,9 +177,17 @@
     [data-sync="syncing"] .sync-dot { background: var(--accent); animation: pulse 1.2s ease-in-out infinite; }
     [data-sync="error"] .sync-dot { background: var(--danger); }
     @keyframes pulse { 50% { opacity: .35; transform: scale(.8); } }
+    .streak-chip {
+      display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 5px 11px;
+      border: 1px solid var(--border); border-radius: 999px; background: var(--surface);
+      color: var(--text-soft); font-size: 12px; font-weight: 750;
+      font-variant-numeric: tabular-nums;
+    }
+    .streak-chip .flame { font-size: 14px; line-height: 1; }
+    .streak-chip.is-hot { border-color: var(--warm); background: var(--warm-soft); color: var(--warm-deep); }
     .icon-btn {
       display: grid; place-items: center; width: 46px; height: 46px; padding: 0;
-      border: 1px solid var(--border); border-radius: 14px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 15px; background: var(--surface);
       color: var(--text-soft); cursor: pointer; box-shadow: var(--shadow-sm);
       transition: border-color .2s, color .2s, transform .2s;
     }
@@ -163,18 +197,23 @@
     :root[data-theme="light"] .icon-sun, :root[data-theme="dark"] .icon-moon { display: none; }
     .app-main { padding: 18px 0 24px; }
     .overview-grid {
-      display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(280px, .8fr);
+      display: grid; grid-template-columns: minmax(0, 1.42fr) minmax(272px, .78fr);
       gap: 16px; align-items: stretch;
     }
     .hero-card {
       position: relative; overflow: hidden; min-width: 0; padding: 24px;
       border-radius: 26px; color: #fff;
-      background: linear-gradient(135deg, #00add8 0%, #008aae 52%, #00708d 100%);
-      box-shadow: 0 20px 44px rgba(0, 125, 156, .25);
+      background: linear-gradient(140deg, #13a294 0%, #0b7f76 55%, #08605c 100%);
+      box-shadow: 0 22px 46px rgba(8, 96, 92, .26);
     }
     .hero-card::after {
-      content: ""; position: absolute; right: -70px; bottom: -110px; width: 280px; height: 280px;
-      border: 34px solid rgba(255, 255, 255, .08); border-radius: 50%; pointer-events: none;
+      content: ""; position: absolute; right: -80px; bottom: -130px; width: 300px; height: 300px;
+      border: 36px solid rgba(255, 255, 255, .07); border-radius: 50%; pointer-events: none;
+    }
+    .hero-card::before {
+      content: ""; position: absolute; top: -70px; right: 92px; width: 150px; height: 150px;
+      border-radius: 50%; background: radial-gradient(circle, rgba(255, 214, 160, .22), transparent 68%);
+      pointer-events: none;
     }
     .hero-top { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
     .hero-copy { min-width: 0; }
@@ -182,121 +221,149 @@
       color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .12em;
       text-transform: uppercase;
     }
-    .hero-card .eyebrow { color: rgba(255, 255, 255, .72); }
-    .hero-count { margin-top: 10px; font-size: clamp(19px, 2.8vw, 26px); font-weight: 750; letter-spacing: -.025em; }
-    .hero-sub { margin-top: 6px; color: rgba(255, 255, 255, .72); font-size: 13px; }
+    .hero-card .eyebrow { color: rgba(255, 255, 255, .74); }
+    .hero-count {
+      margin-top: 8px; font-family: var(--font-display);
+      font-size: clamp(20px, 2.8vw, 27px); font-weight: 700; line-height: 1.2; letter-spacing: -.02em;
+    }
+    .hero-sub { margin-top: 6px; color: rgba(255, 255, 255, .76); font-size: 13px; }
     .hero-stats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
     .hero-stat {
       display: inline-flex; align-items: baseline; gap: 5px; min-height: 32px; padding: 5px 10px;
-      border: 1px solid rgba(255, 255, 255, .2); border-radius: 999px;
-      background: rgba(0, 55, 70, .16); color: rgba(255, 255, 255, .82); font-size: 11px;
+      border: 1px solid rgba(255, 255, 255, .22); border-radius: 999px;
+      background: rgba(3, 61, 58, .18); color: rgba(255, 255, 255, .84); font-size: 11px;
     }
     .hero-stat strong { color: #fff; font-size: 13px; }
     .progress-ring {
       --pct: 0; position: relative; flex: none; display: grid; place-items: center;
       width: 108px; aspect-ratio: 1; border-radius: 50%;
-      background: conic-gradient(#fff calc(var(--pct) * 1%), rgba(255, 255, 255, .2) 0);
+      background: conic-gradient(#ffe0b8 calc(var(--pct) * 1%), rgba(255, 255, 255, .22) 0);
     }
     .progress-ring::before {
       content: ""; position: absolute; inset: 9px; border-radius: 50%;
-      background: rgba(0, 82, 104, .55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+      background: rgba(5, 78, 74, .62); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
     }
     .progress-ring span { position: relative; z-index: 1; font-size: 22px; font-weight: 850; letter-spacing: -.04em; }
     .hero-meter { position: relative; z-index: 1; margin-top: 20px; }
     .meter {
       overflow: hidden; width: 100%; height: 8px; border-radius: 999px; background: var(--surface-3);
     }
-    .hero-card .meter { background: rgba(255, 255, 255, .2); }
+    .hero-card .meter { background: rgba(255, 255, 255, .22); }
     .meter > span {
       display: block; width: 0; height: 100%; border-radius: inherit;
-      background: linear-gradient(90deg, var(--accent), #67e0f7);
+      background: linear-gradient(90deg, var(--accent), #6fdccb);
       transition: width .35s ease;
     }
-    .hero-card .meter > span { background: #fff; }
-    .date-card {
-      display: flex; flex-direction: column; min-width: 0; padding: 22px;
+    .hero-card .meter > span { background: linear-gradient(90deg, #ffe3bd, #ffc98a); }
+    .streak-card {
+      position: relative; display: flex; flex-direction: column; min-width: 0; padding: 21px;
       border: 1px solid var(--border); border-radius: 26px; background: var(--surface);
       box-shadow: var(--shadow-sm);
     }
-    .date-card h2 { margin-top: 4px; font-size: 17px; letter-spacing: -.02em; }
-    .date-field { display: grid; gap: 7px; margin-top: 15px; }
-    .date-field label { color: var(--text-soft); font-size: 12px; font-weight: 700; }
-    input[type="date"] {
-      width: 100%; min-height: 48px; padding: 8px 12px;
-      border: 1px solid var(--border); border-radius: 12px;
-      background: var(--surface-2); color: var(--text); font-size: 16px;
+    .streak-card::after {
+      content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+      background: radial-gradient(220px 120px at 100% 0%, var(--warm-soft), transparent 70%);
     }
-    input[type="date"]:focus { outline: 3px solid var(--focus); outline-offset: 1px; border-color: var(--accent); }
-    .countdown-box { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; margin-top: auto; padding-top: 18px; }
-    .countdown-number { color: var(--accent-ink); font-size: clamp(30px, 5vw, 42px); font-weight: 850; line-height: 1; letter-spacing: -.05em; }
-    .countdown-label { color: var(--text-soft); font-size: 13px; font-weight: 650; }
-    .date-hint { margin-top: 8px; color: var(--muted); font-size: 11px; }
-    .countdown-box.is-past .countdown-number { color: var(--muted); }
+    .streak-top { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .streak-flame {
+      display: grid; place-items: center; width: 38px; height: 38px; border-radius: 13px;
+      background: var(--warm-soft); font-size: 19px;
+    }
+    .streak-number { position: relative; z-index: 1; display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .streak-number strong {
+      font-family: var(--font-display); color: var(--warm-deep); font-size: 40px; line-height: 1; letter-spacing: -.04em;
+    }
+    .streak-number span { color: var(--text-soft); font-size: 13px; font-weight: 650; }
+    .streak-days { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); gap: 4px; width: 100%; margin-top: 14px; }
+    .streak-day {
+      aspect-ratio: 1; border-radius: 5px; background: var(--surface-3);
+      border: 1px solid transparent; transition: background .2s;
+    }
+    .streak-day.is-active { background: var(--warm); }
+    .streak-day.is-today { border-color: var(--warm-deep); }
+    .daily-tip {
+      position: relative; z-index: 1; margin-top: auto; padding-top: 15px;
+      border-top: 1px dashed var(--border);
+    }
+    .tip-badge {
+      display: inline-block; padding: 3px 8px; border-radius: 999px;
+      background: var(--accent-soft); color: var(--accent-ink); font-size: 10px; font-weight: 800;
+      letter-spacing: .07em; text-transform: uppercase;
+    }
+    .daily-tip p { margin-top: 8px; color: var(--text-soft); font-size: 12.5px; line-height: 1.5; }
     .tabbar {
-      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px;
+      display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px;
       margin: 18px 0 22px; padding: 6px;
-      border: 1px solid var(--border); border-radius: 18px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 19px; background: var(--surface);
       box-shadow: var(--shadow-sm);
     }
     .tab {
       display: flex; align-items: center; justify-content: center; gap: 8px;
-      min-width: 0; min-height: 46px; padding: 7px 10px;
-      border: 0; border-radius: 13px; background: transparent; color: var(--text-soft);
+      min-width: 0; min-height: 46px; padding: 7px 8px;
+      border: 0; border-radius: 14px; background: transparent; color: var(--text-soft);
       font-size: 13px; font-weight: 700; cursor: pointer; transition: background .2s, color .2s;
     }
     .tab svg { width: 18px; height: 18px; flex: none; }
     .tab:hover { background: var(--surface-2); color: var(--text); }
     .tab[aria-selected="true"] { background: var(--accent-soft); color: var(--accent-ink); }
     .tab:focus-visible { outline: 3px solid var(--focus); outline-offset: -2px; }
+    .tab .tab-dot { display: none; }
     .panel { min-width: 0; animation: panel-in .25s ease both; }
     @keyframes panel-in { from { opacity: .45; transform: translateY(3px); } }
     .panel-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
-    .panel-head h2 { margin-top: 3px; font-size: clamp(22px, 3.5vw, 30px); line-height: 1.15; letter-spacing: -.035em; }
+    .panel-head h2 {
+      margin-top: 2px; font-family: var(--font-display); font-size: clamp(23px, 3.5vw, 31px);
+      font-weight: 700; line-height: 1.15; letter-spacing: -.02em;
+    }
     .panel-head p { margin-top: 6px; color: var(--text-soft); font-size: 13px; max-width: 640px; }
-    .stage-list { display: grid; gap: 12px; }
-    .stage {
+    .stage-list, .topic-list { display: grid; gap: 12px; }
+    .stage, .topic {
       overflow: hidden; min-width: 0;
       border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface);
-      box-shadow: var(--shadow-sm); transition: border-color .2s;
+      box-shadow: var(--shadow-sm); transition: border-color .2s, box-shadow .2s;
     }
-    .stage.is-open { border-color: var(--border-strong); }
-    .stage-toggle {
+    .stage.is-open, .topic.is-open { border-color: var(--border-strong); box-shadow: var(--shadow); }
+    .stage-toggle, .topic-toggle {
       display: grid; grid-template-columns: 44px minmax(0, 1fr) auto 24px;
       align-items: center; gap: 14px; width: 100%; min-height: 76px; padding: 14px 18px;
       border: 0; background: transparent; color: inherit; text-align: left; cursor: pointer;
     }
-    .stage-toggle:hover { background: var(--surface-2); }
-    .stage-toggle:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+    .stage-toggle:hover, .topic-toggle:hover { background: var(--surface-2); }
+    .stage-toggle:focus-visible, .topic-toggle:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
     .stage-index {
       display: grid; place-items: center; width: 44px; height: 44px;
       border-radius: 14px; background: var(--accent-soft); color: var(--accent-ink);
       font-size: 17px; font-weight: 850;
     }
-    .stage.is-complete .stage-index { background: var(--success-soft, #e6f8f1); color: var(--success); }
-    [data-theme="dark"] .stage.is-complete .stage-index { background: #123b30; }
-    .stage-heading { min-width: 0; }
-    .stage-title { display: block; font-size: 16px; font-weight: 780; letter-spacing: -.015em; overflow-wrap: anywhere; }
-    .stage-weeks { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
-    .stage-count {
+    .stage.is-complete .stage-index { background: var(--success-soft); color: var(--success); }
+    .topic-emoji {
+      display: grid; place-items: center; width: 44px; height: 44px;
+      border-radius: 14px; background: var(--surface-2); font-size: 20px;
+    }
+    .stage-heading, .topic-heading { min-width: 0; }
+    .stage-title, .topic-title { display: block; font-size: 16px; font-weight: 780; letter-spacing: -.015em; overflow-wrap: anywhere; }
+    .stage-weeks, .topic-weeks { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
+    .stage-count, .topic-count {
       padding: 7px 10px; border: 1px solid var(--border); border-radius: 999px;
       background: var(--surface-2); color: var(--text-soft); font-size: 12px; font-weight: 700;
       font-variant-numeric: tabular-nums; white-space: nowrap;
     }
-    .stage-chevron { display: grid; place-items: center; color: var(--muted); transition: transform .22s; }
-    .stage-chevron svg { width: 20px; height: 20px; }
-    .stage.is-open .stage-chevron { transform: rotate(180deg); }
-    .stage-panel { padding: 0 18px 18px; }
+    .stage-chevron, .topic-chevron { display: grid; place-items: center; color: var(--muted); transition: transform .22s; }
+    .stage-chevron svg, .topic-chevron svg { width: 20px; height: 20px; }
+    .stage.is-open .stage-chevron, .topic.is-open .topic-chevron { transform: rotate(180deg); }
+    .stage-panel, .topic-panel { padding: 0 18px 18px; }
     .stage-progress-row { display: flex; align-items: center; gap: 12px; padding: 0 4px 14px; }
     .stage-progress-row .meter { flex: 1; height: 7px; }
     .stage-progress-text { flex: none; color: var(--muted); font-size: 11px; white-space: nowrap; }
     .task-list, .min-list { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
-    .task {
-      position: relative; display: flex; align-items: flex-start; gap: 12px;
-      min-height: 52px; padding: 11px 8px; border-radius: 12px; cursor: pointer;
+    .task, .problem {
+      position: relative; display: flex; align-items: center; gap: 12px;
+      min-height: 52px; padding: 10px 8px; border-radius: 13px; cursor: pointer;
       transition: background .18s;
     }
-    .task:hover { background: var(--surface-2); }
-    .task input {
+    .task { align-items: flex-start; }
+    .task:hover, .problem:hover { background: var(--surface-2); }
+    .task input, .problem input {
       position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
       overflow: hidden; clip: rect(0, 0, 0, 0); clip-path: inset(50%);
       white-space: nowrap; border: 0;
@@ -311,13 +378,32 @@
       border-left: 2px solid #fff; border-bottom: 2px solid #fff;
       transform: rotate(-45deg) scale(.25); opacity: 0; transition: transform .18s, opacity .18s;
     }
-    .task input:checked + .check-box { border-color: var(--accent); background: var(--accent); }
-    .task input:checked + .check-box::after { transform: rotate(-45deg) scale(1); opacity: 1; }
-    .task input:focus-visible + .check-box { box-shadow: 0 0 0 4px var(--focus); }
+    .task input:checked + .check-box, .problem input:checked + .check-box { border-color: var(--accent); background: var(--accent); }
+    .task input:checked + .check-box::after, .problem input:checked + .check-box::after { transform: rotate(-45deg) scale(1); opacity: 1; }
+    .task input:focus-visible + .check-box, .problem input:focus-visible + .check-box { box-shadow: 0 0 0 4px var(--focus); }
     .task-text { min-width: 0; padding-top: 1px; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
-    .task.is-done .task-text { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
-    .task.is-done .check-box { animation: check-pop .22s ease; }
+    .task.is-done .task-text, .problem.is-done .problem-title { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+    .task.is-done .check-box, .problem.is-done .check-box { animation: check-pop .22s ease; }
     @keyframes check-pop { 50% { transform: scale(.88); } }
+    .problem-label {
+      display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1;
+      padding: 5px 0; cursor: pointer;
+    }
+    .problem-title { min-width: 0; font-size: 14px; font-weight: 600; line-height: 1.4; overflow-wrap: anywhere; }
+    .problem-open {
+      flex: none; display: grid; place-items: center; width: 38px; height: 38px; margin-left: auto;
+      border-radius: 11px; color: var(--muted); text-decoration: none;
+      transition: background .18s, color .18s;
+    }
+    .problem-open:hover { background: var(--surface-3); color: var(--accent-ink); }
+    .problem-open svg { width: 16px; height: 16px; }
+    .level {
+      flex: none; padding: 2px 8px; border-radius: 999px;
+      font-size: 10.5px; font-weight: 800; letter-spacing: .02em;
+    }
+    .level-easy { background: var(--success-soft); color: var(--easy); }
+    .level-medium { background: var(--gold-soft); color: var(--medium); }
+    .level-hard { background: var(--danger-soft); color: var(--hard); }
     .notes-block { margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border); }
     .notes-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
     .notes-head label { color: var(--text-soft); font-size: 12px; font-weight: 750; }
@@ -344,27 +430,37 @@
     .min-item { border-top: 1px solid var(--border); }
     .min-item:first-child { border-top: 0; }
     .min-item .task-text { font-size: 14.5px; }
-    .resource-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .resources-block { margin-top: 26px; }
+    .resources-block h2 {
+      font-family: var(--font-display); font-size: 22px; font-weight: 700; letter-spacing: -.02em;
+    }
+    .resources-block > p { margin-top: 4px; color: var(--text-soft); font-size: 13px; }
+    .resource-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
     .resource-card {
-      display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: 20px;
-      border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface);
+      display: flex; flex-direction: column; gap: 6px; min-width: 0; padding: 17px;
+      border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface);
       box-shadow: var(--shadow-sm); color: inherit; text-decoration: none;
       transition: transform .2s, border-color .2s, box-shadow .2s;
     }
     .resource-card:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: var(--shadow); }
     .resource-card:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
     .resource-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .resource-host { color: var(--accent-ink); font-size: 11px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
-    .resource-card h3 { font-size: 16px; letter-spacing: -.015em; }
-    .resource-card p { color: var(--text-soft); font-size: 13px; }
+    .resource-host { color: var(--accent-ink); font-size: 10.5px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+    .resource-card h3 { font-size: 15.5px; letter-spacing: -.015em; }
+    .resource-card p { color: var(--text-soft); font-size: 12.5px; }
     .external-icon { flex: none; color: var(--muted); }
-    .external-icon svg { display: block; width: 17px; height: 17px; }
-    .settings-grid { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); gap: 16px; align-items: start; }
-    .settings-column { display: grid; gap: 16px; min-width: 0; }
-    .card h2 { margin-bottom: 4px; font-size: 19px; letter-spacing: -.025em; }
+    .external-icon svg { display: block; width: 16px; height: 16px; }
+    .practice-top { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: 16px; align-items: start; margin-bottom: 20px; }
+    .card h2 { margin-bottom: 4px; font-family: var(--font-display); font-size: 20px; font-weight: 700; letter-spacing: -.015em; }
     .card > .eyebrow { margin-bottom: 3px; }
-    .card-desc { margin: 6px 0 16px; color: var(--text-soft); font-size: 13px; }
-    .field { display: grid; gap: 7px; margin-bottom: 14px; }
+    .card-desc { margin: 6px 0 14px; color: var(--text-soft); font-size: 13px; }
+    .lc-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .lc-badge {
+      flex: none; margin-top: 3px; padding: 4px 9px; border-radius: 999px;
+      background: var(--success-soft); color: var(--success); font-size: 10px; font-weight: 800;
+      letter-spacing: .05em; text-transform: uppercase;
+    }
+    .field { display: grid; gap: 7px; margin-bottom: 13px; }
     .field label { color: var(--text-soft); font-size: 12px; font-weight: 750; }
     .field input {
       width: 100%; min-height: 48px; padding: 10px 13px;
@@ -379,21 +475,81 @@
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
       min-height: 46px; padding: 10px 17px;
       border: 1px solid transparent; border-radius: 12px;
-      font-size: 13px; font-weight: 750; line-height: 1.2;
+      font-size: 13px; font-weight: 750; line-height: 1.2; text-decoration: none;
       cursor: pointer; transition: transform .15s, background .2s, border-color .2s, opacity .2s;
     }
     .btn:active { transform: scale(.98); }
     .btn:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
     .btn:disabled { opacity: .55; cursor: wait; transform: none; }
     .btn svg { width: 17px; height: 17px; flex: none; }
-    .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 6px 16px rgba(0, 173, 216, .22); }
+    .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 6px 16px rgba(15, 148, 136, .24); }
     .btn-primary:hover { background: var(--accent-deep); }
+    .btn-warm { background: var(--warm); color: #fff; box-shadow: 0 6px 16px rgba(221, 133, 76, .28); }
+    .btn-warm:hover { background: var(--warm-deep); }
     .btn-secondary { border-color: var(--border); background: var(--surface); color: var(--text-soft); }
     .btn-secondary:hover { border-color: var(--border-strong); background: var(--surface-2); color: var(--text); }
     .btn-danger { border-color: transparent; background: var(--danger-soft); color: var(--danger); }
     .btn-danger:hover { border-color: var(--danger); }
     .btn-quiet { border-color: transparent; background: transparent; color: var(--text-soft); }
     .btn-quiet:hover { background: var(--surface-2); color: var(--text); }
+    .lc-stats { margin-top: 16px; padding-top: 15px; border-top: 1px dashed var(--border); }
+    .lc-total { display: flex; align-items: baseline; gap: 8px; }
+    .lc-total strong { font-family: var(--font-display); color: var(--accent-ink); font-size: 36px; line-height: 1; letter-spacing: -.03em; }
+    .lc-total span { color: var(--text-soft); font-size: 12px; }
+    .lc-breakdown { display: grid; gap: 7px; margin-top: 12px; }
+    .lc-row { display: grid; grid-template-columns: 58px minmax(0, 1fr) 38px; align-items: center; gap: 9px; }
+    .lc-row .meter { height: 7px; }
+    .lc-row b { font-size: 12px; font-variant-numeric: tabular-nums; text-align: right; }
+    .lc-row .level { background: transparent; padding: 0; font-size: 11px; }
+    .lc-meta { margin-top: 10px; color: var(--muted); font-size: 11px; }
+    .suggest-card { display: flex; flex-direction: column; background: linear-gradient(170deg, var(--surface) 55%, var(--warm-soft)); }
+    .suggest-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .suggest-emoji {
+      display: grid; place-items: center; width: 40px; height: 40px; flex: none;
+      border-radius: 13px; background: var(--warm-soft); font-size: 20px;
+    }
+    .suggest-card .btn-warm { width: 100%; }
+    .suggest-result { margin-top: 13px; padding: 13px; border-radius: 13px; background: var(--surface); border: 1px solid var(--border); }
+    .suggest-empty { color: var(--muted); font-size: 12px; }
+    .suggest-topic { color: var(--muted); font-size: 10.5px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+    .suggest-name { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 5px; font-size: 15px; font-weight: 750; letter-spacing: -.01em; }
+    .suggest-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 11px; }
+    .suggest-actions .btn { min-height: 40px; padding: 8px 12px; font-size: 12px; }
+    .practice-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 12px; }
+    .practice-head h2 { font-family: var(--font-display); font-size: 22px; font-weight: 700; letter-spacing: -.02em; }
+    .practice-head span { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+    .topic-panel .meter { margin: 0 4px 12px; height: 7px; }
+    .topic-note { margin: 0 4px 12px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .achievement-summary { margin-bottom: 16px; }
+    .achievement-summary-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 11px; }
+    .achievement-summary-top strong { font-family: var(--font-display); font-size: 22px; letter-spacing: -.02em; }
+    .achievement-summary-top span { margin-left: 7px; color: var(--text-soft); font-size: 13px; }
+    .achievement-medal {
+      display: grid; place-items: center; width: 42px; height: 42px; border-radius: 14px;
+      background: var(--gold-soft); font-size: 21px;
+    }
+    .achievement-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .achievement {
+      min-width: 0; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+      background: var(--surface); box-shadow: var(--shadow-sm);
+      transition: transform .2s, border-color .2s;
+    }
+    .achievement:hover { transform: translateY(-2px); }
+    .achievement.is-unlocked { border-color: var(--gold); background: linear-gradient(165deg, var(--gold-soft), var(--surface) 62%); }
+    .achievement-icon {
+      display: grid; place-items: center; width: 42px; height: 42px; border-radius: 13px;
+      background: var(--surface-2); font-size: 20px; filter: grayscale(1); opacity: .55;
+    }
+    .achievement.is-unlocked .achievement-icon { background: var(--gold-soft); filter: none; opacity: 1; }
+    .achievement-title { margin-top: 10px; font-size: 14.5px; font-weight: 780; letter-spacing: -.01em; }
+    .achievement-desc { margin-top: 3px; color: var(--text-soft); font-size: 12px; line-height: 1.45; }
+    .achievement-foot { margin-top: 10px; }
+    .achievement-progress { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+    .achievement .meter { height: 5px; margin-top: 6px; }
+    .achievement-date { display: inline-flex; align-items: center; gap: 5px; color: var(--gold); font-size: 11px; font-weight: 700; }
+    .achievement.is-locked { opacity: .82; }
+    .settings-grid { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); gap: 16px; align-items: start; }
+    .settings-column { display: grid; gap: 16px; min-width: 0; }
     .sync-status-line { display: flex; align-items: center; gap: 9px; margin-top: 16px; }
     .sync-status-line strong { font-size: 13px; font-weight: 750; }
     .sync-detail { margin-top: 6px; color: var(--muted); font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
@@ -415,13 +571,17 @@
     }
     .toast.is-visible { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
     .toast[data-tone="error"] { border-color: var(--danger); color: var(--danger); }
+    .toast[data-tone="achievement"] { border-color: var(--gold); background: var(--gold-soft); color: var(--text); }
     .noscript { padding: 14px; background: var(--danger-soft); color: var(--danger); text-align: center; font-weight: 700; }
     @media (max-width: 860px) {
       .overview-grid { grid-template-columns: minmax(0, 1fr); }
-      .date-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(150px, .65fr); column-gap: 18px; }
-      .date-card .eyebrow, .date-card h2, .date-field, .date-hint { grid-column: 1; }
-      .countdown-box { grid-column: 2; grid-row: 1 / span 4; align-self: center; padding-top: 0; }
+      .streak-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(190px, .8fr); column-gap: 18px; align-items: start; }
+      .streak-top, .streak-number { grid-column: 1; }
+      .streak-days { grid-column: 2; grid-row: 1 / span 2; margin-top: 4px; }
+      .daily-tip { grid-column: 1 / -1; margin-top: 14px; }
       .settings-grid { grid-template-columns: minmax(0, 1fr); }
+      .practice-top { grid-template-columns: minmax(0, 1fr); }
+      .achievement-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 720px) {
       .shell { width: calc(100% - 24px); }
@@ -431,22 +591,23 @@
       .tabbar {
         position: fixed; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom)); left: 10px;
         z-index: 50; margin: 0; padding: 6px;
-        border-radius: 20px; background: var(--surface); box-shadow: 0 16px 44px rgba(4, 35, 44, .2);
+        border-radius: 20px; background: var(--surface); box-shadow: 0 16px 44px rgba(74, 54, 26, .22);
       }
-      .tab { flex-direction: column; gap: 3px; min-height: 54px; padding: 4px 2px; font-size: 10.5px; }
+      .tab { flex-direction: column; gap: 3px; min-height: 54px; padding: 4px 2px; font-size: 10px; }
       .tab svg { width: 20px; height: 20px; }
-      .hero-card, .date-card { border-radius: 21px; }
+      .hero-card, .streak-card { border-radius: 21px; }
       .hero-card { padding: 19px; }
       .progress-ring { width: 92px; }
       .progress-ring span { font-size: 19px; }
-      .date-card { display: flex; }
-      .countdown-box { padding-top: 18px; }
-      .stage-toggle { grid-template-columns: 42px minmax(0, 1fr) 20px; gap: 12px; min-height: 70px; padding: 13px 14px; }
-      .stage-index { width: 42px; height: 42px; border-radius: 13px; }
-      .stage-count { display: none; }
-      .stage-panel { padding: 0 14px 15px; }
+      .stage-toggle, .topic-toggle {
+        grid-template-columns: 42px minmax(0, 1fr) 20px; gap: 12px; min-height: 70px; padding: 13px 14px;
+      }
+      .stage-index, .topic-emoji { width: 42px; height: 42px; border-radius: 13px; }
+      .stage-count, .topic-count { display: none; }
+      .stage-panel, .topic-panel { padding: 0 14px 15px; }
       .resource-grid { grid-template-columns: minmax(0, 1fr); }
       .toast { bottom: calc(88px + env(safe-area-inset-bottom)); }
+      .problem { padding-inline: 6px; }
     }
     @media (max-width: 460px) {
       .brand p { display: none; }
@@ -456,15 +617,17 @@
       .hero-stat { font-size: 10px; }
       .hero-count { font-size: 19px; }
       .panel-head { display: block; }
-      .panel-head h2 { font-size: 23px; }
+      .panel-head h2 { font-size: 24px; }
       .card { padding: 17px; }
-      .date-card { padding: 18px; }
       .task { padding-inline: 6px; }
+      .achievement-grid { grid-template-columns: minmax(0, 1fr); }
+      .streak-card { display: flex; align-items: stretch; }
+      .streak-days { margin-top: 14px; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
     }
-</style>
+  </style>
 </head>
 <body>
   <noscript><div class="noscript">Для работы трекера нужен JavaScript.</div></noscript>
@@ -475,13 +638,17 @@
         <div class="brand-mark" aria-hidden="true">Go</div>
         <div class="brand-copy">
           <h1>Трекер роадмапа Go</h1>
-          <p>Golang до стажировки</p>
+          <p>Уютный путь до стажировки</p>
         </div>
       </div>
       <div class="top-actions">
         <span class="sync-chip" title="Статус синхронизации">
           <span class="sync-dot" aria-hidden="true"></span>
           <span data-sync-text>Локально</span>
+        </span>
+        <span class="streak-chip" id="headerStreakChip" title="Серия занятий">
+          <span class="flame" aria-hidden="true">🔥</span>
+          <span id="headerStreak">0</span>
         </span>
         <button class="icon-btn" type="button" id="themeToggle" aria-label="Включить тёмную тему" title="Сменить тему">
           <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg>
@@ -496,12 +663,13 @@
       <div class="hero-card">
         <div class="hero-top">
           <div class="hero-copy">
-            <p class="eyebrow">Общий прогресс</p>
+            <p class="eyebrow" id="greeting">Добрый день</p>
             <p class="hero-count" id="overallCount">выполнено 0 из 0 задач</p>
-            <p class="hero-sub">Готовность к стажировке по Go</p>
+            <p class="hero-sub" id="heroSub">Спокойный темп важнее рывков.</p>
             <div class="hero-stats">
               <span class="hero-stat"><strong id="stagesDone">0</strong><span>из 8 этапов</span></span>
-              <span class="hero-stat"><strong id="checklistStat">0/0</strong><span>чек-лист</span></span>
+              <span class="hero-stat"><strong id="practiceStat">0</strong><span>задач практики</span></span>
+              <span class="hero-stat"><strong id="achievementStat">0</strong><span>ачивок</span></span>
             </div>
           </div>
           <div class="progress-ring" id="overallRing" style="--pct: 0" aria-hidden="true">
@@ -515,37 +683,40 @@
         </div>
       </div>
 
-      <aside class="date-card" aria-labelledby="dateTitle">
-        <p class="eyebrow">Ориентир</p>
-        <h2 id="dateTitle">До старта стажировки</h2>
-        <div class="date-field">
-          <label for="startDate">Дата старта стажировки</label>
-          <input type="date" id="startDate" autocomplete="off">
+      <aside class="streak-card" aria-labelledby="streakTitle">
+        <div class="streak-top">
+          <p class="eyebrow" id="streakTitle">Серия занятий</p>
+          <span class="streak-flame" aria-hidden="true">🔥</span>
         </div>
-        <div class="countdown-box" id="countdownBox">
-          <span class="countdown-number" id="countdownNumber">—</span>
-          <span class="countdown-label" id="countdownLabel">Укажите дату старта</span>
+        <p class="streak-number"><strong id="streakDays">0</strong><span id="streakLabel">дней подряд</span></p>
+        <div class="streak-days" id="streakCalendar" role="img" aria-label="Активность за последние 14 дней"></div>
+        <div class="daily-tip">
+          <span class="tip-badge">Совет дня</span>
+          <p id="dailyTip"></p>
         </div>
-        <p class="date-hint" id="dateHint">Счётчик обновляется автоматически.</p>
       </aside>
     </section>
 
     <div class="tabbar" role="tablist" aria-label="Разделы приложения">
       <button class="tab" type="button" role="tab" id="tab-roadmap" aria-controls="panel-roadmap" aria-selected="true" tabindex="0" data-tab="roadmap">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18-6 3V6l6-3 6 3 6-3v15l-6 3-6-3Z"/><path d="M9 3v15M15 6v15"/></svg>
-        <span>Роадмап</span>
+        <span>План</span>
+      </button>
+      <button class="tab" type="button" role="tab" id="tab-practice" aria-controls="panel-practice" aria-selected="false" tabindex="-1" data-tab="practice">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg>
+        <span>Практика</span>
+      </button>
+      <button class="tab" type="button" role="tab" id="tab-achievements" aria-controls="panel-achievements" aria-selected="false" tabindex="-1" data-tab="achievements">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>
+        <span>Ачивки</span>
       </button>
       <button class="tab" type="button" role="tab" id="tab-checklist" aria-controls="panel-checklist" aria-selected="false" tabindex="-1" data-tab="checklist">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        <span>Чек-лист</span>
-      </button>
-      <button class="tab" type="button" role="tab" id="tab-resources" aria-controls="panel-resources" aria-selected="false" tabindex="-1" data-tab="resources">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
-        <span>Ресурсы</span>
+        <span>Минимум</span>
       </button>
       <button class="tab" type="button" role="tab" id="tab-settings" aria-controls="panel-settings" aria-selected="false" tabindex="-1" data-tab="settings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"/><path d="M1 14h6M9 8h6M17 16h6"/></svg>
-        <span>Настройки</span>
+        <span>Ещё</span>
       </button>
     </div>
 
@@ -558,6 +729,129 @@
         </div>
       </div>
       <div class="stage-list" id="roadmapList"></div>
+
+      <section class="resources-block" aria-labelledby="resourcesTitle">
+        <h2 id="resourcesTitle">Полезные ссылки</h2>
+        <p>Проверенные материалы, чтобы закрывать темы без лишнего шума.</p>
+        <div class="resource-grid">
+          <a class="resource-card" href="https://go.dev/tour/" target="_blank" rel="noopener noreferrer">
+            <span class="resource-top"><span class="resource-host">go.dev</span><span class="external-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span></span>
+            <h3>Tour of Go</h3>
+            <p>Интерактивное знакомство с синтаксисом, типами, методами и конкурентностью.</p>
+          </a>
+          <a class="resource-card" href="https://go.dev/doc/effective_go" target="_blank" rel="noopener noreferrer">
+            <span class="resource-top"><span class="resource-host">go.dev</span><span class="external-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span></span>
+            <h3>Effective Go</h3>
+            <p>Идиоматичный Go: как писать понятный и правильный код на языке.</p>
+          </a>
+          <a class="resource-card" href="https://gobyexample.com/" target="_blank" rel="noopener noreferrer">
+            <span class="resource-top"><span class="resource-host">gobyexample.com</span><span class="external-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span></span>
+            <h3>Go by Example</h3>
+            <p>Короткие рабочие примеры на каждую тему — удобно повторять перед практикой.</p>
+          </a>
+          <a class="resource-card" href="https://go.dev/blog/" target="_blank" rel="noopener noreferrer">
+            <span class="resource-top"><span class="resource-host">go.dev</span><span class="external-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span></span>
+            <h3>Go Blog</h3>
+            <p>Официальный блог о возможностях языка, инструментах и подходах.</p>
+          </a>
+          <a class="resource-card" href="https://pkg.go.dev/" target="_blank" rel="noopener noreferrer">
+            <span class="resource-top"><span class="resource-host">pkg.go.dev</span><span class="external-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span></span>
+            <h3>pkg.go.dev</h3>
+            <p>Документация стандартной библиотеки и сторонних пакетов с примерами.</p>
+          </a>
+          <a class="resource-card" href="https://go.dev/doc/faq" target="_blank" rel="noopener noreferrer">
+            <span class="resource-top"><span class="resource-host">go.dev</span><span class="external-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span></span>
+            <h3>Go FAQ</h3>
+            <p>Ответы на частые вопросы о языке — хорошая шпаргалка перед интервью.</p>
+          </a>
+        </div>
+      </section>
+    </section>
+
+    <section class="panel" id="panel-practice" role="tabpanel" aria-labelledby="tab-practice" tabindex="0" hidden>
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">LeetCode по темам</p>
+          <h2>Практика</h2>
+          <p>Задачи разложены по темам Go-роадмапа. Отмечайте решённые и получайте случайную задачу, когда не знаете, с чего начать.</p>
+        </div>
+      </div>
+
+      <div class="practice-top">
+        <div class="card lc-card">
+          <div class="lc-head">
+            <div>
+              <p class="eyebrow">LeetCode</p>
+              <h2>Статистика решений</h2>
+            </div>
+            <span class="lc-badge" id="lcBadge" hidden>подключено</span>
+          </div>
+          <p class="card-desc">Введите ник — приложение подтянет число решённых задач. Нужны только публичные данные, токен не требуется.</p>
+          <div class="field">
+            <label for="leetcodeUser">Ник на LeetCode</label>
+            <input type="text" id="leetcodeUser" placeholder="например, neal_wu" autocomplete="off" spellcheck="false">
+            <span class="field-hint">Профиль должен быть публичным. Первый запрос иногда занимает до 30 секунд.</span>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-primary" type="button" id="lcConnectBtn">Подключить</button>
+            <a class="btn btn-secondary" id="lcProfileLink" href="https://leetcode.com/" target="_blank" rel="noopener noreferrer" hidden>Открыть профиль</a>
+          </div>
+          <p class="sync-detail" id="lcStatus" role="status">Статистика появится после подключения.</p>
+          <div class="lc-stats" id="lcStats" hidden>
+            <div class="lc-total"><strong id="lcTotal">0</strong><span>решено всего</span></div>
+            <div class="lc-breakdown">
+              <div class="lc-row"><span class="level level-easy">Easy</span><div class="meter"><span id="lcEasyBar"></span></div><b id="lcEasy">0</b></div>
+              <div class="lc-row"><span class="level level-medium">Medium</span><div class="meter"><span id="lcMediumBar"></span></div><b id="lcMedium">0</b></div>
+              <div class="lc-row"><span class="level level-hard">Hard</span><div class="meter"><span id="lcHardBar"></span></div><b id="lcHard">0</b></div>
+            </div>
+            <p class="lc-meta" id="lcMeta"></p>
+          </div>
+        </div>
+
+        <div class="card suggest-card">
+          <div class="suggest-head">
+            <div>
+              <p class="eyebrow">Подсказка</p>
+              <h2>Дай мне задачу</h2>
+            </div>
+            <span class="suggest-emoji" aria-hidden="true">🎲</span>
+          </div>
+          <p class="card-desc">Случайная нерешённая задача из практики — с темой и уровнем сложности.</p>
+          <button class="btn btn-warm" type="button" id="suggestBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="4"/></svg>
+            Подобрать задачу
+          </button>
+          <div class="suggest-result" id="suggestResult" aria-live="polite">
+            <p class="suggest-empty">Нажмите кнопку — и получите задачу на сегодня.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="practice-head">
+        <h2>Темы</h2>
+        <span id="practiceCount">0 из 0 задач</span>
+      </div>
+      <div class="topic-list" id="practiceList"></div>
+    </section>
+
+    <section class="panel" id="panel-achievements" role="tabpanel" aria-labelledby="tab-achievements" tabindex="0" hidden>
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Маленькие победы</p>
+          <h2>Ачивки</h2>
+          <p>Награды за прогресс, серию и практику. Открываются сами — достаточно заниматься понемногу.</p>
+        </div>
+      </div>
+      <div class="card achievement-summary">
+        <div class="achievement-summary-top">
+          <div><strong id="achCount">0 из 0</strong><span>открыто</span></div>
+          <span class="achievement-medal" aria-hidden="true">🏅</span>
+        </div>
+        <div class="meter" role="progressbar" aria-label="Прогресс ачивок" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="achMeter">
+          <span id="achBar"></span>
+        </div>
+      </div>
+      <div class="achievement-grid" id="achievementGrid"></div>
     </section>
 
     <section class="panel" id="panel-checklist" role="tabpanel" aria-labelledby="tab-checklist" tabindex="0" hidden>
@@ -577,43 +871,6 @@
           <span id="checklistBar"></span>
         </div>
         <ul class="min-list" id="checklistList"></ul>
-      </div>
-    </section>
-
-    <section class="panel" id="panel-resources" role="tabpanel" aria-labelledby="tab-resources" tabindex="0" hidden>
-      <div class="panel-head">
-        <div>
-          <p class="eyebrow">Проверенные источники</p>
-          <h2>Ресурсы</h2>
-          <p>Официальные материалы и практика. Ссылки открываются в новой вкладке.</p>
-        </div>
-      </div>
-      <div class="resource-grid">
-        <a class="resource-card" href="https://go.dev/tour/" target="_blank" rel="noopener noreferrer">
-          <span class="resource-top"><span class="resource-host">go.dev</span><span class="external-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span></span>
-          <h3>Tour of Go</h3>
-          <p>Интерактивное знакомство с синтаксисом, типами, методами и конкурентностью.</p>
-        </a>
-        <a class="resource-card" href="https://go.dev/doc/effective_go" target="_blank" rel="noopener noreferrer">
-          <span class="resource-top"><span class="resource-host">go.dev</span><span class="external-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span></span>
-          <h3>Effective Go</h3>
-          <p>Идиоматичный Go: как писать понятный и правильный код на языке.</p>
-        </a>
-        <a class="resource-card" href="https://gobyexample.com/" target="_blank" rel="noopener noreferrer">
-          <span class="resource-top"><span class="resource-host">gobyexample.com</span><span class="external-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span></span>
-          <h3>Go by Example</h3>
-          <p>Короткие рабочие примеры на каждую тему — удобно повторять перед практикой.</p>
-        </a>
-        <a class="resource-card" href="https://go.dev/blog/" target="_blank" rel="noopener noreferrer">
-          <span class="resource-top"><span class="resource-host">go.dev</span><span class="external-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span></span>
-          <h3>Go Blog</h3>
-          <p>Официальный блог о возможностях языка, инструментах и подходах.</p>
-        </a>
-        <a class="resource-card" href="https://pkg.go.dev/" target="_blank" rel="noopener noreferrer">
-          <span class="resource-top"><span class="resource-host">pkg.go.dev</span><span class="external-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span></span>
-          <h3>pkg.go.dev</h3>
-          <p>Документация стандартной библиотеки и сторонних пакетов с примерами.</p>
-        </a>
       </div>
     </section>
 
@@ -659,7 +916,7 @@
           <div class="card">
             <p class="eyebrow">Резервная копия</p>
             <h2>Экспорт и импорт</h2>
-            <p class="card-desc">Работает без токена и интернета. JSON содержит прогресс, заметки, дату старта и чек-лист.</p>
+            <p class="card-desc">Работает без токена и интернета. JSON содержит прогресс, практику, ачивки, заметки и чек-лист.</p>
             <div class="data-actions">
               <button class="btn btn-secondary" type="button" id="exportBtn">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg>
@@ -673,7 +930,7 @@
             <input type="file" id="importFile" accept="application/json,.json" hidden>
             <div class="danger-zone">
               <button class="btn btn-danger" type="button" id="resetBtn">Сбросить прогресс</button>
-              <p class="field-hint" style="margin-top: 8px;">Очистит задачи, заметки и чек-лист. Дата старта и тема оформления останутся.</p>
+              <p class="field-hint" style="margin-top: 8px;">Очистит задачи, практику, ачивки, заметки и чек-лист. Тема оформления и ник LeetCode останутся.</p>
             </div>
           </div>
           <div class="card">
@@ -683,6 +940,7 @@
               <li>Каждое изменение сразу сохраняется в localStorage.</li>
               <li>Без сети приложение продолжает работать, а данные остаются на устройстве.</li>
               <li>При конфликте побеждает версия с большим updatedAt.</li>
+              <li>Ник LeetCode и статистика решений тоже переносятся через Gist.</li>
               <li>Для второго устройства используйте тот же токен и ID Gist.</li>
             </ul>
           </div>
@@ -696,7 +954,7 @@
   <script>
     "use strict";
 
-    // Роадмап: этапы и задачи
+    // ---------- Данные: роадмап ----------
     const ROADMAP = [
       {
         id: "prep",
@@ -801,7 +1059,7 @@
       }
     ];
 
-    // Минимум к собеседованию
+    // ---------- Данные: минимум к собеседованию ----------
     const CHECKLIST_MIN = [
       "Синтаксис Go",
       "Слайсы и map",
@@ -816,37 +1074,296 @@
       "40+ задач на алгоритмы"
     ];
 
+    // ---------- Данные: практика по темам ----------
+    const PRACTICE = [
+      {
+        id: "arrays", emoji: "🧺", title: "Массивы и слайсы", note: "База для всего: индексы, срезы, префиксные суммы.",
+        problems: [
+          ["two-sum", "Two Sum", "Easy"],
+          ["best-time-to-buy-and-sell-stock", "Best Time to Buy and Sell Stock", "Easy"],
+          ["contains-duplicate", "Contains Duplicate", "Easy"],
+          ["move-zeroes", "Move Zeroes", "Easy"],
+          ["maximum-subarray", "Maximum Subarray", "Medium"],
+          ["product-of-array-except-self", "Product of Array Except Self", "Medium"],
+          ["merge-intervals", "Merge Intervals", "Medium"]
+        ]
+      },
+      {
+        id: "strings", emoji: "🔤", title: "Строки", note: "Байты и руны, Unicode и аккуратная обработка текста.",
+        problems: [
+          ["valid-palindrome", "Valid Palindrome", "Easy"],
+          ["valid-anagram", "Valid Anagram", "Easy"],
+          ["longest-common-prefix", "Longest Common Prefix", "Easy"],
+          ["group-anagrams", "Group Anagrams", "Medium"],
+          ["longest-substring-without-repeating-characters", "Longest Substring Without Repeating Characters", "Medium"],
+          ["string-to-integer-atoi", "String to Integer (atoi)", "Medium"],
+          ["reverse-words-in-a-string", "Reverse Words in a String", "Medium"]
+        ]
+      },
+      {
+        id: "maps", emoji: "🗺", title: "Хеш-таблицы", note: "map в Go: подсчёты, группировки и кэши.",
+        problems: [
+          ["ransom-note", "Ransom Note", "Easy"],
+          ["isomorphic-strings", "Isomorphic Strings", "Easy"],
+          ["word-pattern", "Word Pattern", "Easy"],
+          ["top-k-frequent-elements", "Top K Frequent Elements", "Medium"],
+          ["subarray-sum-equals-k", "Subarray Sum Equals K", "Medium"],
+          ["lru-cache", "LRU Cache", "Medium"]
+        ]
+      },
+      {
+        id: "two-pointers", emoji: "👉", title: "Два указателя", note: "Экономия памяти там, где хочется вложенных циклов.",
+        problems: [
+          ["remove-duplicates-from-sorted-array", "Remove Duplicates from Sorted Array", "Easy"],
+          ["two-sum-ii-input-array-is-sorted", "Two Sum II - Input Array Is Sorted", "Medium"],
+          ["container-with-most-water", "Container With Most Water", "Medium"],
+          ["3sum", "3Sum", "Medium"],
+          ["sort-colors", "Sort Colors", "Medium"],
+          ["trapping-rain-water", "Trapping Rain Water", "Hard"]
+        ]
+      },
+      {
+        id: "sliding-window", emoji: "🪟", title: "Скользящее окно", note: "Подстроки и подмассивы без перебора всех вариантов.",
+        problems: [
+          ["maximum-average-subarray-i", "Maximum Average Subarray I", "Easy"],
+          ["longest-repeating-character-replacement", "Longest Repeating Character Replacement", "Medium"],
+          ["permutation-in-string", "Permutation in String", "Medium"],
+          ["minimum-window-substring", "Minimum Window Substring", "Hard"],
+          ["sliding-window-maximum", "Sliding Window Maximum", "Hard"]
+        ]
+      },
+      {
+        id: "binary-search", emoji: "🔍", title: "Бинарный поиск", note: "Логарифм вместо перебора — и аккуратные границы.",
+        problems: [
+          ["binary-search", "Binary Search", "Easy"],
+          ["search-insert-position", "Search Insert Position", "Easy"],
+          ["search-in-rotated-sorted-array", "Search in Rotated Sorted Array", "Medium"],
+          ["find-minimum-in-rotated-sorted-array", "Find Minimum in Rotated Sorted Array", "Medium"],
+          ["koko-eating-bananas", "Koko Eating Bananas", "Medium"],
+          ["median-of-two-sorted-arrays", "Median of Two Sorted Arrays", "Hard"]
+        ]
+      },
+      {
+        id: "linked-list", emoji: "🔗", title: "Связные списки", note: "Указатели, фиктивный узел и два бегуна.",
+        problems: [
+          ["reverse-linked-list", "Reverse Linked List", "Easy"],
+          ["merge-two-sorted-lists", "Merge Two Sorted Lists", "Easy"],
+          ["linked-list-cycle", "Linked List Cycle", "Easy"],
+          ["remove-nth-node-from-end-of-list", "Remove Nth Node From End of List", "Medium"],
+          ["reorder-list", "Reorder List", "Medium"],
+          ["add-two-numbers", "Add Two Numbers", "Medium"],
+          ["merge-k-sorted-lists", "Merge k Sorted Lists", "Hard"]
+        ]
+      },
+      {
+        id: "stack-queue", emoji: "🥞", title: "Стек и очередь", note: "Скобки, монотонные стеки и вычисление выражений.",
+        problems: [
+          ["valid-parentheses", "Valid Parentheses", "Easy"],
+          ["implement-queue-using-stacks", "Implement Queue using Stacks", "Easy"],
+          ["min-stack", "Min Stack", "Medium"],
+          ["daily-temperatures", "Daily Temperatures", "Medium"],
+          ["evaluate-reverse-polish-notation", "Evaluate Reverse Polish Notation", "Medium"],
+          ["largest-rectangle-in-histogram", "Largest Rectangle in Histogram", "Hard"]
+        ]
+      },
+      {
+        id: "trees", emoji: "🌳", title: "Деревья", note: "Обходы, рекурсия и бинарные деревья поиска.",
+        problems: [
+          ["maximum-depth-of-binary-tree", "Maximum Depth of Binary Tree", "Easy"],
+          ["invert-binary-tree", "Invert Binary Tree", "Easy"],
+          ["same-tree", "Same Tree", "Easy"],
+          ["binary-tree-level-order-traversal", "Binary Tree Level Order Traversal", "Medium"],
+          ["validate-binary-search-tree", "Validate Binary Search Tree", "Medium"],
+          ["kth-smallest-element-in-a-bst", "Kth Smallest Element in a BST", "Medium"],
+          ["lowest-common-ancestor-of-a-binary-tree", "Lowest Common Ancestor of a Binary Tree", "Medium"],
+          ["serialize-and-deserialize-binary-tree", "Serialize and Deserialize Binary Tree", "Hard"]
+        ]
+      },
+      {
+        id: "graphs", emoji: "🕸", title: "Графы", note: "BFS, DFS и топологическая сортировка.",
+        problems: [
+          ["number-of-islands", "Number of Islands", "Medium"],
+          ["clone-graph", "Clone Graph", "Medium"],
+          ["rotting-oranges", "Rotting Oranges", "Medium"],
+          ["course-schedule", "Course Schedule", "Medium"],
+          ["pacific-atlantic-water-flow", "Pacific Atlantic Water Flow", "Medium"],
+          ["word-ladder", "Word Ladder", "Hard"]
+        ]
+      },
+      {
+        id: "dp", emoji: "🧠", title: "Динамика", note: "Разбиение на подзадачи и мемоизация.",
+        problems: [
+          ["climbing-stairs", "Climbing Stairs", "Easy"],
+          ["house-robber", "House Robber", "Medium"],
+          ["coin-change", "Coin Change", "Medium"],
+          ["longest-increasing-subsequence", "Longest Increasing Subsequence", "Medium"],
+          ["longest-palindromic-substring", "Longest Palindromic Substring", "Medium"],
+          ["word-break", "Word Break", "Medium"],
+          ["edit-distance", "Edit Distance", "Hard"]
+        ]
+      },
+      {
+        id: "backtracking", emoji: "🧩", title: "Перебор и бэктрекинг", note: "Дерево решений, откаты и отсечения.",
+        problems: [
+          ["subsets", "Subsets", "Medium"],
+          ["combination-sum", "Combination Sum", "Medium"],
+          ["permutations", "Permutations", "Medium"],
+          ["generate-parentheses", "Generate Parentheses", "Medium"],
+          ["word-search", "Word Search", "Medium"],
+          ["n-queens", "N-Queens", "Hard"]
+        ]
+      },
+      {
+        id: "heap", emoji: "⛰", title: "Кучи и приоритеты", note: "container/heap и задачи «top K».",
+        problems: [
+          ["kth-largest-element-in-an-array", "Kth Largest Element in an Array", "Medium"],
+          ["k-closest-points-to-origin", "K Closest Points to Origin", "Medium"],
+          ["task-scheduler", "Task Scheduler", "Medium"],
+          ["find-median-from-data-stream", "Find Median from Data Stream", "Hard"]
+        ]
+      },
+      {
+        id: "sql", emoji: "🗄", title: "SQL", note: "Для бэкенда: JOIN, агрегаты и оконные функции.",
+        problems: [
+          ["combine-two-tables", "Combine Two Tables", "Easy"],
+          ["employees-earning-more-than-their-managers", "Employees Earning More Than Their Managers", "Easy"],
+          ["duplicate-emails", "Duplicate Emails", "Easy"],
+          ["second-highest-salary", "Second Highest Salary", "Medium"],
+          ["department-top-three-salaries", "Department Top Three Salaries", "Hard"]
+        ]
+      },
+      {
+        id: "concurrency", emoji: "⚙️", title: "Конкурентность", note: "LeetCode-задачи, которые можно решать на Go: каналы и мьютексы.",
+        problems: [
+          ["print-in-order", "Print in Order", "Easy"],
+          ["print-foobar-alternately", "Print FooBar Alternately", "Medium"],
+          ["print-zero-even-odd", "Print Zero Even Odd", "Medium"],
+          ["building-h2o", "Building H2O", "Medium"],
+          ["the-dining-philosophers", "The Dining Philosophers", "Medium"],
+          ["web-crawler-multithreaded", "Web Crawler Multithreaded", "Medium"]
+        ]
+      }
+    ];
+
+    const DIFFICULTY = {
+      Easy: { label: "Easy", cls: "level-easy" },
+      Medium: { label: "Medium", cls: "level-medium" },
+      Hard: { label: "Hard", cls: "level-hard" }
+    };
+
+    // ---------- Данные: ачивки ----------
+    const ACHIEVEMENTS = [
+      { id: "first-step", icon: "🌱", title: "Первый шаг", desc: "Отметьте первую задачу роадмапа", metric: "tasks", target: 1 },
+      { id: "ten-tasks", icon: "🎯", title: "Десятка", desc: "10 задач роадмапа закрыто", metric: "tasks", target: 10 },
+      { id: "half-way", icon: "🧭", title: "Экватор", desc: "Половина роадмапа пройдена", metric: "percent", target: 50 },
+      { id: "first-stage", icon: "🧱", title: "Фундамент", desc: "Первый этап закрыт полностью", metric: "stages", target: 1 },
+      { id: "three-stages", icon: "🏗", title: "Строитель", desc: "Три этапа закрыты полностью", metric: "stages", target: 3 },
+      { id: "all-stages", icon: "🏆", title: "Весь роадмап", desc: "Все 8 этапов закрыты", metric: "stages", target: 8 },
+      { id: "first-practice", icon: "🧩", title: "Первая практика", desc: "Решена первая задача из практики", metric: "practice", target: 1 },
+      { id: "practice-10", icon: "🔟", title: "Десяток практики", desc: "10 задач практики отмечено", metric: "practice", target: 10 },
+      { id: "practice-30", icon: "🧠", title: "Алгоритмист", desc: "30 задач практики отмечено", metric: "practice", target: 30 },
+      { id: "practice-50", icon: "🚀", title: "Полсотни", desc: "50 задач практики отмечено", metric: "practice", target: 50 },
+      { id: "hard-one", icon: "💎", title: "Хардкор", desc: "Первая задача уровня Hard", metric: "hard", target: 1 },
+      { id: "sql-first", icon: "🗄", title: "Запросы", desc: "Первая SQL-задача решена", metric: "sql", target: 1 },
+      { id: "go-first", icon: "⚙️", title: "Горутины", desc: "Первая задача на конкурентность", metric: "concurrency", target: 1 },
+      { id: "notes-3", icon: "✍️", title: "Мыслитель", desc: "Заметки в трёх этапах", metric: "notes", target: 3 },
+      { id: "streak-3", icon: "🔥", title: "Три дня", desc: "Занимайтесь три дня подряд", metric: "streak", target: 3 },
+      { id: "streak-7", icon: "⚡", title: "Неделя в ритме", desc: "Семь дней подряд", metric: "streak", target: 7 },
+      { id: "streak-30", icon: "🌙", title: "Месяц дисциплины", desc: "Тридцать дней подряд", metric: "streak", target: 30 },
+      { id: "lc-linked", icon: "🔗", title: "Связь с LeetCode", desc: "Подключён профиль LeetCode", metric: "leetcode", target: 1 },
+      { id: "lc-50", icon: "⭐", title: "50 на LeetCode", desc: "50 задач решено на LeetCode", metric: "solved", target: 50 },
+      { id: "lc-100", icon: "🌟", title: "100 на LeetCode", desc: "100 задач решено на LeetCode", metric: "solved", target: 100 },
+      { id: "checklist", icon: "👑", title: "Минимум закрыт", desc: "Весь чек-лист к собеседованию", metric: "checklist", target: CHECKLIST_MIN.length },
+      { id: "cloud", icon: "☁️", title: "В облаке", desc: "Первая успешная синхронизация", metric: "sync", target: 1 }
+    ];
+
+    const TIPS = [
+      "Сначала 25 минут кода, потом 5 минут отдыха — короткие подходы работают лучше марафонов.",
+      "Если задача не идёт 20 минут, посмотрите разбор и перепишите решение по памяти.",
+      "Пишите тесты до того, как чинить баг: так вы точно поймёте, что починили.",
+      "Один pet-проект с README впечатляет сильнее десяти незаконченных.",
+      "Проговаривайте решение вслух: интервьюер оценивает не только код, но и ход мысли.",
+      "Перед сном пролистайте конспект за день — пять минут закрепляют больше, чем час зубрёжки.",
+      "Начинайте день с самой неприятной задачи: дальше всё кажется проще.",
+      "Если застряли, объясните задачу вслух — половина вопросов снимается сама.",
+      "Коммитьте маленькими шагами: история Git — это тоже портфолио.",
+      "Раз в неделю перечитывайте старые решения — там прячутся лучшие идеи.",
+      "Не сравнивайте свой день 10 с чьим-то днём 300.",
+      "Горутины любят контекст: всегда думайте, кто и когда их остановит.",
+      "Слайс — это окно в массив. Помните про capacity, и половина сюрпризов исчезнет."
+    ];
+
+    // ---------- Константы ----------
     const STATE_KEY = "go-roadmap-v1";
     const SYNC_KEY = "go-roadmap-sync-v1";
     const API_URL = "https://api.github.com";
     const GIST_FILE = "roadmap.json";
     const NOTE_DELAY = 500;
     const SYNC_DELAY = 1500;
+    const LC_TIMEOUT = 15000;
+    const LC_STALE_MS = 6 * 60 * 60 * 1000;
+    const LC_ENDPOINTS = [
+      (user) => "https://alfa-leetcode-api.onrender.com/" + encodeURIComponent(user) + "/solved",
+      (user) => "https://leetcode-stats-api.herokuapp.com/" + encodeURIComponent(user),
+      (user) => "https://leetcode-api-faisalshohag.vercel.app/" + encodeURIComponent(user)
+    ];
+
     const TOTAL_TASKS = ROADMAP.reduce((sum, stage) => sum + stage.tasks.length, 0);
     const TASK_KEYS = new Set(
       ROADMAP.flatMap((stage) => stage.tasks.map((_, index) => taskKey(stage.id, index)))
     );
-
+    const PRACTICE_PROBLEMS = PRACTICE.flatMap((topic) =>
+      topic.problems.map(([slug, title, level]) => ({ slug, title, level, topicId: topic.id, topicTitle: topic.title }))
+    );
+    const TOTAL_PROBLEMS = PRACTICE_PROBLEMS.length;
+    const PRACTICE_KEYS = new Set(PRACTICE_PROBLEMS.map((problem) => problem.slug));
+    const TOPIC_BY_PROBLEM = new Map(PRACTICE_PROBLEMS.map((problem) => [problem.slug, problem.topicId]));
     const dom = {
       themeToggle: document.getElementById("themeToggle"),
-      roadmapList: document.getElementById("roadmapList"),
-      checklistList: document.getElementById("checklistList"),
-      checklistCount: document.getElementById("checklistCount"),
-      checklistBar: document.getElementById("checklistBar"),
-      checklistMeter: document.getElementById("checklistMeter"),
-      checklistStat: document.getElementById("checklistStat"),
+      headerStreak: document.getElementById("headerStreak"),
+      headerStreakChip: document.getElementById("headerStreakChip"),
+      greeting: document.getElementById("greeting"),
+      heroSub: document.getElementById("heroSub"),
       overallCount: document.getElementById("overallCount"),
       overallPercent: document.getElementById("overallPercent"),
       overallBar: document.getElementById("overallBar"),
       overallRing: document.getElementById("overallRing"),
       overallMeter: document.getElementById("overallMeter"),
       stagesDone: document.getElementById("stagesDone"),
-      startDate: document.getElementById("startDate"),
-      countdownBox: document.getElementById("countdownBox"),
-      countdownNumber: document.getElementById("countdownNumber"),
-      countdownLabel: document.getElementById("countdownLabel"),
-      dateHint: document.getElementById("dateHint"),
+      practiceStat: document.getElementById("practiceStat"),
+      achievementStat: document.getElementById("achievementStat"),
+      streakDays: document.getElementById("streakDays"),
+      streakLabel: document.getElementById("streakLabel"),
+      streakCalendar: document.getElementById("streakCalendar"),
+      dailyTip: document.getElementById("dailyTip"),
+      roadmapList: document.getElementById("roadmapList"),
+      checklistList: document.getElementById("checklistList"),
+      checklistCount: document.getElementById("checklistCount"),
+      checklistBar: document.getElementById("checklistBar"),
+      checklistMeter: document.getElementById("checklistMeter"),
       tabbar: document.querySelector(".tabbar"),
+      practiceList: document.getElementById("practiceList"),
+      practiceCount: document.getElementById("practiceCount"),
+      suggestBtn: document.getElementById("suggestBtn"),
+      suggestResult: document.getElementById("suggestResult"),
+      lcConnectBtn: document.getElementById("lcConnectBtn"),
+      lcProfileLink: document.getElementById("lcProfileLink"),
+      lcStatus: document.getElementById("lcStatus"),
+      lcStats: document.getElementById("lcStats"),
+      lcTotal: document.getElementById("lcTotal"),
+      lcEasy: document.getElementById("lcEasy"),
+      lcMedium: document.getElementById("lcMedium"),
+      lcHard: document.getElementById("lcHard"),
+      lcEasyBar: document.getElementById("lcEasyBar"),
+      lcMediumBar: document.getElementById("lcMediumBar"),
+      lcHardBar: document.getElementById("lcHardBar"),
+      lcMeta: document.getElementById("lcMeta"),
+      lcBadge: document.getElementById("lcBadge"),
+      leetcodeUser: document.getElementById("leetcodeUser"),
+      achCount: document.getElementById("achCount"),
+      achBar: document.getElementById("achBar"),
+      achMeter: document.getElementById("achMeter"),
+      achievementGrid: document.getElementById("achievementGrid"),
       githubToken: document.getElementById("githubToken"),
       gistId: document.getElementById("gistId"),
       connectBtn: document.getElementById("connectBtn"),
@@ -864,6 +1381,7 @@
     let state = createState();
     let syncConfig = { token: "", gistId: "" };
     let openStages = new Set([ROADMAP[0].id]);
+    let openTopics = new Set([PRACTICE[0].id]);
     const noteTimers = new Map();
     let noteFlushNeeded = false;
     let syncTimer = null;
@@ -874,8 +1392,11 @@
     let toastTimer = null;
     let storageWarned = false;
     let activeTab = "roadmap";
+    let currentSuggestion = null;
+    let lcRequestId = 0;
+    let lcBusy = false;
 
-    // Короткие утилиты
+    // ---------- Утилиты ----------
     function taskKey(stageId, index) {
       return stageId + ":" + index;
     }
@@ -884,6 +1405,11 @@
       return String(value).replace(/[&<>"']/g, (char) => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
       }[char]));
+    }
+
+    function cssEscape(value) {
+      if (window.CSS && typeof window.CSS.escape === "function") return window.CSS.escape(value);
+      return String(value).replace(/["\\]/g, "\\$&");
     }
 
     function plural(number, one, few, many) {
@@ -908,23 +1434,50 @@
       return ROADMAP.find((stage) => stage.id === stageId) || null;
     }
 
+    function pad2(value) {
+      return value < 10 ? "0" + value : String(value);
+    }
+
+    function dayKey(date) {
+      const d = date || new Date();
+      return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+    }
+
+    function dayFromKey(key) {
+      const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(key || "");
+      if (!match) return null;
+      const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+      return Number.isFinite(date.getTime()) ? date : null;
+    }
+
     function showToast(message, tone) {
       if (!dom.toast) return;
       dom.toast.textContent = message;
       dom.toast.dataset.tone = tone || "";
       dom.toast.classList.add("is-visible");
       clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => dom.toast.classList.remove("is-visible"), 2800);
+      toastTimer = setTimeout(() => dom.toast.classList.remove("is-visible"), 3200);
     }
 
-    // Состояние и localStorage
+    function toastAchievements(list) {
+      if (!list || !list.length) return;
+      const shown = list.slice(0, 2).map((item) => item.icon + " " + item.title).join(", ");
+      const extra = list.length > 2 ? " и ещё " + (list.length - 2) : "";
+      showToast("Новая ачивка: " + shown + extra, "achievement");
+    }
+
+    // ---------- Состояние и localStorage ----------
     function createState() {
       return {
-        version: 1,
+        version: 2,
         tasks: {},
         notes: {},
         checklist: {},
-        startDate: "",
+        practice: {},
+        activity: {},
+        achievements: {},
+        leetcode: { username: "", total: 0, easy: 0, medium: 0, hard: 0, ranking: 0, syncedAt: "" },
+        syncedOnce: false,
         theme: "",
         updatedAt: ""
       };
@@ -951,9 +1504,40 @@
           if (raw.checklist[key] === true) normalized.checklist[key] = true;
         });
       }
-      if (typeof raw.startDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(raw.startDate)) {
-        if (dateParts(raw.startDate)) normalized.startDate = raw.startDate;
+      if (raw.practice && typeof raw.practice === "object") {
+        Object.keys(raw.practice).forEach((key) => {
+          if (PRACTICE_KEYS.has(key) && raw.practice[key] === true) normalized.practice[key] = true;
+        });
       }
+      if (raw.activity && typeof raw.activity === "object") {
+        Object.keys(raw.activity).forEach((key) => {
+          const count = raw.activity[key];
+          if (dayFromKey(key) && Number.isFinite(count) && count > 0) {
+            normalized.activity[key] = Math.min(Math.floor(count), 10000);
+          }
+        });
+      }
+      if (raw.achievements && typeof raw.achievements === "object") {
+        const known = new Set(ACHIEVEMENTS.map((item) => item.id));
+        Object.keys(raw.achievements).forEach((key) => {
+          const value = raw.achievements[key];
+          if (known.has(key) && typeof value === "string" && Number.isFinite(Date.parse(value))) {
+            normalized.achievements[key] = value;
+          }
+        });
+      }
+      if (raw.leetcode && typeof raw.leetcode === "object") {
+        const lc = raw.leetcode;
+        if (typeof lc.username === "string") normalized.leetcode.username = lc.username.trim().slice(0, 64);
+        ["total", "easy", "medium", "hard", "ranking"].forEach((field) => {
+          const value = Number(lc[field]);
+          if (Number.isFinite(value) && value > 0) normalized.leetcode[field] = Math.floor(value);
+        });
+        if (typeof lc.syncedAt === "string" && Number.isFinite(Date.parse(lc.syncedAt))) {
+          normalized.leetcode.syncedAt = lc.syncedAt;
+        }
+      }
+      normalized.syncedOnce = raw.syncedOnce === true;
       if (raw.theme === "light" || raw.theme === "dark") normalized.theme = raw.theme;
       if (typeof raw.updatedAt === "string" && Number.isFinite(Date.parse(raw.updatedAt))) {
         normalized.updatedAt = raw.updatedAt;
@@ -966,8 +1550,10 @@
       return Boolean(
         Object.keys(target.tasks || {}).length ||
         Object.keys(target.checklist || {}).length ||
+        Object.keys(target.practice || {}).length ||
+        Object.keys(target.achievements || {}).length ||
         Object.values(target.notes || {}).some((note) => String(note).trim()) ||
-        target.startDate
+        (target.leetcode && target.leetcode.username)
       );
     }
 
@@ -1019,7 +1605,7 @@
       ) || ROADMAP[0];
     }
 
-    // Тема
+    // ---------- Тема ----------
     const darkMedia = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
     const themeMeta = document.querySelector('meta[name="theme-color"]');
 
@@ -1031,7 +1617,7 @@
     function applyTheme() {
       const theme = resolvedTheme();
       document.documentElement.dataset.theme = theme;
-      if (themeMeta) themeMeta.setAttribute("content", theme === "dark" ? "#081418" : "#00ADD8");
+      if (themeMeta) themeMeta.setAttribute("content", theme === "dark" ? "#15120e" : "#0f9488");
       if (dom.themeToggle) {
         const label = theme === "dark" ? "Включить светлую тему" : "Включить тёмную тему";
         dom.themeToggle.setAttribute("aria-label", label);
@@ -1039,13 +1625,154 @@
       }
     }
 
-    // Отрисовка
+    // ---------- Статистика, серия, совет дня ----------
+    function currentStreak() {
+      const cursor = new Date();
+      if (!state.activity[dayKey(cursor)]) cursor.setDate(cursor.getDate() - 1);
+      let count = 0;
+      while (count < 4000 && state.activity[dayKey(cursor)]) {
+        count += 1;
+        cursor.setDate(cursor.getDate() - 1);
+      }
+      return count;
+    }
+
+    function bumpActivity() {
+      const key = dayKey();
+      state.activity[key] = (state.activity[key] || 0) + 1;
+      const limit = Date.now() - 180 * 86400000;
+      Object.keys(state.activity).forEach((day) => {
+        const date = dayFromKey(day);
+        if (!date || date.getTime() < limit) delete state.activity[day];
+      });
+    }
+
+    function computeStats() {
+      let tasks = 0;
+      let stages = 0;
+      ROADMAP.forEach((stage) => {
+        const done = stage.tasks.reduce((count, _, index) =>
+          count + (state.tasks[taskKey(stage.id, index)] ? 1 : 0), 0);
+        tasks += done;
+        if (done === stage.tasks.length) stages += 1;
+      });
+      const checklist = CHECKLIST_MIN.reduce((count, _, index) =>
+        count + (state.checklist["min-" + index] ? 1 : 0), 0);
+      let practice = 0;
+      let hard = 0;
+      let sql = 0;
+      let concurrency = 0;
+      PRACTICE_PROBLEMS.forEach((problem) => {
+        if (!state.practice[problem.slug]) return;
+        practice += 1;
+        if (problem.level === "Hard") hard += 1;
+        if (problem.topicId === "sql") sql += 1;
+        if (problem.topicId === "concurrency") concurrency += 1;
+      });
+      const notes = Object.keys(state.notes).length;
+      return {
+        tasks: tasks,
+        percent: TOTAL_TASKS ? Math.round((tasks / TOTAL_TASKS) * 100) : 0,
+        stages: stages,
+        checklist: checklist,
+        practice: practice,
+        hard: hard,
+        sql: sql,
+        concurrency: concurrency,
+        notes: notes,
+        streak: currentStreak(),
+        solved: state.leetcode.total || 0,
+        leetcode: state.leetcode.username ? 1 : 0,
+        sync: state.syncedOnce ? 1 : 0
+      };
+    }
+
+    function metricValue(metric, stats) {
+      const value = stats[metric];
+      return Number.isFinite(value) ? value : 0;
+    }
+
+    function evaluateAchievements() {
+      const stats = computeStats();
+      const unlocked = [];
+      ACHIEVEMENTS.forEach((item) => {
+        if (state.achievements[item.id]) return;
+        if (metricValue(item.metric, stats) >= item.target) {
+          state.achievements[item.id] = nowIso();
+          unlocked.push(item);
+        }
+      });
+      return unlocked;
+    }
+
+    function updateGreeting(stats) {
+      const hour = new Date().getHours();
+      let greeting = "Добрый вечер";
+      if (hour < 6) greeting = "Доброй ночи";
+      else if (hour < 12) greeting = "Доброе утро";
+      else if (hour < 18) greeting = "Добрый день";
+      if (dom.greeting) dom.greeting.textContent = greeting;
+
+      let sub = "Спокойный темп важнее рывков.";
+      if (stats.percent >= 100) sub = "Роадмап пройден. Самое время откликаться!";
+      else if (stats.streak >= 3) sub = "Серия " + stats.streak + " " + plural(stats.streak, "день", "дня", "дней") + " — отличный ритм.";
+      else if (stats.percent > 0) sub = "Продолжайте с того места, где остановились.";
+      if (dom.heroSub) dom.heroSub.textContent = sub;
+    }
+
+    function renderStreak() {
+      const streak = currentStreak();
+      if (dom.streakDays) dom.streakDays.textContent = String(streak);
+      if (dom.streakLabel) {
+        dom.streakLabel.textContent = streak > 0
+          ? plural(streak, "день подряд", "дня подряд", "дней подряд")
+          : "начните серию сегодня";
+      }
+      if (dom.headerStreak) dom.headerStreak.textContent = String(streak);
+      if (dom.headerStreakChip) {
+        dom.headerStreakChip.classList.toggle("is-hot", streak > 0);
+        dom.headerStreakChip.title = streak > 0
+          ? "Серия: " + streak + " " + plural(streak, "день", "дня", "дней") + " подряд"
+          : "Серия ещё не начата";
+      }
+      if (dom.streakCalendar) {
+        const cells = [];
+        for (let offset = 13; offset >= 0; offset -= 1) {
+          const date = new Date();
+          date.setDate(date.getDate() - offset);
+          const key = dayKey(date);
+          const active = Boolean(state.activity[key]);
+          const classes = ["streak-day"];
+          if (active) classes.push("is-active");
+          if (offset === 0) classes.push("is-today");
+          cells.push(
+            '<span class="' + classes.join(" ") + '" title="' +
+            date.toLocaleDateString("ru-RU", { day: "numeric", month: "short" }) +
+            (active ? ": были занятия" : ": без занятий") + '"></span>'
+          );
+        }
+        dom.streakCalendar.innerHTML = cells.join("");
+      }
+    }
+
+    function renderDailyTip() {
+      if (!dom.dailyTip) return;
+      const start = new Date(new Date().getFullYear(), 0, 0);
+      const dayOfYear = Math.floor((Date.now() - start.getTime()) / 86400000);
+      dom.dailyTip.textContent = TIPS[Math.abs(dayOfYear) % TIPS.length];
+    }
+
+    // ---------- Отрисовка: роадмап ----------
     function renderAll() {
       renderRoadmap();
       renderChecklist();
+      renderPractice();
+      renderAchievements();
+      renderLeetCode();
       updateOverview();
       updateChecklistUI();
-      updateDateUI();
+      renderStreak();
+      renderDailyTip();
       applyTheme();
     }
 
@@ -1074,7 +1801,7 @@
           <article class="stage${isOpen ? " is-open" : ""}${complete ? " is-complete" : ""}" data-stage-id="${escapeHtml(stage.id)}">
             <h2>
               <button class="stage-toggle" type="button" aria-expanded="${isOpen}" aria-controls="stage-body-${escapeHtml(stage.id)}">
-                <span class="stage-index" aria-hidden="true">${stageIndex}</span>
+                <span class="stage-index" aria-hidden="true">${stageIndex + 1}</span>
                 <span class="stage-heading">
                   <span class="stage-title">${escapeHtml(stage.title)}</span>
                   <span class="stage-weeks">${escapeHtml(stage.weeks)}</span>
@@ -1104,10 +1831,8 @@
           </article>`;
       }).join("");
 
-      // Значения заметок ставим через value, чтобы не ломать разметку
       dom.roadmapList.querySelectorAll("textarea[data-notes]").forEach((area) => {
-        const stageId = area.dataset.notes;
-        area.value = state.notes[stageId] || "";
+        area.value = state.notes[area.dataset.notes] || "";
       });
     }
 
@@ -1127,21 +1852,18 @@
     }
 
     function updateOverview() {
-      let done = 0;
-      let completeStages = 0;
-      ROADMAP.forEach((stage) => {
-        const stageDone = stage.tasks.filter((_, index) =>
-          state.tasks[taskKey(stage.id, index)]).length;
-        done += stageDone;
-        if (stageDone === stage.tasks.length) completeStages += 1;
-      });
-      const percent = TOTAL_TASKS ? Math.round((done / TOTAL_TASKS) * 100) : 0;
-      dom.overallCount.textContent = "выполнено " + done + " из " + TOTAL_TASKS + " задач";
-      dom.overallPercent.textContent = percent + "%";
-      dom.overallRing.style.setProperty("--pct", String(percent));
-      dom.overallBar.style.width = percent + "%";
-      dom.overallMeter.setAttribute("aria-valuenow", String(percent));
-      dom.stagesDone.textContent = String(completeStages);
+      const stats = computeStats();
+      dom.overallCount.textContent = "выполнено " + stats.tasks + " из " + TOTAL_TASKS + " задач";
+      dom.overallPercent.textContent = stats.percent + "%";
+      dom.overallRing.style.setProperty("--pct", String(stats.percent));
+      dom.overallBar.style.width = stats.percent + "%";
+      dom.overallMeter.setAttribute("aria-valuenow", String(stats.percent));
+      dom.stagesDone.textContent = String(stats.stages);
+      dom.practiceStat.textContent = String(stats.practice);
+      dom.achievementStat.textContent = String(Object.keys(state.achievements).length);
+      dom.practiceCount.textContent = stats.practice + " из " + TOTAL_PROBLEMS + " задач";
+      updateGreeting(stats);
+      renderStreak();
     }
 
     function updateChecklistUI() {
@@ -1151,13 +1873,12 @@
       dom.checklistCount.textContent = "выполнено " + done + " из " + CHECKLIST_MIN.length;
       dom.checklistBar.style.width = percent + "%";
       dom.checklistMeter.setAttribute("aria-valuenow", String(percent));
-      dom.checklistStat.textContent = done + "/" + CHECKLIST_MIN.length;
     }
 
     function updateStageUI(stageId) {
       const stage = findStage(stageId);
       const article = dom.roadmapList.querySelector(
-        '.stage[data-stage-id="' + stageId + '"]'
+        '.stage[data-stage-id="' + cssEscape(stageId) + '"]'
       );
       if (!stage || !article) return;
       const done = stage.tasks.reduce((count, _, index) =>
@@ -1169,69 +1890,360 @@
       article.querySelector("[data-stage-count]").textContent = done + "/" + total;
       article.querySelector("[data-stage-bar]").style.width = percent + "%";
       article.querySelector("[data-stage-meter]").setAttribute("aria-valuenow", String(percent));
-      article.querySelector("[data-stage-progress]").textContent =
-        "выполнено " + done + " из " + total;
+      article.querySelector("[data-stage-progress]").textContent = "выполнено " + done + " из " + total;
     }
 
-    function dateParts(value) {
-      const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || "");
-      if (!match) return null;
-      const year = Number(match[1]);
-      const month = Number(match[2]) - 1;
-      const day = Number(match[3]);
-      const date = new Date(Date.UTC(year, month, day));
-      if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month || date.getUTCDate() !== day) {
-        return null;
+    // ---------- Отрисовка: практика ----------
+    function renderPractice() {
+      dom.practiceList.innerHTML = PRACTICE.map((topic) => {
+        const isOpen = openTopics.has(topic.id);
+        const done = topic.problems.reduce((count, problem) =>
+          count + (state.practice[problem[0]] ? 1 : 0), 0);
+        const total = topic.problems.length;
+        const percent = total ? Math.round((done / total) * 100) : 0;
+        const problems = topic.problems.map(([slug, title, level]) => {
+          const info = DIFFICULTY[level] || DIFFICULTY.Medium;
+          const checked = Boolean(state.practice[slug]);
+          return `
+            <li class="problem${checked ? " is-done" : ""}" data-problem-row="${escapeHtml(slug)}">
+              <label class="problem-label">
+                <input type="checkbox" data-problem="${escapeHtml(slug)}"${checked ? " checked" : ""}>
+                <span class="check-box" aria-hidden="true"></span>
+                <span class="problem-title">${escapeHtml(title)}</span>
+              </label>
+              <span class="level ${info.cls}">${info.label}</span>
+              <a class="problem-open" href="https://leetcode.com/problems/${encodeURIComponent(slug)}/" target="_blank" rel="noopener noreferrer" aria-label="Открыть «${escapeHtml(title)}» на LeetCode">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+              </a>
+            </li>`;
+        }).join("");
+
+        return `
+          <article class="topic${isOpen ? " is-open" : ""}" data-topic-id="${escapeHtml(topic.id)}">
+            <h2>
+              <button class="topic-toggle" type="button" aria-expanded="${isOpen}" aria-controls="topic-body-${escapeHtml(topic.id)}">
+                <span class="topic-emoji" aria-hidden="true">${topic.emoji}</span>
+                <span class="topic-heading">
+                  <span class="topic-title">${escapeHtml(topic.title)}</span>
+                  <span class="topic-weeks">${escapeHtml(topic.note)}</span>
+                </span>
+                <span class="topic-count" data-topic-count>${done}/${total}</span>
+                <span class="topic-chevron" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </span>
+              </button>
+            </h2>
+            <div class="topic-panel" id="topic-body-${escapeHtml(topic.id)}"${isOpen ? "" : " hidden"}>
+              <div class="meter" role="progressbar" aria-label="Прогресс темы ${escapeHtml(topic.title)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}" data-topic-meter>
+                <span data-topic-bar style="width:${percent}%"></span>
+              </div>
+              <ul class="task-list">${problems}</ul>
+            </div>
+          </article>`;
+      }).join("");
+      updatePracticeSummary();
+    }
+
+    function updateTopicUI(topicId) {
+      const topic = PRACTICE.find((item) => item.id === topicId);
+      const article = dom.practiceList.querySelector(
+        '.topic[data-topic-id="' + cssEscape(topicId) + '"]'
+      );
+      if (!topic || !article) return;
+      const done = topic.problems.reduce((count, problem) =>
+        count + (state.practice[problem[0]] ? 1 : 0), 0);
+      const total = topic.problems.length;
+      const percent = total ? Math.round((done / total) * 100) : 0;
+      const countNode = article.querySelector("[data-topic-count]");
+      if (countNode) countNode.textContent = done + "/" + total;
+      const meter = article.querySelector("[data-topic-meter]");
+      if (meter) meter.setAttribute("aria-valuenow", String(percent));
+      const bar = article.querySelector("[data-topic-bar]");
+      if (bar) bar.style.width = percent + "%";
+    }
+
+    function updatePracticeSummary() {
+      const done = PRACTICE_PROBLEMS.reduce((count, problem) =>
+        count + (state.practice[problem.slug] ? 1 : 0), 0);
+      dom.practiceCount.textContent = done + " из " + TOTAL_PROBLEMS + " задач";
+      dom.practiceStat.textContent = String(done);
+    }
+
+    function applyProblemDone(slug, done) {
+      if (done) state.practice[slug] = true;
+      else delete state.practice[slug];
+      const input = dom.practiceList.querySelector('input[data-problem="' + cssEscape(slug) + '"]');
+      if (input) {
+        input.checked = done;
+        const row = input.closest(".problem");
+        if (row) row.classList.toggle("is-done", done);
       }
-      return { year, month, day, utc: date.getTime() };
+      const topicId = TOPIC_BY_PROBLEM.get(slug);
+      if (topicId) updateTopicUI(topicId);
+      updatePracticeSummary();
+      renderSuggestion();
     }
 
-    function updateDateUI() {
-      if (document.activeElement !== dom.startDate) dom.startDate.value = state.startDate || "";
-      const parts = dateParts(state.startDate);
-      dom.countdownBox.classList.remove("is-past");
-      if (!parts) {
-        dom.countdownNumber.textContent = "—";
-        dom.countdownLabel.textContent = "Укажите дату старта";
-        dom.dateHint.textContent = "Счётчик обновляется автоматически.";
+    function pickSuggestion() {
+      const unsolved = PRACTICE_PROBLEMS.filter((problem) => !state.practice[problem.slug]);
+      if (!unsolved.length) {
+        currentSuggestion = null;
+        dom.suggestResult.innerHTML = '<p class="suggest-empty">Все задачи из практики отмечены. Отличная работа — можно переходить к повторению и pet-проектам! 🎉</p>';
         return;
       }
-      const now = new Date();
-      const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-      const days = Math.round((parts.utc - today) / 86400000);
-      if (days > 0) {
-        dom.countdownNumber.textContent = String(days);
-        dom.countdownLabel.textContent = plural(days, "день до старта", "дня до старта", "дней до старта");
-      } else if (days === 0) {
-        dom.countdownNumber.textContent = "0";
-        dom.countdownLabel.textContent = "старт сегодня";
-      } else {
-        const past = Math.abs(days);
-        dom.countdownBox.classList.add("is-past");
-        dom.countdownNumber.textContent = String(past);
-        dom.countdownLabel.textContent = plural(past, "день прошёл", "дня прошло", "дней прошло");
-      }
-      let formatted = "";
-      try {
-        formatted = new Intl.DateTimeFormat("ru-RU", {
-          day: "numeric", month: "long", year: "numeric", timeZone: "UTC"
-        }).format(new Date(parts.utc));
-      } catch (error) {
-        formatted = state.startDate;
-      }
-      dom.dateHint.textContent = "Старт: " + formatted;
+      const pick = unsolved[Math.floor(Math.random() * unsolved.length)];
+      currentSuggestion = pick.slug;
+      renderSuggestion();
     }
 
-    // Изменения данных
+    function renderSuggestion() {
+      if (!currentSuggestion) return;
+      const problem = PRACTICE_PROBLEMS.find((item) => item.slug === currentSuggestion);
+      if (!problem) return;
+      const info = DIFFICULTY[problem.level] || DIFFICULTY.Medium;
+      const done = Boolean(state.practice[problem.slug]);
+      dom.suggestResult.innerHTML = `
+        <p class="suggest-topic">${escapeHtml(problem.topicTitle)}</p>
+        <p class="suggest-name">${escapeHtml(problem.title)} <span class="level ${info.cls}">${info.label}</span></p>
+        <div class="suggest-actions">
+          <a class="btn btn-secondary" href="https://leetcode.com/problems/${encodeURIComponent(problem.slug)}/" target="_blank" rel="noopener noreferrer">Открыть на LeetCode</a>
+          ${done
+            ? '<span class="achievement-date">✓ уже решено</span>'
+            : '<button class="btn btn-primary" type="button" data-mark-done="' + escapeHtml(problem.slug) + '">Отметить решённой</button>'}
+        </div>`;
+    }
+
+    // ---------- Отрисовка: ачивки ----------
+    function renderAchievements() {
+      const stats = computeStats();
+      const unlockedCount = ACHIEVEMENTS.filter((item) => state.achievements[item.id]).length;
+      dom.achCount.textContent = unlockedCount + " из " + ACHIEVEMENTS.length;
+      const percent = ACHIEVEMENTS.length ? Math.round((unlockedCount / ACHIEVEMENTS.length) * 100) : 0;
+      dom.achBar.style.width = percent + "%";
+      dom.achMeter.setAttribute("aria-valuenow", String(percent));
+      if (dom.achievementStat) dom.achievementStat.textContent = String(unlockedCount);
+
+      dom.achievementGrid.innerHTML = ACHIEVEMENTS.map((item) => {
+        const unlockedAt = state.achievements[item.id];
+        const value = Math.min(metricValue(item.metric, stats), item.target);
+        const progress = item.target ? Math.min(100, Math.round((value / item.target) * 100)) : 0;
+        let foot = "";
+        if (unlockedAt) {
+          const date = new Date(unlockedAt);
+          const formatted = Number.isFinite(date.getTime())
+            ? date.toLocaleDateString("ru-RU", { day: "numeric", month: "short" })
+            : "";
+          foot = '<span class="achievement-date">🏅 ' + escapeHtml(formatted) + "</span>";
+        } else {
+          foot = '<span class="achievement-progress">' + value + " / " + item.target + "</span>" +
+            '<div class="meter"><span style="width:' + progress + '%"></span></div>';
+        }
+        return `
+          <article class="achievement${unlockedAt ? " is-unlocked" : " is-locked"}">
+            <div class="achievement-icon" aria-hidden="true">${item.icon}</div>
+            <h3 class="achievement-title">${escapeHtml(item.title)}</h3>
+            <p class="achievement-desc">${escapeHtml(item.desc)}</p>
+            <div class="achievement-foot">${foot}</div>
+          </article>`;
+      }).join("");
+    }
+
+    // ---------- LeetCode ----------
+    function lcStatus(text, tone) {
+      if (!dom.lcStatus) return;
+      dom.lcStatus.textContent = text;
+      dom.lcStatus.style.color = tone === "error" ? "var(--danger)" : "";
+    }
+
+    function formatDateTime(iso) {
+      const date = new Date(iso);
+      if (!Number.isFinite(date.getTime())) return "";
+      try {
+        return date.toLocaleString("ru-RU", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+      } catch (error) {
+        return date.toISOString().slice(0, 16).replace("T", " ");
+      }
+    }
+
+    function renderLeetCode() {
+      const lc = state.leetcode || createState().leetcode;
+      if (document.activeElement !== dom.leetcodeUser) dom.leetcodeUser.value = lc.username || "";
+      dom.lcBadge.hidden = !lc.username;
+      dom.lcProfileLink.hidden = !lc.username;
+      if (lc.username) {
+        dom.lcProfileLink.href = "https://leetcode.com/u/" + encodeURIComponent(lc.username) + "/";
+      }
+      dom.lcConnectBtn.textContent = lc.username ? "Обновить" : "Подключить";
+
+      const total = Number(lc.total) || 0;
+      const easy = Number(lc.easy) || 0;
+      const medium = Number(lc.medium) || 0;
+      const hard = Number(lc.hard) || 0;
+      const hasStats = total > 0 || easy + medium + hard > 0;
+      dom.lcStats.hidden = !hasStats;
+      if (hasStats) {
+        dom.lcTotal.textContent = String(total || easy + medium + hard);
+        dom.lcEasy.textContent = String(easy);
+        dom.lcMedium.textContent = String(medium);
+        dom.lcHard.textContent = String(hard);
+        const sum = Math.max(1, easy + medium + hard);
+        dom.lcEasyBar.style.width = Math.round((easy / sum) * 100) + "%";
+        dom.lcMediumBar.style.width = Math.round((medium / sum) * 100) + "%";
+        dom.lcHardBar.style.width = Math.round((hard / sum) * 100) + "%";
+        const parts = [];
+        if (lc.ranking > 0) parts.push("Рейтинг: " + Number(lc.ranking).toLocaleString("ru-RU"));
+        if (lc.syncedAt) parts.push("обновлено " + formatDateTime(lc.syncedAt));
+        dom.lcMeta.textContent = parts.join(" · ");
+      }
+      if (lc.username) {
+        lcStatus("Статистика для «" + lc.username + "». Обновляется автоматически, когда данные устаревают.", "");
+      } else {
+        lcStatus("Статистика появится после подключения.", "");
+      }
+    }
+
+    async function lcRequest(url) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), LC_TIMEOUT);
+      try {
+        return await fetch(url, { signal: controller.signal, cache: "no-store" });
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
+    function intOrZero(value) {
+      const number = Number(value);
+      return Number.isFinite(number) && number > 0 ? Math.floor(number) : 0;
+    }
+
+    async function fetchLeetcode(username) {
+      let lastError = null;
+      for (const build of LC_ENDPOINTS) {
+        try {
+          const response = await lcRequest(build(username));
+          if (!response.ok) {
+            lastError = new Error("HTTP " + response.status);
+            continue;
+          }
+          const data = await response.json();
+          if (data && Array.isArray(data.errors) && data.errors.length) {
+            const notFound = new Error("Пользователь не найден");
+            notFound.code = "NOT_FOUND";
+            throw notFound;
+          }
+          const total = data.solvedProblem != null ? Number(data.solvedProblem)
+            : data.totalSolved != null ? Number(data.totalSolved)
+            : Number(data.total);
+          if (!Number.isFinite(total)) {
+            lastError = new Error("Неожиданный ответ API");
+            continue;
+          }
+          return {
+            username: username,
+            total: intOrZero(total),
+            easy: intOrZero(data.easySolved),
+            medium: intOrZero(data.mediumSolved),
+            hard: intOrZero(data.hardSolved),
+            ranking: intOrZero(data.ranking),
+            syncedAt: nowIso()
+          };
+        } catch (error) {
+          if (error && error.code === "NOT_FOUND") throw error;
+          lastError = error;
+        }
+      }
+      throw lastError || new Error("Не удалось получить данные");
+    }
+
+    async function refreshLeetcode(options) {
+      const opts = options || {};
+      const username = String(opts.username != null ? opts.username : dom.leetcodeUser.value).trim();
+      if (!username) {
+        dom.leetcodeUser.classList.add("is-invalid");
+        dom.leetcodeUser.focus();
+        if (!opts.silent) showToast("Введите ник на LeetCode", "error");
+        return false;
+      }
+      if (!/^[A-Za-z0-9_.-]{1,64}$/.test(username)) {
+        dom.leetcodeUser.classList.add("is-invalid");
+        if (!opts.silent) showToast("Ник выглядит неверно", "error");
+        return false;
+      }
+      dom.leetcodeUser.classList.remove("is-invalid");
+      if (!navigator.onLine && !opts.silent) {
+        lcStatus("Нет сети. Показываем последнюю сохранённую статистику.", "error");
+        showToast("Нет соединения с интернетом", "error");
+        return false;
+      }
+      if (lcBusy) return false;
+
+      const requestId = ++lcRequestId;
+      lcBusy = true;
+      dom.lcConnectBtn.disabled = true;
+      dom.lcConnectBtn.textContent = "Загрузка…";
+      lcStatus("Запрашиваем статистику LeetCode…", "");
+
+      try {
+        const result = await fetchLeetcode(username);
+        if (requestId !== lcRequestId) return false;
+        state.leetcode = result;
+        const unlocked = evaluateAchievements();
+        saveStateLocal();
+        renderLeetCode();
+        updateOverview();
+        if (unlocked.length) {
+          state.updatedAt = nowIso();
+          saveStateLocal();
+          renderAchievements();
+          toastAchievements(unlocked);
+          scheduleSync(600);
+        }
+        if (!opts.silent) showToast("Статистика LeetCode обновлена");
+        return true;
+      } catch (error) {
+        if (requestId !== lcRequestId) return false;
+        const message = error && error.code === "NOT_FOUND"
+          ? "Пользователь «" + username + "» не найден на LeetCode."
+          : error && error.name === "AbortError"
+            ? "LeetCode отвечает слишком долго. Попробуйте ещё раз."
+            : "Не удалось получить статистику. Проверьте ник и соединение.";
+        lcStatus(message, "error");
+        if (!opts.silent) showToast("LeetCode не ответил", "error");
+        return false;
+      } finally {
+        if (requestId === lcRequestId) {
+          lcBusy = false;
+          dom.lcConnectBtn.disabled = false;
+          dom.lcConnectBtn.textContent = state.leetcode.username ? "Обновить" : "Подключить";
+        }
+      }
+    }
+
+    function refreshLeetcodeIfNeeded() {
+      const lc = state.leetcode;
+      if (!lc.username || !navigator.onLine) return;
+      const age = Date.now() - stamp(lc.syncedAt);
+      if (!lc.total || age > LC_STALE_MS) refreshLeetcode({ silent: true });
+    }
+
+    // ---------- Изменения данных ----------
     function markChanged(syncDelay) {
       state.updatedAt = nowIso();
+      const unlocked = evaluateAchievements();
       saveStateLocal();
+      updateOverview();
+      updateChecklistUI();
+      if (unlocked.length) {
+        renderAchievements();
+        toastAchievements(unlocked);
+      }
       scheduleSync(typeof syncDelay === "number" ? syncDelay : SYNC_DELAY);
     }
 
     function setNoteStatus(stageId, text, saved) {
       const status = dom.roadmapList.querySelector(
-        '[data-note-status="' + stageId + '"]'
+        '[data-note-status="' + cssEscape(stageId) + '"]'
       );
       if (!status) return;
       status.textContent = text;
@@ -1250,9 +2262,16 @@
       noteTimers.set(stageId, setTimeout(() => {
         noteTimers.delete(stageId);
         noteFlushNeeded = noteTimers.size > 0;
+        bumpActivity();
         state.updatedAt = nowIso();
+        const unlocked = evaluateAchievements();
         saveStateLocal();
         setNoteStatus(stageId, "Сохранено", true);
+        updateOverview();
+        if (unlocked.length) {
+          renderAchievements();
+          toastAchievements(unlocked);
+        }
         scheduleSync();
       }, NOTE_DELAY));
     }
@@ -1277,8 +2296,12 @@
     function handleTaskChange(input) {
       const key = input.dataset.task;
       if (!key) return;
-      if (input.checked) state.tasks[key] = true;
-      else delete state.tasks[key];
+      if (input.checked) {
+        state.tasks[key] = true;
+        bumpActivity();
+      } else {
+        delete state.tasks[key];
+      }
       const item = input.closest(".task");
       if (item) item.classList.toggle("is-done", input.checked);
       const stageId = key.split(":")[0];
@@ -1290,11 +2313,25 @@
     function handleChecklistChange(input) {
       const key = input.dataset.check;
       if (!key) return;
-      if (input.checked) state.checklist[key] = true;
-      else delete state.checklist[key];
+      if (input.checked) {
+        state.checklist[key] = true;
+        bumpActivity();
+      } else {
+        delete state.checklist[key];
+      }
       const item = input.closest(".task");
       if (item) item.classList.toggle("is-done", input.checked);
       updateChecklistUI();
+      updateOverview();
+      markChanged();
+    }
+
+    function handleProblemChange(input) {
+      const slug = input.dataset.problem;
+      if (!slug) return;
+      if (input.checked) bumpActivity();
+      applyProblemDone(slug, input.checked);
+      updateOverview();
       markChanged();
     }
 
@@ -1310,10 +2347,24 @@
       else openStages.delete(article.dataset.stageId);
     }
 
-    // Вкладки
-    const TAB_NAMES = ["roadmap", "checklist", "resources", "settings"];
+    function toggleTopic(button) {
+      const article = button.closest(".topic");
+      if (!article) return;
+      const body = document.getElementById(button.getAttribute("aria-controls"));
+      const nextOpen = button.getAttribute("aria-expanded") !== "true";
+      button.setAttribute("aria-expanded", String(nextOpen));
+      article.classList.toggle("is-open", nextOpen);
+      if (body) body.hidden = !nextOpen;
+      if (nextOpen) openTopics.add(article.dataset.topicId);
+      else openTopics.delete(article.dataset.topicId);
+    }
+
+    // ---------- Вкладки ----------
+    const TAB_NAMES = ["roadmap", "practice", "achievements", "checklist", "settings"];
+    const TAB_ALIASES = { resources: "roadmap" };
 
     function switchTab(name, withHash) {
+      name = TAB_ALIASES[name] || name;
       if (!TAB_NAMES.includes(name)) name = "roadmap";
       activeTab = name;
       document.querySelectorAll('[role="tab"]').forEach((tab) => {
@@ -1329,16 +2380,7 @@
       }
     }
 
-    // Дата старта
-    function handleDateChange() {
-      state.startDate = dom.startDate.value || "";
-      state.updatedAt = nowIso();
-      saveStateLocal();
-      updateDateUI();
-      scheduleSync();
-    }
-
-    // Экспорт, импорт и сброс
+    // ---------- Экспорт, импорт и сброс ----------
     function exportJson() {
       const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
@@ -1371,7 +2413,7 @@
         return;
       }
       if (hasAnyData(state) && !window.confirm(
-        "Заменить текущий прогресс, заметки и чек-лист данными из файла?"
+        "Заменить текущий прогресс, практику, ачивки, заметки и чек-лист данными из файла?"
       )) {
         return;
       }
@@ -1379,6 +2421,7 @@
       state = normalizeState(parsed);
       state.updatedAt = nowIso();
       openStages = new Set([firstIncompleteStage().id]);
+      openTopics = new Set([PRACTICE[0].id]);
       saveStateLocal();
       applyTheme();
       renderAll();
@@ -1388,16 +2431,17 @@
 
     function resetProgress() {
       if (!window.confirm(
-        "Сбросить все задачи, заметки и чек-лист? Это действие нельзя отменить."
+        "Сбросить все задачи, практику, ачивки, заметки и чек-лист? Это действие нельзя отменить."
       )) return;
       const theme = state.theme;
-      const startDate = state.startDate;
+      const lcUsername = state.leetcode ? state.leetcode.username : "";
       clearNoteTimers();
       state = createState();
       state.theme = theme;
-      state.startDate = startDate;
+      state.leetcode.username = lcUsername;
       state.updatedAt = nowIso();
       openStages = new Set([ROADMAP[0].id]);
+      openTopics = new Set([PRACTICE[0].id]);
       saveStateLocal();
       applyTheme();
       renderAll();
@@ -1405,7 +2449,7 @@
       showToast("Прогресс сброшен");
     }
 
-    // Синхронизация с GitHub Gist
+    // ---------- Синхронизация с GitHub Gist ----------
     const SYNC_LABELS = {
       local: "Локально",
       syncing: "Синхронизация…",
@@ -1466,7 +2510,7 @@
       if (settings.body) headers["Content-Type"] = "application/json";
       const response = await fetch(API_URL + path, {
         method: settings.method || "GET",
-        headers,
+        headers: headers,
         body: settings.body,
         cache: "no-store"
       });
@@ -1534,6 +2578,19 @@
       return "Нет соединения с GitHub. Данные сохранены локально и не потеряны.";
     }
 
+    function markSynced() {
+      state.syncedOnce = true;
+      const unlocked = evaluateAchievements();
+      saveStateLocal();
+      updateOverview();
+      if (unlocked.length) {
+        state.updatedAt = nowIso();
+        saveStateLocal();
+        renderAchievements();
+        toastAchievements(unlocked);
+      }
+    }
+
     async function createGist() {
       if (!state.updatedAt) {
         state.updatedAt = nowIso();
@@ -1582,10 +2639,12 @@
             clearNoteTimers();
             state = remote;
             openStages = new Set([firstIncompleteStage().id]);
+            openTopics = new Set([PRACTICE[0].id]);
             saveStateLocal();
             applyTheme();
             renderAll();
             lastSyncAt = new Date();
+            markSynced();
             setSyncState("synced", "Данные загружены из Gist.");
             return true;
           }
@@ -1600,6 +2659,7 @@
           })
         });
         lastSyncAt = new Date();
+        markSynced();
         setSyncState("synced", "Все изменения сохранены в Gist.");
         return true;
       } catch (error) {
@@ -1651,6 +2711,7 @@
           saveSyncConfig();
           dom.gistId.value = gist.id;
           lastSyncAt = new Date();
+          markSynced();
           setSyncState("synced", "Приватный Gist создан. Синхронизация включена.");
           updateSyncControls();
           showToast("Gist создан и подключён");
@@ -1696,7 +2757,7 @@
       showToast("Синхронизация отключена");
     }
 
-    // События
+    // ---------- События ----------
     function bindEvents() {
       dom.roadmapList.addEventListener("click", (event) => {
         const toggle = event.target.closest(".stage-toggle");
@@ -1711,6 +2772,40 @@
         if (event.target.matches("textarea[data-notes]")) handleNoteInput(event.target);
       });
 
+      dom.practiceList.addEventListener("click", (event) => {
+        const toggle = event.target.closest(".topic-toggle");
+        if (toggle) toggleTopic(toggle);
+      });
+
+      dom.practiceList.addEventListener("change", (event) => {
+        if (event.target.matches("input[data-problem]")) handleProblemChange(event.target);
+      });
+
+      dom.suggestBtn.addEventListener("click", pickSuggestion);
+
+      dom.suggestResult.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-mark-done]");
+        if (!button) return;
+        const slug = button.dataset.markDone;
+        if (!slug || state.practice[slug]) return;
+        bumpActivity();
+        applyProblemDone(slug, true);
+        updateOverview();
+        markChanged();
+        showToast("Задача отмечена решённой");
+      });
+
+      dom.lcConnectBtn.addEventListener("click", () => refreshLeetcode());
+      dom.leetcodeUser.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          refreshLeetcode();
+        }
+      });
+      dom.leetcodeUser.addEventListener("input", () => {
+        dom.leetcodeUser.classList.remove("is-invalid");
+      });
+
       dom.checklistList.addEventListener("change", (event) => {
         if (event.target.matches("input[data-check]")) handleChecklistChange(event.target);
       });
@@ -1720,8 +2815,6 @@
         applyTheme();
         markChanged();
       });
-
-      dom.startDate.addEventListener("change", handleDateChange);
 
       dom.tabbar.addEventListener("click", (event) => {
         const tab = event.target.closest("[data-tab]");
@@ -1764,16 +2857,22 @@
         if (document.visibilityState === "hidden") {
           flushNotes();
           saveStateLocal();
+        } else {
+          renderStreak();
+          updateOverview();
+          refreshLeetcodeIfNeeded();
         }
       });
 
       window.addEventListener("online", () => {
         if (hasSyncConfig() && syncKind === "error") runSync({ pullFirst: true });
+        refreshLeetcodeIfNeeded();
       });
 
       window.addEventListener("hashchange", () => {
         const name = location.hash.replace(/^#/, "");
-        if (TAB_NAMES.includes(name) && name !== activeTab) switchTab(name, false);
+        const normalized = TAB_ALIASES[name] || name;
+        if (TAB_NAMES.includes(normalized) && normalized !== activeTab) switchTab(normalized, false);
       });
 
       if (darkMedia) {
@@ -1792,19 +2891,20 @@
       });
     }
 
-    // Запуск
+    // ---------- Запуск ----------
     function init() {
       state = loadState();
       syncConfig = loadSyncConfig();
       dom.githubToken.value = syncConfig.token;
       dom.gistId.value = syncConfig.gistId;
       openStages = new Set([firstIncompleteStage().id]);
+      openTopics = new Set([PRACTICE[0].id]);
       applyTheme();
       renderAll();
       bindEvents();
       updateSyncControls();
 
-      const hash = location.hash.replace(/^#/, "");
+      const hash = TAB_ALIASES[location.hash.replace(/^#/, "")] || location.hash.replace(/^#/, "");
       switchTab(TAB_NAMES.includes(hash) ? hash : "roadmap", false);
 
       if (hasSyncConfig()) {
@@ -1816,7 +2916,11 @@
       }
 
       registerServiceWorker();
-      setInterval(updateDateUI, 60000);
+      refreshLeetcodeIfNeeded();
+      setInterval(() => {
+        renderStreak();
+        updateGreeting(computeStats());
+      }, 60000);
     }
 
     init();

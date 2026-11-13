@@ -1,14 +1,14 @@
 {
   "name": "Трекер роадмапа Go",
   "short_name": "Go Roadmap",
-  "description": "Личный трекер изучения Golang до стажировки: этапы, заметки, чек-лист и синхронизация через GitHub Gist.",
+  "description": "Уютный трекер Golang до стажировки: этапы, практика LeetCode по темам, ачивки, заметки и синхронизация через GitHub Gist.",
   "lang": "ru",
   "dir": "ltr",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "theme_color": "#00ADD8",
-  "background_color": "#ffffff",
+  "theme_color": "#0f9488",
+  "background_color": "#f7f1e6",
   "categories": ["education", "productivity"],
   "icons": [
     {
