@@ -1,0 +1,27 @@
+{
+  "name": "Трекер роадмапа Go",
+  "short_name": "Go Roadmap",
+  "description": "Личный трекер изучения Golang до стажировки: этапы, заметки, чек-лист и синхронизация через GitHub Gist.",
+  "lang": "ru",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "theme_color": "#00ADD8",
+  "background_color": "#ffffff",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
