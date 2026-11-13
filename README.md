@@ -233,7 +233,7 @@ Accept: application/vnd.github+json
 
 Если вы изменили файлы приложения:
 
-1. Увеличьте `CACHE_NAME` в `sw.js`, например с `go-roadmap-v3` на `go-roadmap-v4`.
+1. Увеличьте `CACHE_NAME` в `sw.js`, например с `go-roadmap-v4` на `go-roadmap-v5`.
 2. Задеплойте изменения.
 3. Обновите страницу два раза или перезапустите установленное PWA.
 
