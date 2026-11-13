@@ -1855,9 +1855,7 @@
       const streak = currentStreak();
       if (dom.streakDays) dom.streakDays.textContent = String(streak);
       if (dom.streakLabel) {
-        dom.streakLabel.textContent = streak > 0
-          ? plural(streak, "день подряд", "дня подряд", "дней подряд")
-          : "начните серию сегодня";
+        dom.streakLabel.textContent = plural(streak, "день подряд", "дня подряд", "дней подряд");
       }
       if (dom.headerStreak) dom.headerStreak.textContent = String(streak);
       if (dom.headerStreakChip) {
