@@ -1,34 +1,35 @@
 <!doctype html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Генератор иконок — Go Roadmap</title>
+  <title>Генератор иконок — go-roadmap</title>
   <style>
-    :root { color-scheme: light; }
+    :root { color-scheme: dark; }
     body {
-      margin: 0; padding: 32px 20px; background: #f4f6fc; color: #1e2433;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0; padding: 32px 20px;
+      background: #060912; color: #e4ebff;
+      font-family: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
     }
     main { width: min(720px, 100%); margin: 0 auto; }
-    h1 { letter-spacing: -.03em; }
-    p { color: #4b5468; line-height: 1.6; }
+    h1 { letter-spacing: -.02em; }
+    p { color: #7a86b0; line-height: 1.6; }
     .previews { display: flex; flex-wrap: wrap; gap: 22px; align-items: end; margin: 28px 0; }
     .preview { display: grid; gap: 10px; justify-items: center; }
-    .preview img { display: block; max-width: 100%; height: auto; border-radius: 22%; box-shadow: 0 12px 28px rgba(68, 83, 207, .26); }
+    .preview img { display: block; max-width: 100%; height: auto; border-radius: 22%; box-shadow: 0 0 28px rgba(94, 231, 255, .28); }
     .actions { display: flex; flex-wrap: wrap; gap: 10px; }
     a {
       display: inline-flex; align-items: center; min-height: 46px; padding: 10px 18px;
-      border-radius: 12px; background: #5566e8; color: #fff; font-weight: 700;
+      border-radius: 12px; background: #5ee7ff; color: #04121a; font-weight: 700;
       text-decoration: none;
     }
-    code { background: #eceffd; padding: 2px 6px; border-radius: 6px; }
+    code { background: #101a33; border: 1px solid rgba(94, 231, 255, .28); padding: 2px 6px; border-radius: 6px; color: #5ee7ff; }
   </style>
 </head>
 <body>
   <main>
     <h1>Иконки PWA</h1>
-    <p>Страница рисует иконки на canvas и сразу предлагает скачать PNG. После замены файлов увеличьте версию кэша в <code>sw.js</code>.</p>
+    <p>Страница рисует неоновые иконки на canvas и сразу предлагает скачать PNG. После замены файлов увеличьте версию кэша в <code>sw.js</code>.</p>
     <div class="previews" id="previews"></div>
     <div class="actions" id="actions"></div>
   </main>
@@ -38,36 +39,80 @@
     const previews = document.getElementById("previews");
     const actions = document.getElementById("actions");
 
+    function roundRect(ctx, x, y, width, height, radius) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.arcTo(x + width, y, x + width, y + height, radius);
+      ctx.arcTo(x + width, y + height, x, y + height, radius);
+      ctx.arcTo(x, y + height, x, y, radius);
+      ctx.arcTo(x, y, x + width, y, radius);
+      ctx.closePath();
+    }
+
     function drawIcon(size) {
       const canvas = document.createElement("canvas");
       canvas.width = size;
       canvas.height = size;
       const ctx = canvas.getContext("2d");
+      const radius = size * 0.22;
 
-      const gradient = ctx.createLinearGradient(0, 0, size, size);
-      gradient.addColorStop(0, "#7b8bff");
-      gradient.addColorStop(0.55, "#5a6aee");
-      gradient.addColorStop(1, "#4453cf");
-      ctx.fillStyle = gradient;
+      ctx.save();
+      roundRect(ctx, 0, 0, size, size, radius);
+      ctx.clip();
+
+      const bg = ctx.createLinearGradient(0, 0, size, size);
+      bg.addColorStop(0, "#0b1326");
+      bg.addColorStop(1, "#060912");
+      ctx.fillStyle = bg;
       ctx.fillRect(0, 0, size, size);
 
-      const glow = ctx.createRadialGradient(size * 0.86, size * 0.9, 0, size * 0.86, size * 0.9, size * 0.55);
-      glow.addColorStop(0, "rgba(167, 240, 216, 0.38)");
-      glow.addColorStop(1, "rgba(167, 240, 216, 0)");
+      ctx.strokeStyle = "rgba(94, 231, 255, 0.07)";
+      ctx.lineWidth = 1;
+      const step = size / 16;
+      for (let x = 0; x <= size; x += step) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, size); ctx.stroke();
+      }
+      for (let y = 0; y <= size; y += step) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(size, y); ctx.stroke();
+      }
+
+      const glow = ctx.createRadialGradient(size * 0.2, size * 0.15, 0, size * 0.2, size * 0.15, size * 0.9);
+      glow.addColorStop(0, "rgba(94, 231, 255, 0.30)");
+      glow.addColorStop(1, "rgba(94, 231, 255, 0)");
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, size, size);
 
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
-      ctx.lineWidth = size * 0.06;
-      ctx.beginPath();
-      ctx.arc(size * 0.86, size * 0.14, size * 0.34, 0, Math.PI * 2);
+      const glow2 = ctx.createRadialGradient(size * 0.88, size * 0.9, 0, size * 0.88, size * 0.9, size * 0.75);
+      glow2.addColorStop(0, "rgba(255, 107, 214, 0.22)");
+      glow2.addColorStop(1, "rgba(255, 107, 214, 0)");
+      ctx.fillStyle = glow2;
+      ctx.fillRect(0, 0, size, size);
+      ctx.restore();
+
+      roundRect(ctx, size * 0.027, size * 0.027, size * 0.946, size * 0.946, radius * 0.9);
+      ctx.strokeStyle = "rgba(94, 231, 255, 0.35)";
+      ctx.lineWidth = size * 0.006;
       ctx.stroke();
 
-      ctx.fillStyle = "#ffffff";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.font = "800 " + Math.round(size * 0.44) + "px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-      ctx.fillText("Go", size / 2, size / 2 + size * 0.02);
+      const font = "700 " + Math.round(size * 0.293) + "px ui-monospace, 'JetBrains Mono', Menlo, monospace";
+      ctx.font = font;
+      ctx.textAlign = "left";
+      ctx.textBaseline = "alphabetic";
+
+      ctx.save();
+      ctx.shadowColor = "rgba(94, 231, 255, 0.55)";
+      ctx.shadowBlur = size * 0.09;
+      ctx.fillStyle = "#5ee7ff";
+      ctx.fillText(">go", size * 0.19, size * 0.62);
+      ctx.restore();
+
+      ctx.fillStyle = "rgba(255, 107, 214, 0.85)";
+      ctx.fillRect(size * 0.746, size * 0.367, size * 0.09, size * 0.242);
+
+      ctx.font = "500 " + Math.round(size * 0.067) + "px ui-monospace, 'JetBrains Mono', Menlo, monospace";
+      ctx.fillStyle = "#b6ff5e";
+      ctx.fillText("roadmap", size * 0.19, size * 0.79);
+
       return canvas;
     }
 

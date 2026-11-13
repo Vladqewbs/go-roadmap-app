@@ -1,11 +1,15 @@
 // Service worker: офлайн-кэш приложения
-const CACHE_NAME = "go-roadmap-v5";
+const CACHE_NAME = "go-roadmap-v6";
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./icon-192.png",
-  "./icon-512.png"
+  "./icon-512.png",
+  "./fonts/jetbrains-mono-cyrillic.woff2",
+  "./fonts/jetbrains-mono-latin.woff2",
+  "./fonts/manrope-cyrillic.woff2",
+  "./fonts/manrope-latin.woff2"
 ];
 
 // Установка: складываем основные файлы в кэш
