@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#060912">
-  <meta name="description" content="Терминальный трекер роадмапа Go: этапы, задачи LeetCode по темам, статистика профиля, ачивки, заметки, чек-лист и синхронизация через GitHub Gist.">
+  <meta name="description" content="Терминальный трекер роадмапа Go: этапы, конспекты теории с источниками и вопросами, задачи LeetCode по темам, статистика профиля, ачивки, заметки, чек-лист и синхронизация через GitHub Gist.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -294,7 +294,7 @@
     /* ================= НИЖНИЕ ВКЛАДКИ ================= */
     .tabbar {
       position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
-      display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px;
+      display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 3px;
       padding: 8px 10px calc(8px + var(--safe-b));
       background: color-mix(in srgb, var(--panel) 94%, transparent);
       -webkit-backdrop-filter: blur(14px);
@@ -478,6 +478,133 @@
     .log div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .log .p { color: var(--acc2); }
     .log .k { color: var(--ok); }
+
+    /* ================= ТЕОРИЯ ================= */
+    .theory-summary { margin: 2px 0 12px; }
+    .theory-summary-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .theory-summary-top strong { font-family: var(--mono); font-size: 19px; font-weight: 800; }
+    .theory-summary-top span { margin-left: 7px; font-size: 12.5px; color: var(--muted); }
+    .theory-summary .meter > span { background: linear-gradient(90deg, var(--acc2), var(--acc)); }
+    .theory-list { display: grid; gap: 12px; }
+    .theory-stage {
+      --hue: var(--acc);
+      --c: var(--hue);
+      position: relative; overflow: hidden; min-width: 0;
+      border-radius: var(--radius); border: 1px solid var(--line); background: var(--card);
+    }
+    :root[data-theme="light"] .theory-stage { --c: color-mix(in srgb, var(--hue) 55%, #0a2a33); }
+    .theory-list .theory-stage:nth-child(8n + 1) { --hue: #ff6bd6; }
+    .theory-list .theory-stage:nth-child(8n + 2) { --hue: #ffd166; }
+    .theory-list .theory-stage:nth-child(8n + 3) { --hue: #5ee7ff; }
+    .theory-list .theory-stage:nth-child(8n + 4) { --hue: #b6ff5e; }
+    .theory-list .theory-stage:nth-child(8n + 5) { --hue: #ff9a5e; }
+    .theory-list .theory-stage:nth-child(8n + 6) { --hue: #a78bfa; }
+    .theory-list .theory-stage:nth-child(8n + 7) { --hue: #5dffb0; }
+    .theory-list .theory-stage:nth-child(8n + 8) { --hue: #7cf0ff; }
+    .theory-stage::before {
+      content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+      background: var(--c);
+    }
+    :root[data-theme="dark"] .theory-stage::before { box-shadow: 0 0 14px var(--c); }
+    .theory-toggle {
+      display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center; gap: 12px;
+      width: 100%; min-height: 64px; padding: 14px 14px 14px 18px;
+      border: 0; background: transparent; color: inherit; text-align: left;
+      transition: background .2s ease;
+    }
+    .theory-toggle:hover { background: color-mix(in srgb, var(--c) 7%, transparent); }
+    .theory-toggle:focus-visible { outline: 2px solid var(--c); outline-offset: -2px; }
+    .theory-stage.is-open .stage-chevron { transform: rotate(180deg); }
+    .theory-stage { scroll-margin-top: 84px; }
+    .stage-theory-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin: 12px 0 0; padding: 7px 11px;
+      border: 1px solid var(--line); border-radius: 10px;
+      background: var(--panel); color: var(--acc);
+      font-family: var(--mono); font-size: 10.5px; font-weight: 700;
+      cursor: pointer; transition: border-color .2s ease, background .2s ease;
+    }
+    .stage-theory-link:hover { border-color: var(--acc); background: color-mix(in srgb, var(--acc) 10%, var(--panel)); }
+    .theory-empty { padding: 16px; border: 1px dashed var(--line); border-radius: 12px; font-size: 13px; color: var(--muted); }
+    .theory-stage.is-complete .stage-index::after { content: " ✓"; color: var(--ok); }
+    .theory-panel { padding: 0 14px 14px 18px; }
+    .theory-intro {
+      margin: 0 0 12px; padding: 0 2px 12px;
+      border-bottom: 1px dashed var(--line);
+      font-size: 13px; line-height: 1.55; color: var(--muted);
+    }
+    .lesson {
+      margin-top: 10px; padding: 14px;
+      border: 1px solid var(--line); border-radius: 14px; background: var(--panel);
+      transition: border-color .2s ease, background .2s ease;
+    }
+    .lesson:first-of-type { margin-top: 0; }
+    .lesson.is-read { border-color: var(--c); background: color-mix(in srgb, var(--c) 10%, var(--panel)); }
+    .lesson-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .lesson-head > div { min-width: 0; }
+    .lesson-num {
+      display: block; margin-bottom: 3px;
+      font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--c);
+    }
+    .lesson-head h3 { font-size: 15px; font-weight: 800; line-height: 1.35; letter-spacing: -.01em; }
+    .lesson-check {
+      display: inline-flex; align-items: center; gap: 6px; flex: none;
+      padding: 4px 0; cursor: pointer;
+      font-family: var(--mono); font-size: 9.5px; color: var(--muted);
+    }
+    .lesson-check input {
+      position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+      overflow: hidden; clip: rect(0, 0, 0, 0); clip-path: inset(50%);
+      white-space: nowrap; border: 0;
+    }
+    .lesson-check .check-box { width: 22px; height: 22px; border-radius: 7px; }
+    .lesson-check .check-box::after { width: 11px; height: 6px; border-width: 0 0 2px 2px; }
+    .lesson-check input:checked + .check-box {
+      background: var(--c); border-color: var(--c);
+    }
+    .lesson-check input:checked + .check-box::after {
+      transform: rotate(-45deg) scale(1); opacity: 1;
+    }
+    .lesson-check input:focus-visible + .check-box { box-shadow: 0 0 0 3px var(--glow); }
+    .lesson-text p { margin-top: 8px; font-size: 13.5px; line-height: 1.6; color: var(--fg); }
+    .lesson-points { display: grid; gap: 6px; margin: 10px 0 0; padding: 0 0 0 18px; }
+    .lesson-points li { font-size: 13px; line-height: 1.55; color: var(--muted); }
+    .lesson-code {
+      margin: 10px 0 0; padding: 10px 12px; max-width: 100%;
+      border: 1px dashed var(--line); border-radius: 10px;
+      background: rgba(0, 0, 0, .26); overflow-x: auto;
+      font-family: var(--mono); font-size: 11px; line-height: 1.6; color: var(--fg);
+      -webkit-overflow-scrolling: touch;
+    }
+    :root[data-theme="light"] .lesson-code { background: rgba(29, 36, 51, .04); }
+    .lesson-source {
+      margin-top: 10px;
+      font-family: var(--mono); font-size: 10.5px; line-height: 1.6; color: var(--dim);
+    }
+    .lesson-source a { color: var(--acc); text-decoration: none; border-bottom: 1px dotted color-mix(in srgb, var(--acc) 55%, transparent); }
+    .lesson-source a:hover { border-bottom-style: solid; }
+    .lesson-qa { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line); }
+    .lesson-qa-title {
+      font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+      letter-spacing: .07em; text-transform: uppercase; color: var(--acc2);
+    }
+    .lesson-qa details {
+      margin-top: 7px; border: 1px solid var(--line); border-radius: 10px; background: var(--card);
+    }
+    .lesson-qa details[open] { border-color: var(--c); }
+    .lesson-qa summary {
+      display: flex; gap: 8px; padding: 9px 11px;
+      font-size: 13px; font-weight: 700; line-height: 1.45; cursor: pointer;
+      list-style: none;
+    }
+    .lesson-qa summary::-webkit-details-marker { display: none; }
+    .lesson-qa summary::before {
+      content: "?"; flex: none;
+      font-family: var(--mono); font-size: 12px; color: var(--acc2);
+    }
+    .lesson-qa details[open] summary::before { content: "!"; color: var(--ok); }
+    .lesson-qa p { padding: 0 11px 11px 30px; font-size: 12.5px; line-height: 1.55; color: var(--muted); }
 
     /* ================= ПРАКТИКА ================= */
     .practice-top { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); gap: 12px; align-items: start; }
@@ -765,7 +892,8 @@
     (function () {
       var hash = (location.hash || "").replace(/^#/, "");
       if (hash === "resources") hash = "roadmap";
-      var allowed = ["roadmap", "practice", "achievements", "checklist", "settings"];
+      if (hash === "learning" || hash === "teach") hash = "theory";
+      var allowed = ["roadmap", "theory", "practice", "achievements", "checklist", "settings"];
       document.body.dataset.tab = allowed.indexOf(hash) >= 0 ? hash : "roadmap";
     })();
   </script>
@@ -809,7 +937,7 @@
           <div class="stat"><b id="streakDays">0</b><span id="streakLabel">дней подряд</span></div>
           <div class="stat"><b><span id="stagesDone">0</span><span class="stat-sep">/</span>8</b><span>этапов</span></div>
           <div class="stat"><b id="practiceStat">0</b><span id="practiceUnit">задач</span></div>
-          <div class="stat"><b><span id="achievementStat">0</span><span class="stat-sep">/</span>22</b><span>ачивок</span></div>
+          <div class="stat"><b><span id="achievementStat">0</span><span class="stat-sep">/</span><span id="achievementTotal">25</span></b><span>ачивок</span></div>
         </div>
         <div class="streak-days" id="streakCalendar" role="img" aria-label="Активность за последние 14 дней"></div>
         <p class="daily-tip" id="dailyTip"></p>
@@ -823,6 +951,24 @@
 
       <h2 class="prompt">cat log</h2>
       <div class="log" id="actionLog" aria-live="polite"><div class="muted">— журнал пуст —</div></div>
+    </section>
+
+
+    <section class="panel" id="panel-theory" role="tabpanel" aria-labelledby="tab-theory" tabindex="0" hidden>
+      <div class="panel-head">
+        <h2>theory --read</h2>
+        <p>Конспекты по каждому пункту роадмапа: главное, источники и вопросы для самопроверки. Сначала ответьте вслух, потом раскрывайте ответ.</p>
+      </div>
+      <div class="card theory-summary">
+        <div class="theory-summary-top">
+          <div><strong id="theoryCount">0 из 0</strong><span>тем изучено</span></div>
+          <span class="achievement-medal" aria-hidden="true">📖</span>
+        </div>
+        <div class="meter" role="progressbar" aria-label="Прогресс теории" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="theoryMeter">
+          <span id="theoryBar"></span>
+        </div>
+      </div>
+      <div class="theory-list" id="theoryList"></div>
     </section>
 
     <section class="panel" id="panel-practice" role="tabpanel" aria-labelledby="tab-practice" tabindex="0" hidden>
@@ -957,7 +1103,7 @@
           <div class="card">
             <p class="eyebrow">Резервная копия</p>
             <h2>Экспорт и импорт</h2>
-            <p class="card-desc">Работает без токена и интернета. JSON содержит прогресс, практику, ачивки, заметки и чек-лист.</p>
+            <p class="card-desc">Работает без токена и интернета. JSON содержит прогресс, теорию, практику, ачивки, заметки и чек-лист.</p>
             <div class="data-actions">
               <button class="btn btn-secondary" type="button" id="exportBtn">Экспорт JSON</button>
               <button class="btn btn-secondary" type="button" id="importBtn">Импорт JSON</button>
@@ -965,7 +1111,7 @@
             <input type="file" id="importFile" accept="application/json,.json" hidden>
             <div class="danger-zone">
               <button class="btn btn-danger" type="button" id="resetBtn">Сбросить прогресс</button>
-              <p class="field-hint" style="margin-top: 8px;">Очистит задачи, практику, ачивки, заметки и чек-лист. Тема оформления и ник LeetCode останутся.</p>
+              <p class="field-hint" style="margin-top: 8px;">Очистит задачи, теорию, практику, ачивки, заметки и чек-лист. Тема оформления и ник LeetCode останутся.</p>
             </div>
           </div>
         </div>
@@ -1021,6 +1167,9 @@
     <button class="tab" type="button" role="tab" id="tab-roadmap" aria-controls="panel-roadmap" aria-selected="true" tabindex="0" data-tab="roadmap">
       <span class="ic" aria-hidden="true">🧭</span><span class="lb">путь</span>
     </button>
+    <button class="tab" type="button" role="tab" id="tab-theory" aria-controls="panel-theory" aria-selected="false" tabindex="-1" data-tab="theory">
+      <span class="ic" aria-hidden="true">📖</span><span class="lb">теория</span>
+    </button>
     <button class="tab" type="button" role="tab" id="tab-practice" aria-controls="panel-practice" aria-selected="false" tabindex="-1" data-tab="practice">
       <span class="ic" aria-hidden="true">🧩</span><span class="lb">практика</span>
     </button>
@@ -1038,6 +1187,7 @@
   <footer class="footer">go-roadmap · данные не покидают ваши устройства без вашего Gist</footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <script src="./theory.js"></script>
   <script>
     "use strict";
 
@@ -1160,6 +1310,13 @@
       "2+ проекта на GitHub с README",
       "40+ задач на алгоритмы"
     ];
+
+    // ---------- Данные: теория ----------
+    const THEORY = Array.isArray(window.GO_ROADMAP_THEORY) ? window.GO_ROADMAP_THEORY : [];
+    const TOTAL_THEORY = THEORY.reduce((sum, stage) => sum + stage.sections.length, 0);
+    const THEORY_KEYS = new Set(
+      THEORY.flatMap((stage) => stage.sections.map((_, index) => stage.id + ":" + index))
+    );
 
     // ---------- Данные: практика по темам ----------
     const PRACTICE = [
@@ -1361,6 +1518,9 @@
       { id: "lc-50", icon: "⭐", title: "50 на LeetCode", desc: "50 задач решено на LeetCode", metric: "solved", target: 50 },
       { id: "lc-100", icon: "🌟", title: "100 на LeetCode", desc: "100 задач решено на LeetCode", metric: "solved", target: 100 },
       { id: "checklist", icon: "👑", title: "Минимум закрыт", desc: "Весь чек-лист к собеседованию", metric: "checklist", target: CHECKLIST_MIN.length },
+      { id: "theory-first", icon: "📖", title: "Первый конспект", desc: "Изучена первая тема теории", metric: "theory", target: 1 },
+      { id: "theory-ten", icon: "🎓", title: "Теоретик", desc: "10 тем теории изучено", metric: "theory", target: 10 },
+      { id: "theory-all", icon: "🧠", title: "Эрудит", desc: "Вся теория роадмапа изучена", metric: "theory", target: TOTAL_THEORY },
       { id: "cloud", icon: "☁️", title: "В облаке", desc: "Первая успешная синхронизация", metric: "sync", target: 1 }
     ];
 
@@ -1423,6 +1583,11 @@
       streakCalendar: document.getElementById("streakCalendar"),
       dailyTip: document.getElementById("dailyTip"),
       roadmapList: document.getElementById("roadmapList"),
+      theoryList: document.getElementById("theoryList"),
+      theoryCount: document.getElementById("theoryCount"),
+      theoryBar: document.getElementById("theoryBar"),
+      theoryMeter: document.getElementById("theoryMeter"),
+      achievementTotal: document.getElementById("achievementTotal"),
       checklistList: document.getElementById("checklistList"),
       checklistCount: document.getElementById("checklistCount"),
       checklistBar: document.getElementById("checklistBar"),
@@ -1469,6 +1634,7 @@
     let syncConfig = { token: "", gistId: "" };
     let openStages = new Set([ROADMAP[0].id]);
     let openTopics = new Set([PRACTICE[0].id]);
+    let openTheoryStages = new Set(THEORY.length ? [THEORY[0].id] : []);
     const noteTimers = new Map();
     let noteFlushNeeded = false;
     let syncTimer = null;
@@ -1485,6 +1651,10 @@
 
     // ---------- Утилиты ----------
     function taskKey(stageId, index) {
+      return stageId + ":" + index;
+    }
+
+    function theoryKey(stageId, index) {
       return stageId + ":" + index;
     }
 
@@ -1597,6 +1767,7 @@
       return {
         version: 2,
         tasks: {},
+        theory: {},
         notes: {},
         checklist: {},
         practice: {},
@@ -1616,6 +1787,11 @@
       if (raw.tasks && typeof raw.tasks === "object") {
         Object.keys(raw.tasks).forEach((key) => {
           if (TASK_KEYS.has(key) && raw.tasks[key] === true) normalized.tasks[key] = true;
+        });
+      }
+      if (raw.theory && typeof raw.theory === "object") {
+        Object.keys(raw.theory).forEach((key) => {
+          if (THEORY_KEYS.has(key) && raw.theory[key] === true) normalized.theory[key] = true;
         });
       }
       if (raw.notes && typeof raw.notes === "object") {
@@ -1675,6 +1851,7 @@
       if (!target) return false;
       return Boolean(
         Object.keys(target.tasks || {}).length ||
+        Object.keys(target.theory || {}).length ||
         Object.keys(target.checklist || {}).length ||
         Object.keys(target.practice || {}).length ||
         Object.keys(target.achievements || {}).length ||
@@ -1783,6 +1960,12 @@
       });
       const checklist = CHECKLIST_MIN.reduce((count, _, index) =>
         count + (state.checklist["min-" + index] ? 1 : 0), 0);
+      let theory = 0;
+      THEORY.forEach((stage) => {
+        stage.sections.forEach((_, index) => {
+          if (state.theory[theoryKey(stage.id, index)]) theory += 1;
+        });
+      });
       let practice = 0;
       let hard = 0;
       let sql = 0;
@@ -1800,6 +1983,7 @@
         percent: TOTAL_TASKS ? Math.round((tasks / TOTAL_TASKS) * 100) : 0,
         stages: stages,
         checklist: checklist,
+        theory: theory,
         practice: practice,
         hard: hard,
         sql: sql,
@@ -1822,6 +2006,7 @@
       const unlocked = [];
       ACHIEVEMENTS.forEach((item) => {
         if (state.achievements[item.id]) return;
+        if (item.target <= 0) return;
         if (metricValue(item.metric, stats) >= item.target) {
           state.achievements[item.id] = nowIso();
           unlocked.push(item);
@@ -1881,6 +2066,7 @@
     // ---------- Отрисовка: роадмап ----------
     function renderAll() {
       renderRoadmap();
+      renderTheory();
       renderChecklist();
       renderPractice();
       renderAchievements();
@@ -1936,6 +2122,9 @@
                 <span class="stage-progress-text" data-stage-progress>выполнено ${doneCount} из ${taskCount}</span>
               </div>
               <ul class="task-list">${tasks}</ul>
+              <button class="stage-theory-link" type="button" data-theory-jump="${escapeHtml(stage.id)}">
+                <span aria-hidden="true">📖</span> Теория этапа
+              </button>
               <div class="notes-block">
                 <div class="notes-head">
                   <label for="notes-${escapeHtml(stage.id)}">Заметки</label>
@@ -1950,6 +2139,163 @@
       dom.roadmapList.querySelectorAll("textarea[data-notes]").forEach((area) => {
         area.value = state.notes[area.dataset.notes] || "";
       });
+    }
+
+
+    // ---------- Отрисовка: теория ----------
+    function updateTheorySummary() {
+      const done = computeStats().theory;
+      const percent = TOTAL_THEORY ? Math.round((done / TOTAL_THEORY) * 100) : 0;
+      if (dom.theoryCount) dom.theoryCount.textContent = done + " из " + TOTAL_THEORY;
+      if (dom.theoryBar) dom.theoryBar.style.width = percent + "%";
+      if (dom.theoryMeter) dom.theoryMeter.setAttribute("aria-valuenow", String(percent));
+    }
+
+    function renderTheory() {
+      if (!dom.theoryList) return;
+      if (!THEORY.length) {
+        dom.theoryList.innerHTML = '<p class="theory-empty">Теория не загрузилась. Проверьте файл theory.js.</p>';
+        updateTheorySummary();
+        return;
+      }
+
+      dom.theoryList.innerHTML = THEORY.map((stage, stageIndex) => {
+        const isOpen = openTheoryStages.has(stage.id);
+        const total = stage.sections.length;
+        const done = stage.sections.reduce((count, _, index) =>
+          count + (state.theory[theoryKey(stage.id, index)] ? 1 : 0), 0);
+        const percent = total ? Math.round((done / total) * 100) : 0;
+        const complete = total > 0 && done === total;
+
+        const lessons = stage.sections.map((section, index) => {
+          const key = theoryKey(stage.id, index);
+          const read = Boolean(state.theory[key]);
+          const paragraphs = section.text.map((text) => "<p>" + escapeHtml(text) + "</p>").join("");
+          const points = section.points && section.points.length
+            ? '<ul class="lesson-points">' + section.points.map((point) => "<li>" + escapeHtml(point) + "</li>").join("") + "</ul>"
+            : "";
+          const code = section.code
+            ? '<pre class="lesson-code"><code>' + escapeHtml(section.code) + "</code></pre>"
+            : "";
+          const sources = (section.sources || []).map((source) =>
+            '<a href="' + escapeHtml(source.url) + '" target="_blank" rel="noopener noreferrer">' +
+            escapeHtml(source.label) + "</a>"
+          ).join(" · ");
+          const qa = (section.qa || []).map((pair) =>
+            "<details><summary>" + escapeHtml(pair[0]) + "</summary><p>" + escapeHtml(pair[1]) + "</p></details>"
+          ).join("");
+
+          return `
+            <article class="lesson${read ? " is-read" : ""}" data-lesson-key="${escapeHtml(key)}">
+              <div class="lesson-head">
+                <div>
+                  <span class="lesson-num">${pad2(index + 1)} / ${pad2(total)}</span>
+                  <h3>${escapeHtml(section.title)}</h3>
+                </div>
+                <label class="lesson-check" title="Отметить тему изученной">
+                  <input type="checkbox" data-theory="${escapeHtml(key)}" aria-label="Изучено: ${escapeHtml(section.title)}"${read ? " checked" : ""}>
+                  <span class="check-box" aria-hidden="true"></span>
+                  <span>изучено</span>
+                </label>
+              </div>
+              <div class="lesson-text">${paragraphs}</div>
+              ${points}
+              ${code}
+              <div class="lesson-source">Источник: ${sources || "не указан"}</div>
+              ${qa ? '<div class="lesson-qa"><span class="lesson-qa-title">Вопросы для самопроверки</span>' + qa + "</div>" : ""}
+            </article>`;
+        }).join("");
+
+        return `
+          <article class="theory-stage${isOpen ? " is-open" : ""}${complete ? " is-complete" : ""}" data-theory-stage-id="${escapeHtml(stage.id)}">
+            <h2>
+              <button class="theory-toggle" type="button" aria-expanded="${isOpen}" aria-controls="theory-body-${escapeHtml(stage.id)}">
+                <span class="stage-index" aria-hidden="true">${pad2(stageIndex + 1)}</span>
+                <span class="stage-heading">
+                  <span class="stage-title">${escapeHtml(stage.title)}</span>
+                  <span class="stage-weeks"><span class="stage-count" data-theory-count>${done}/${total}</span> · ${escapeHtml(stage.weeks)}</span>
+                  <span class="stage-barline" aria-hidden="true"><span data-theory-bar style="width:${percent}%"></span></span>
+                </span>
+                <span class="stage-chevron" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </span>
+              </button>
+            </h2>
+            <div class="theory-panel" id="theory-body-${escapeHtml(stage.id)}"${isOpen ? "" : " hidden"}>
+              <div class="stage-progress-row">
+                <div class="meter" role="progressbar" aria-label="Прогресс теории: ${escapeHtml(stage.title)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}" data-theory-meter>
+                  <span data-theory-bar style="width:${percent}%"></span>
+                </div>
+                <span class="stage-progress-text" data-theory-progress>изучено ${done} из ${total}</span>
+              </div>
+              <p class="theory-intro">${escapeHtml(stage.intro)}</p>
+              ${lessons}
+            </div>
+          </article>`;
+      }).join("");
+
+      updateTheorySummary();
+    }
+
+    function updateTheoryUI(stageId) {
+      const stage = THEORY.find((item) => item.id === stageId);
+      const article = dom.theoryList
+        ? dom.theoryList.querySelector('.theory-stage[data-theory-stage-id="' + cssEscape(stageId) + '"]')
+        : null;
+      if (!stage || !article) return;
+      const total = stage.sections.length;
+      const done = stage.sections.reduce((count, _, index) =>
+        count + (state.theory[theoryKey(stage.id, index)] ? 1 : 0), 0);
+      const percent = total ? Math.round((done / total) * 100) : 0;
+      const complete = total > 0 && done === total;
+      const wasComplete = article.classList.contains("is-complete");
+      article.classList.toggle("is-complete", complete);
+      if (complete && !wasComplete) {
+        pushLog("theory stage complete: " + stage.title, "k");
+        confetti();
+      }
+      const countNode = article.querySelector("[data-theory-count]");
+      if (countNode) countNode.textContent = done + "/" + total;
+      article.querySelectorAll("[data-theory-bar]").forEach((bar) => {
+        bar.style.width = percent + "%";
+      });
+      const meter = article.querySelector("[data-theory-meter]");
+      if (meter) meter.setAttribute("aria-valuenow", String(percent));
+      const progress = article.querySelector("[data-theory-progress]");
+      if (progress) progress.textContent = "изучено " + done + " из " + total;
+    }
+
+    function toggleTheoryStage(button) {
+      const article = button.closest(".theory-stage");
+      if (!article) return;
+      const body = document.getElementById(button.getAttribute("aria-controls"));
+      const nextOpen = button.getAttribute("aria-expanded") !== "true";
+      button.setAttribute("aria-expanded", String(nextOpen));
+      article.classList.toggle("is-open", nextOpen);
+      if (body) body.hidden = !nextOpen;
+      if (nextOpen) openTheoryStages.add(article.dataset.theoryStageId);
+      else openTheoryStages.delete(article.dataset.theoryStageId);
+    }
+
+    function handleTheoryChange(input) {
+      const key = input.dataset.theory;
+      if (!key) return;
+      if (input.checked) {
+        state.theory[key] = true;
+        bumpActivity();
+      } else {
+        delete state.theory[key];
+      }
+      const lesson = input.closest(".lesson");
+      if (lesson) lesson.classList.toggle("is-read", input.checked);
+      const stageId = key.split(":")[0];
+      updateTheoryUI(stageId);
+      updateTheorySummary();
+      updateOverview();
+      const titleNode = lesson ? lesson.querySelector("h3") : null;
+      if (input.checked) pushLog("theory read: " + (titleNode ? titleNode.textContent : key), "k");
+      else pushLog("theory unread: " + (titleNode ? titleNode.textContent : key));
+      markChanged();
     }
 
     function renderChecklist() {
@@ -1978,6 +2324,7 @@
       dom.practiceStat.textContent = String(stats.practice);
       if (dom.practiceUnit) dom.practiceUnit.textContent = plural(stats.practice, "задача", "задачи", "задач");
       dom.achievementStat.textContent = String(Object.keys(state.achievements).length);
+      if (dom.achievementTotal) dom.achievementTotal.textContent = String(ACHIEVEMENTS.length);
       dom.practiceCount.textContent = stats.practice + " из " + TOTAL_PROBLEMS + " задач";
       updateGreeting(stats);
       renderStreak();
@@ -2498,8 +2845,8 @@
     }
 
     // ---------- Вкладки ----------
-    const TAB_NAMES = ["roadmap", "practice", "achievements", "checklist", "settings"];
-    const TAB_ALIASES = { resources: "roadmap" };
+    const TAB_NAMES = ["roadmap", "theory", "practice", "achievements", "checklist", "settings"];
+    const TAB_ALIASES = { resources: "roadmap", learning: "theory", teach: "theory" };
 
     function switchTab(name, withHash) {
       name = TAB_ALIASES[name] || name;
@@ -2555,7 +2902,7 @@
         return;
       }
       if (hasAnyData(state) && !window.confirm(
-        "Заменить текущий прогресс, практику, ачивки, заметки и чек-лист данными из файла?"
+        "Заменить текущий прогресс, теорию, практику, ачивки, заметки и чек-лист данными из файла?"
       )) {
         return;
       }
@@ -2564,6 +2911,7 @@
       state.updatedAt = nowIso();
       openStages = new Set([firstIncompleteStage().id]);
       openTopics = new Set([PRACTICE[0].id]);
+      openTheoryStages = new Set(THEORY.length ? [THEORY[0].id] : []);
       saveStateLocal();
       applyTheme();
       renderAll();
@@ -2573,7 +2921,7 @@
 
     function resetProgress() {
       if (!window.confirm(
-        "Сбросить все задачи, практику, ачивки, заметки и чек-лист? Это действие нельзя отменить."
+        "Сбросить задачи, теорию, практику, ачивки, заметки и чек-лист? Это действие нельзя отменить."
       )) return;
       const theme = state.theme;
       const lcUsername = state.leetcode ? state.leetcode.username : "";
@@ -2584,6 +2932,7 @@
       state.updatedAt = nowIso();
       openStages = new Set([ROADMAP[0].id]);
       openTopics = new Set([PRACTICE[0].id]);
+      openTheoryStages = new Set(THEORY.length ? [THEORY[0].id] : []);
       saveStateLocal();
       applyTheme();
       renderAll();
@@ -2902,6 +3251,24 @@
     // ---------- События ----------
     function bindEvents() {
       dom.roadmapList.addEventListener("click", (event) => {
+        const jump = event.target.closest("[data-theory-jump]");
+        if (jump) {
+          const stageId = jump.dataset.theoryJump;
+          openTheoryStages.add(stageId);
+          renderTheory();
+          switchTab("theory");
+          const target = dom.theoryList.querySelector(
+            '.theory-stage[data-theory-stage-id="' + cssEscape(stageId) + '"]'
+          );
+          if (target) {
+            requestAnimationFrame(() => {
+              target.scrollIntoView({ behavior: "smooth", block: "start" });
+              const button = target.querySelector(".theory-toggle");
+              if (button) button.focus({ preventScroll: true });
+            });
+          }
+          return;
+        }
         const toggle = event.target.closest(".stage-toggle");
         if (toggle) toggleStage(toggle);
       });
@@ -2912,6 +3279,15 @@
 
       dom.roadmapList.addEventListener("input", (event) => {
         if (event.target.matches("textarea[data-notes]")) handleNoteInput(event.target);
+      });
+
+      dom.theoryList.addEventListener("click", (event) => {
+        const toggle = event.target.closest(".theory-toggle");
+        if (toggle) toggleTheoryStage(toggle);
+      });
+
+      dom.theoryList.addEventListener("change", (event) => {
+        if (event.target.matches("input[data-theory]")) handleTheoryChange(event.target);
       });
 
       dom.practiceList.addEventListener("click", (event) => {
@@ -3034,6 +3410,7 @@
       dom.gistId.value = syncConfig.gistId;
       openStages = new Set([firstIncompleteStage().id]);
       openTopics = new Set([PRACTICE[0].id]);
+      openTheoryStages = new Set(THEORY.length ? [THEORY[0].id] : []);
       applyTheme();
       renderAll();
       pushLog("session ready · " + TOTAL_TASKS + " задач в роадмапе", "k");
