@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#060912">
-  <meta name="description" content="Терминальный трекер роадмапа Go: этапы, конспекты теории с источниками и вопросами, задачи LeetCode по темам, статистика профиля, ачивки, заметки, чек-лист и синхронизация через GitHub Gist.">
+  <meta name="description" content="Терминальный трекер роадмапа Go: этапы, конспекты теории с источниками, ошибками, вопросами и упражнениями, backend-рецепты, песочница Go, задачи LeetCode по темам, статистика профиля, ачивки, заметки, чек-лист и синхронизация через GitHub Gist.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -527,6 +527,107 @@
     }
     .stage-theory-link:hover { border-color: var(--acc); background: color-mix(in srgb, var(--acc) 10%, var(--panel)); }
     .theory-empty { padding: 16px; border: 1px dashed var(--line); border-radius: 12px; font-size: 13px; color: var(--muted); }
+    .recipes-card {
+      margin: 0 0 12px; padding: 0; overflow: hidden;
+      border-color: color-mix(in srgb, var(--acc) 30%, var(--line));
+    }
+    .recipes-wrap > summary {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 14px 16px; cursor: pointer; list-style: none;
+      background: linear-gradient(165deg, var(--card) 60%, color-mix(in srgb, var(--acc) 8%, var(--card)));
+    }
+    .recipes-wrap > summary::-webkit-details-marker { display: none; }
+    .recipes-wrap[open] > summary { border-bottom: 1px dashed var(--line); }
+    .recipes-heading { font-family: var(--mono); font-size: 12px; font-weight: 700; }
+    .recipes-heading::before { content: "$ "; color: var(--acc); }
+    .recipes-note { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+    .recipes-wrap > summary::after {
+      content: "▾"; flex: none; color: var(--acc2);
+      font-size: 14px; transition: transform .2s ease;
+    }
+    .recipes-wrap[open] > summary::after { transform: rotate(180deg); }
+    .recipes-desc { padding: 12px 16px 0; font-size: 12.5px; line-height: 1.55; color: var(--muted); }
+    .recipes-list { display: grid; gap: 8px; padding: 12px 14px 14px; }
+    .recipe {
+      border: 1px solid var(--line); border-radius: 12px;
+      background: var(--panel); overflow: hidden;
+    }
+    .recipe[open] { border-color: color-mix(in srgb, var(--acc) 35%, var(--line)); }
+    .recipe > summary {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 12px; cursor: pointer; list-style: none;
+    }
+    .recipe > summary::-webkit-details-marker { display: none; }
+    .recipe-num { font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--acc2); }
+    .recipe-summary { display: grid; gap: 2px; min-width: 0; flex: 1; }
+    .recipe-tag {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--acc);
+    }
+    .recipe-title { font-size: 13px; font-weight: 700; line-height: 1.35; }
+    .recipe-chevron { flex: none; font-family: var(--mono); font-size: 16px; color: var(--dim); }
+    .recipe[open] .recipe-chevron { color: var(--acc2); }
+    .recipe-body { padding: 0 12px 12px; border-top: 1px dashed var(--line); }
+    .recipe-problem { margin-top: 10px; font-size: 12.5px; line-height: 1.55; color: var(--fg); }
+    .recipe-steps { display: grid; gap: 5px; margin-top: 9px; padding-left: 17px; }
+    .recipe-steps li { font-size: 12px; line-height: 1.5; color: var(--muted); }
+    .recipe-code-wrap { position: relative; margin-top: 10px; }
+    .recipe-copy {
+      position: absolute; top: 6px; right: 6px; z-index: 1;
+      min-height: 28px; padding: 3px 8px; border-radius: 7px;
+      font-size: 9.5px; background: var(--card); border: 1px solid var(--line);
+    }
+    .recipe-code {
+      margin: 0; padding: 12px 12px; overflow-x: auto;
+      border: 1px solid var(--line); border-radius: 10px;
+      background: rgba(0, 0, 0, .3);
+      font-family: var(--mono); font-size: 11px; line-height: 1.6;
+      tab-size: 4; -webkit-overflow-scrolling: touch;
+    }
+    :root[data-theme="light"] .recipe-code { background: rgba(29, 36, 51, .05); }
+    .recipe-code code { font-family: inherit; white-space: pre; }
+    .recipe-notes { display: grid; gap: 5px; margin-top: 9px; padding-left: 17px; }
+    .recipe-notes li { font-size: 12px; line-height: 1.5; color: var(--muted); }
+    .recipe-notes li::marker { color: var(--acc2); }
+    @media (max-width: 430px) {
+      .recipes-note { display: none; }
+    }
+    .review-block {
+      margin: 0 0 12px; padding: 14px;
+      border: 1px solid color-mix(in srgb, var(--acc2) 38%, var(--line));
+      border-radius: var(--radius);
+      background: linear-gradient(165deg, var(--card) 55%, color-mix(in srgb, var(--acc2) 10%, var(--card)));
+    }
+    .review-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+    .review-head h2 { font-family: var(--mono); font-size: 12px; font-weight: 700; }
+    .review-head h2::before { content: "$ "; color: var(--acc2); }
+    .review-head span { font-family: var(--mono); font-size: 10.5px; color: var(--acc2); }
+    .review-list { display: grid; gap: 8px; }
+    .review-item {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 10px 11px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel);
+    }
+    .review-info { display: grid; gap: 2px; min-width: 0; }
+    .review-stage {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .05em;
+      text-transform: uppercase; color: var(--acc2);
+    }
+    .review-title { font-size: 12.5px; font-weight: 700; line-height: 1.35; }
+    .review-meta { font-family: var(--mono); font-size: 9.5px; color: var(--dim); }
+    .review-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; flex: none; }
+    .review-actions .btn { min-height: 38px; padding: 7px 10px; border-radius: 10px; font-size: 11.5px; }
+    .review-more { margin-top: 2px; font-family: var(--mono); font-size: 10px; color: var(--dim); }
+    .lesson.is-flash { animation: lesson-flash 1.6s ease; }
+    @keyframes lesson-flash {
+      0%, 100% { box-shadow: 0 0 0 0 transparent; }
+      20% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--acc2) 55%, transparent); }
+      60% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--acc2) 25%, transparent); }
+    }
+    @media (max-width: 430px) {
+      .review-item { align-items: flex-start; flex-direction: column; }
+      .review-actions { width: 100%; justify-content: stretch; }
+      .review-actions .btn { flex: 1 1 0; }
+    }
     .theory-stage.is-complete .stage-index::after { content: " ✓"; color: var(--ok); }
     .theory-panel { padding: 0 14px 14px 18px; }
     .theory-intro {
@@ -535,6 +636,7 @@
       font-size: 13px; line-height: 1.55; color: var(--muted);
     }
     .lesson {
+      scroll-margin-top: 84px;
       margin-top: 10px; padding: 14px;
       border: 1px solid var(--line); border-radius: 14px; background: var(--panel);
       transition: border-color .2s ease, background .2s ease;
@@ -605,6 +707,114 @@
     }
     .lesson-qa details[open] summary::before { content: "!"; color: var(--ok); }
     .lesson-qa p { padding: 0 11px 11px 30px; font-size: 12.5px; line-height: 1.55; color: var(--muted); }
+    .lesson-sub-title {
+      display: block; margin-bottom: 7px;
+      font-family: var(--mono); font-size: 10px; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase;
+    }
+    .lesson-mistakes {
+      margin-top: 12px; padding: 11px 12px;
+      border: 1px solid color-mix(in srgb, var(--danger) 34%, var(--line));
+      border-radius: 11px;
+      background: color-mix(in srgb, var(--danger) 6%, var(--panel));
+    }
+    .lesson-mistakes .lesson-sub-title { color: var(--danger); }
+    .lesson-mistakes ul { display: grid; gap: 7px; padding-left: 16px; }
+    .lesson-mistakes li { font-size: 12.5px; line-height: 1.55; color: var(--muted); }
+    .lesson-interview { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line); }
+    .lesson-interview .lesson-sub-title { color: var(--acc2); }
+    .lesson-interview details {
+      margin-top: 6px; border: 1px solid var(--line);
+      border-radius: 10px; background: var(--card); overflow: hidden;
+    }
+    .lesson-interview details[open] { border-color: color-mix(in srgb, var(--acc2) 45%, var(--line)); }
+    .lesson-interview summary {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 11px; cursor: pointer; list-style: none;
+      font-size: 12.5px; font-weight: 600; line-height: 1.45;
+    }
+    .lesson-interview summary::-webkit-details-marker { display: none; }
+    .lesson-interview summary::before {
+      content: "?"; flex: none;
+      font-family: var(--mono); font-size: 12px; color: var(--acc2);
+    }
+    .lesson-interview details[open] summary::before { content: "!"; color: var(--ok); }
+    .lesson-interview p { padding: 0 11px 11px 31px; font-size: 12.5px; line-height: 1.55; color: var(--muted); }
+
+    .theory-ex-summary {
+      margin-top: 9px; font-family: var(--mono); font-size: 10px;
+      letter-spacing: .03em; color: var(--muted);
+    }
+    .lesson-ex {
+      margin-top: 12px; padding-top: 11px;
+      border-top: 1px dashed var(--line);
+    }
+    .lesson-ex-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 9px; }
+    .lesson-ex-title {
+      font-family: var(--mono); font-size: 10px; font-weight: 700;
+      letter-spacing: .07em; text-transform: uppercase; color: var(--acc);
+    }
+    .lesson-ex-title::before { content: "$ "; color: var(--acc2); }
+    .lesson-ex-count { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+    .exercise {
+      margin-top: 8px; padding: 11px;
+      border: 1px solid var(--line); border-radius: 12px;
+      background: color-mix(in srgb, var(--panel) 82%, transparent);
+    }
+    .exercise.is-solved {
+      border-color: color-mix(in srgb, var(--ok) 42%, var(--line));
+      background: linear-gradient(165deg, color-mix(in srgb, var(--ok) 7%, var(--panel)), var(--panel));
+    }
+    .exercise-check {
+      display: flex; align-items: flex-start; gap: 9px;
+      cursor: pointer; user-select: none;
+    }
+    .exercise-check input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .exercise-name { font-size: 13px; font-weight: 700; line-height: 1.4; }
+    .exercise.is-solved .exercise-name { color: var(--ok); }
+    .exercise-task {
+      margin: 8px 0 0 29px; font-size: 12.5px; line-height: 1.55;
+      color: var(--muted); white-space: pre-wrap; overflow-wrap: anywhere;
+    }
+    .exercise-details {
+      margin: 8px 0 0 29px; border: 1px solid var(--line);
+      border-radius: 10px; background: var(--card); overflow: hidden;
+    }
+    .exercise-details summary {
+      display: flex; align-items: center; gap: 7px;
+      padding: 8px 10px; cursor: pointer; list-style: none;
+      font-family: var(--mono); font-size: 10px; letter-spacing: .04em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .exercise-details summary::-webkit-details-marker { display: none; }
+    .exercise-details summary::before { content: "›"; font-size: 13px; color: var(--acc2); }
+    .exercise-details[open] summary::before { content: "⌄"; }
+    .exercise-details p {
+      padding: 0 11px 10px; font-size: 12.5px; line-height: 1.55;
+      color: var(--muted); white-space: pre-wrap; overflow-wrap: anywhere;
+    }
+    .exercise-details pre {
+      margin: 0; padding: 10px 11px; overflow-x: auto;
+      border-top: 1px solid var(--line);
+      background: rgba(0, 0, 0, .3);
+      font-family: var(--mono); font-size: 11.5px; line-height: 1.6;
+      tab-size: 4; -webkit-overflow-scrolling: touch;
+    }
+    :root[data-theme="light"] .exercise-details pre { background: rgba(29, 36, 51, .05); }
+    .exercise-details code { font-family: inherit; white-space: pre; }
+    .exercise-actions {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px; margin: 9px 0 0 29px;
+    }
+    .exercise-actions .btn { min-height: 38px; padding: 7px 11px; border-radius: 10px; font-size: 11.5px; }
+    .exercise-lang {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .05em;
+      text-transform: uppercase; color: var(--dim);
+    }
+    @media (max-width: 430px) {
+      .exercise-actions { margin-left: 0; }
+      .exercise-task, .exercise-details { margin-left: 0; }
+    }
 
     /* ================= ПРАКТИКА ================= */
     .practice-top { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); gap: 12px; align-items: start; }
@@ -700,6 +910,63 @@
     .suggest-name { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 4px; font-size: 15px; font-weight: 800; }
     .suggest-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
     .suggest-actions .btn { min-height: 40px; padding: 8px 12px; font-size: 12.5px; }
+    .sandbox-card { margin-top: 12px; }
+    .sandbox-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .sandbox-emoji {
+      display: grid; place-items: center; flex: none; width: 42px; height: 42px;
+      border-radius: 12px; border: 1px solid var(--line); background: var(--panel); font-size: 20px;
+    }
+    .sandbox-toolbar { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 10px; }
+    .sandbox-toolbar .field { margin-bottom: 10px; }
+    .field select {
+      width: 100%; min-height: 48px; padding: 10px 12px;
+      border: 1px solid var(--line); border-radius: 12px;
+      background: var(--panel); color: var(--fg); font-size: 15px; outline: none;
+    }
+    .field select:focus { border-color: var(--acc); box-shadow: 0 0 0 3px color-mix(in srgb, var(--acc) 22%, transparent); }
+    .sandbox-editor {
+      width: 100%; min-height: 240px; padding: 12px 13px;
+      border: 1px solid var(--line); border-radius: 12px;
+      background: rgba(0, 0, 0, .26); color: var(--fg);
+      font-family: var(--mono); font-size: 12.5px; line-height: 1.6;
+      tab-size: 4; resize: vertical; outline: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    :root[data-theme="light"] .sandbox-editor { background: rgba(29, 36, 51, .04); }
+    .sandbox-editor:focus { border-color: var(--acc); box-shadow: 0 0 0 3px color-mix(in srgb, var(--acc) 18%, transparent); }
+    .sandbox-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .sandbox-actions .btn { min-height: 42px; padding: 9px 13px; font-size: 12.5px; }
+    .sandbox-hint { margin-top: 9px; font-family: var(--mono); font-size: 10px; line-height: 1.5; color: var(--dim); }
+    .sandbox-saved-wrap { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); }
+    .sandbox-saved-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      font-family: var(--mono); font-size: 10px; letter-spacing: .05em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .sandbox-saved-head b { color: var(--acc); font-size: 11px; }
+    .sandbox-saved { display: grid; gap: 7px; margin-top: 8px; }
+    .sandbox-empty { font-size: 12px; color: var(--dim); }
+    .snippet-item {
+      display: flex; align-items: stretch; gap: 6px;
+      border: 1px solid var(--line); border-radius: 11px; background: var(--panel);
+      overflow: hidden;
+    }
+    .snippet-load {
+      display: grid; gap: 2px; flex: 1; min-width: 0; padding: 9px 11px;
+      border: 0; background: transparent; color: inherit; text-align: left; cursor: pointer;
+    }
+    .snippet-load:hover { background: color-mix(in srgb, var(--acc) 8%, transparent); }
+    .snippet-title { font-size: 12.5px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .snippet-meta { font-family: var(--mono); font-size: 9.5px; color: var(--dim); }
+    .snippet-del {
+      flex: none; width: 40px; border: 0; border-left: 1px solid var(--line);
+      background: transparent; color: var(--dim); font-size: 18px; cursor: pointer;
+    }
+    .snippet-del:hover { color: var(--danger); background: color-mix(in srgb, var(--danger) 8%, transparent); }
+    @media (max-width: 430px) {
+      .sandbox-toolbar { grid-template-columns: minmax(0, 1fr); gap: 0; }
+      .sandbox-actions .btn { flex: 1 1 calc(50% - 8px); }
+    }
     .practice-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 22px 0 10px; }
     .practice-head h2 { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--fg); }
     .practice-head h2::before { content: "$ "; color: var(--acc2); }
@@ -937,7 +1204,7 @@
           <div class="stat"><b id="streakDays">0</b><span id="streakLabel">дней подряд</span></div>
           <div class="stat"><b><span id="stagesDone">0</span><span class="stat-sep">/</span>8</b><span>этапов</span></div>
           <div class="stat"><b id="practiceStat">0</b><span id="practiceUnit">задач</span></div>
-          <div class="stat"><b><span id="achievementStat">0</span><span class="stat-sep">/</span><span id="achievementTotal">25</span></b><span>ачивок</span></div>
+          <div class="stat"><b><span id="achievementStat">0</span><span class="stat-sep">/</span><span id="achievementTotal">30</span></b><span>ачивок</span></div>
         </div>
         <div class="streak-days" id="streakCalendar" role="img" aria-label="Активность за последние 14 дней"></div>
         <p class="daily-tip" id="dailyTip"></p>
@@ -957,7 +1224,7 @@
     <section class="panel" id="panel-theory" role="tabpanel" aria-labelledby="tab-theory" tabindex="0" hidden>
       <div class="panel-head">
         <h2>theory --read</h2>
-        <p>Конспекты по каждому пункту роадмапа: главное, источники и вопросы для самопроверки. Сначала ответьте вслух, потом раскрывайте ответ.</p>
+        <p>Конспекты по каждому пункту роадмапа: главное, источники, частые ошибки, вопросы и упражнения. Сначала ответьте вслух, потом раскрывайте ответ и решение.</p>
       </div>
       <div class="card theory-summary">
         <div class="theory-summary-top">
@@ -967,6 +1234,24 @@
         <div class="meter" role="progressbar" aria-label="Прогресс теории" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="theoryMeter">
           <span id="theoryBar"></span>
         </div>
+        <p class="theory-ex-summary" id="exerciseSummary">0 из 0 упражнений решено</p>
+      </div>
+      <div class="card recipes-card" id="recipesCard">
+        <details class="recipes-wrap">
+          <summary>
+            <span class="recipes-heading">recipes --list</span>
+            <span class="recipes-note" id="recipesCount">12 практических рецептов</span>
+          </summary>
+          <p class="recipes-desc">Готовые паттерны для backend: обработчики, конфиг, ошибки, таймауты, транзакции, пул воркеров и shutdown. Код можно скопировать и адаптировать.</p>
+          <div class="recipes-list" id="recipesList"></div>
+        </details>
+      </div>
+      <div class="review-block" id="reviewBlock" hidden>
+        <div class="review-head">
+          <h2>review --today</h2>
+          <span id="reviewCount">0</span>
+        </div>
+        <div class="review-list" id="reviewList"></div>
       </div>
       <div class="theory-list" id="theoryList"></div>
     </section>
@@ -1021,6 +1306,44 @@
           <div class="suggest-result" id="suggestResult" aria-live="polite">
             <p class="suggest-empty">Нажмите кнопку — и получите задачу на сегодня.</p>
           </div>
+        </div>
+      </div>
+
+      <div class="card sandbox-card" id="sandbox">
+        <div class="sandbox-head">
+          <div>
+            <p class="eyebrow">Песочница</p>
+            <h2>Go без установки</h2>
+          </div>
+          <span class="sandbox-emoji" aria-hidden="true">⌨️</span>
+        </div>
+        <p class="card-desc">Напишите код, сохраните сниппет и откройте его в официальном Go Playground. Код остаётся в браузере, на сервер приложения ничего не уходит.</p>
+        <div class="sandbox-toolbar">
+          <label class="field">
+            <span>Название сниппета</span>
+            <input type="text" id="snippetTitle" maxlength="80" placeholder="например, worker pool" autocomplete="off" spellcheck="false">
+          </label>
+          <label class="field">
+            <span>Шаблон</span>
+            <select id="snippetTemplate">
+              <option value="hello">Hello, world</option>
+              <option value="stdin">Чтение stdin</option>
+              <option value="algo">Функция и проверки</option>
+            </select>
+          </label>
+        </div>
+        <textarea id="sandboxCode" class="sandbox-editor" rows="12" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Код Go"></textarea>
+        <div class="sandbox-actions">
+          <button class="btn btn-primary" type="button" id="sandboxRunBtn">Открыть в Go Playground</button>
+          <button class="btn btn-secondary" type="button" id="sandboxSaveBtn">Сохранить</button>
+          <button class="btn btn-secondary" type="button" id="sandboxCopyBtn">Копировать</button>
+          <button class="btn btn-secondary" type="button" id="sandboxDownloadBtn">Скачать .go</button>
+          <button class="btn btn-quiet" type="button" id="sandboxNewBtn">Очистить</button>
+        </div>
+        <p class="sandbox-hint" id="sandboxHint">Ctrl+Enter — открыть в Go Playground, Tab — отступ. На iPhone копирование работает через кнопку «Копировать».</p>
+        <div class="sandbox-saved-wrap">
+          <div class="sandbox-saved-head"><span>Сохранённые сниппеты</span><b id="snippetCount">0</b></div>
+          <div class="sandbox-saved" id="savedSnippets"></div>
         </div>
       </div>
 
@@ -1187,6 +1510,8 @@
   <footer class="footer">go-roadmap · данные не покидают ваши устройства без вашего Gist</footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <script src="./recipes.js"></script>
+  <script src="./exercises.js"></script>
   <script src="./theory.js"></script>
   <script>
     "use strict";
@@ -1317,6 +1642,36 @@
     const THEORY_KEYS = new Set(
       THEORY.flatMap((stage) => stage.sections.map((_, index) => stage.id + ":" + index))
     );
+
+    // ---------- Данные: упражнения ----------
+    const EXERCISES = (window.GO_ROADMAP_EXERCISES && typeof window.GO_ROADMAP_EXERCISES === "object")
+      ? window.GO_ROADMAP_EXERCISES : {};
+    const EXERCISE_KEYS = new Set();
+    let TOTAL_EXERCISES = 0;
+    Object.keys(EXERCISES).forEach((topicKey) => {
+      if (!THEORY_KEYS.has(topicKey) || !Array.isArray(EXERCISES[topicKey])) return;
+      EXERCISES[topicKey].forEach((_, index) => {
+        EXERCISE_KEYS.add(topicKey + ":" + index);
+        TOTAL_EXERCISES += 1;
+      });
+    });
+
+    // ---------- Данные: рецепты ----------
+    const RECIPES = Array.isArray(window.GO_ROADMAP_RECIPES) ? window.GO_ROADMAP_RECIPES : [];
+
+    function exerciseKey(topicKey, index) {
+      return topicKey + ":" + index;
+    }
+
+    const EXERCISE_INDEX = new Map();
+    Object.keys(EXERCISES).forEach((topicKey) => {
+      if (!Array.isArray(EXERCISES[topicKey])) return;
+      EXERCISES[topicKey].forEach((item, index) => {
+        if (item && typeof item === "object") {
+          EXERCISE_INDEX.set(exerciseKey(topicKey, index), item);
+        }
+      });
+    });
 
     // ---------- Данные: практика по темам ----------
     const PRACTICE = [
@@ -1521,6 +1876,11 @@
       { id: "theory-first", icon: "📖", title: "Первый конспект", desc: "Изучена первая тема теории", metric: "theory", target: 1 },
       { id: "theory-ten", icon: "🎓", title: "Теоретик", desc: "10 тем теории изучено", metric: "theory", target: 10 },
       { id: "theory-all", icon: "🧠", title: "Эрудит", desc: "Вся теория роадмапа изучена", metric: "theory", target: TOTAL_THEORY },
+      { id: "ex-first", icon: "🛠", title: "Руки в коде", desc: "Первое упражнение решено", metric: "exercises", target: 1 },
+      { id: "ex-30", icon: "🧪", title: "Практик", desc: "30 упражнений решено", metric: "exercises", target: 30 },
+      { id: "ex-all", icon: "🏗", title: "Мастерская", desc: "Все упражнения решены", metric: "exercises", target: TOTAL_EXERCISES },
+      { id: "review-first", icon: "🔁", title: "Возвращение", desc: "Первое повторение теории", metric: "reviews", target: 1 },
+      { id: "review-25", icon: "🧲", title: "Второй проход", desc: "25 повторений теории", metric: "reviews", target: 25 },
       { id: "cloud", icon: "☁️", title: "В облаке", desc: "Первая успешная синхронизация", metric: "sync", target: 1 }
     ];
 
@@ -1587,6 +1947,13 @@
       theoryCount: document.getElementById("theoryCount"),
       theoryBar: document.getElementById("theoryBar"),
       theoryMeter: document.getElementById("theoryMeter"),
+      exerciseSummary: document.getElementById("exerciseSummary"),
+      recipesCard: document.getElementById("recipesCard"),
+      recipesList: document.getElementById("recipesList"),
+      recipesCount: document.getElementById("recipesCount"),
+      reviewBlock: document.getElementById("reviewBlock"),
+      reviewList: document.getElementById("reviewList"),
+      reviewCount: document.getElementById("reviewCount"),
       achievementTotal: document.getElementById("achievementTotal"),
       checklistList: document.getElementById("checklistList"),
       checklistCount: document.getElementById("checklistCount"),
@@ -1597,6 +1964,18 @@
       practiceCount: document.getElementById("practiceCount"),
       suggestBtn: document.getElementById("suggestBtn"),
       suggestResult: document.getElementById("suggestResult"),
+      sandboxCard: document.getElementById("sandbox"),
+      snippetTitle: document.getElementById("snippetTitle"),
+      snippetTemplate: document.getElementById("snippetTemplate"),
+      sandboxCode: document.getElementById("sandboxCode"),
+      sandboxRunBtn: document.getElementById("sandboxRunBtn"),
+      sandboxSaveBtn: document.getElementById("sandboxSaveBtn"),
+      sandboxCopyBtn: document.getElementById("sandboxCopyBtn"),
+      sandboxDownloadBtn: document.getElementById("sandboxDownloadBtn"),
+      sandboxNewBtn: document.getElementById("sandboxNewBtn"),
+      sandboxHint: document.getElementById("sandboxHint"),
+      savedSnippets: document.getElementById("savedSnippets"),
+      snippetCount: document.getElementById("snippetCount"),
       lcConnectBtn: document.getElementById("lcConnectBtn"),
       lcProfileLink: document.getElementById("lcProfileLink"),
       lcStatus: document.getElementById("lcStatus"),
@@ -1707,6 +2086,56 @@
       return Number.isFinite(date.getTime()) ? date : null;
     }
 
+    const REVIEW_INTERVALS = [3, 7, 21, 60, 365];
+
+    function addDays(date, days) {
+      const next = new Date(date);
+      next.setDate(next.getDate() + days);
+      return next;
+    }
+
+    function theoryLookup() {
+      const map = new Map();
+      THEORY.forEach((stage) => {
+        stage.sections.forEach((section, index) => {
+          map.set(theoryKey(stage.id, index), { stage: stage, section: section, index: index });
+        });
+      });
+      return map;
+    }
+
+    const THEORY_INDEX = theoryLookup();
+
+    function dueReviewKeys() {
+      const today = dayKey();
+      return Object.keys(state.reviews)
+        .filter((key) => state.reviews[key] && state.reviews[key].due <= today)
+        .sort((a, b) => {
+          const dueA = state.reviews[a] ? state.reviews[a].due : "";
+          const dueB = state.reviews[b] ? state.reviews[b].due : "";
+          return dueA === dueB ? a.localeCompare(b) : dueA.localeCompare(dueB);
+        });
+    }
+
+    function scheduleReview(key) {
+      if (!THEORY_KEYS.has(key) || state.reviews[key]) return;
+      state.reviews[key] = { due: dayKey(addDays(new Date(), 1)), step: 0 };
+    }
+
+    function completeReview(key) {
+      const entry = state.reviews[key];
+      if (!entry) return null;
+      const step = Math.min((entry.step || 0) + 1, REVIEW_INTERVALS.length);
+      entry.step = step;
+      entry.due = dayKey(addDays(new Date(), REVIEW_INTERVALS[step - 1] || 365));
+      return entry;
+    }
+
+    function reviewIntervalLabel(step) {
+      const days = REVIEW_INTERVALS[Math.max(0, Math.min(step, REVIEW_INTERVALS.length - 1))];
+      return days >= 365 ? "через год" : "через " + days + " " + plural(days, "день", "дня", "дней");
+    }
+
     function showToast(message, tone) {
       if (!dom.toast) return;
       dom.toast.textContent = message;
@@ -1768,6 +2197,9 @@
         version: 2,
         tasks: {},
         theory: {},
+        exercises: {},
+        reviews: {},
+        snippets: [],
         notes: {},
         checklist: {},
         practice: {},
@@ -1793,6 +2225,38 @@
         Object.keys(raw.theory).forEach((key) => {
           if (THEORY_KEYS.has(key) && raw.theory[key] === true) normalized.theory[key] = true;
         });
+      }
+      if (raw.exercises && typeof raw.exercises === "object") {
+        Object.keys(raw.exercises).forEach((key) => {
+          if (EXERCISE_KEYS.has(key) && raw.exercises[key] === true) normalized.exercises[key] = true;
+        });
+      }
+      if (raw.reviews && typeof raw.reviews === "object") {
+        Object.keys(raw.reviews).forEach((key) => {
+          if (!THEORY_KEYS.has(key)) return;
+          const entry = raw.reviews[key];
+          if (!entry || typeof entry !== "object") return;
+          const due = typeof entry.due === "string" ? entry.due : "";
+          if (!dayFromKey(due)) return;
+          const step = Number(entry.step);
+          normalized.reviews[key] = {
+            due: due,
+            step: Number.isFinite(step) ? Math.max(0, Math.min(6, Math.floor(step))) : 0
+          };
+        });
+      }
+      if (Array.isArray(raw.snippets)) {
+        normalized.snippets = raw.snippets
+          .filter((item) => item && typeof item === "object")
+          .slice(0, 50)
+          .map((item) => ({
+            id: typeof item.id === "string" ? item.id.slice(0, 40) : "",
+            title: typeof item.title === "string" ? item.title.trim().slice(0, 80) : "",
+            code: typeof item.code === "string" ? item.code.slice(0, 20000) : "",
+            updatedAt: typeof item.updatedAt === "string" && Number.isFinite(Date.parse(item.updatedAt))
+              ? item.updatedAt : ""
+          }))
+          .filter((item) => item.id && item.code);
       }
       if (raw.notes && typeof raw.notes === "object") {
         ROADMAP.forEach((stage) => {
@@ -1852,6 +2316,9 @@
       return Boolean(
         Object.keys(target.tasks || {}).length ||
         Object.keys(target.theory || {}).length ||
+        Object.keys(target.exercises || {}).length ||
+        Object.keys(target.reviews || {}).length ||
+        (Array.isArray(target.snippets) && target.snippets.length) ||
         Object.keys(target.checklist || {}).length ||
         Object.keys(target.practice || {}).length ||
         Object.keys(target.achievements || {}).length ||
@@ -1966,6 +2433,14 @@
           if (state.theory[theoryKey(stage.id, index)]) theory += 1;
         });
       });
+      let exercises = 0;
+      Object.keys(state.exercises).forEach((key) => {
+        if (EXERCISE_KEYS.has(key) && state.exercises[key]) exercises += 1;
+      });
+      let reviews = 0;
+      Object.keys(state.reviews).forEach((key) => {
+        if (state.reviews[key] && state.reviews[key].step > 0) reviews += 1;
+      });
       let practice = 0;
       let hard = 0;
       let sql = 0;
@@ -1984,6 +2459,8 @@
         stages: stages,
         checklist: checklist,
         theory: theory,
+        exercises: exercises,
+        reviews: reviews,
         practice: practice,
         hard: hard,
         sql: sql,
@@ -2149,6 +2626,95 @@
       if (dom.theoryCount) dom.theoryCount.textContent = done + " из " + TOTAL_THEORY;
       if (dom.theoryBar) dom.theoryBar.style.width = percent + "%";
       if (dom.theoryMeter) dom.theoryMeter.setAttribute("aria-valuenow", String(percent));
+      if (dom.exerciseSummary) {
+        const solved = computeStats().exercises;
+        dom.exerciseSummary.textContent = solved + " из " + TOTAL_EXERCISES + " упражнений решено";
+      }
+    }
+
+    function renderRecipes() {
+      if (!dom.recipesList) return;
+      if (dom.recipesCount) {
+        dom.recipesCount.textContent = RECIPES.length + " " +
+          plural(RECIPES.length, "практический рецепт", "практических рецепта", "практических рецептов");
+      }
+      if (!RECIPES.length) {
+        dom.recipesList.innerHTML = '<p class="theory-empty">Рецепты не загрузились. Проверьте файл recipes.js.</p>';
+        return;
+      }
+      dom.recipesList.innerHTML = RECIPES.map((recipe, index) => {
+        const steps = (recipe.steps || []).length
+          ? "<ol class=\"recipe-steps\">" + recipe.steps.map((step) => "<li>" + escapeHtml(step) + "</li>").join("") + "</ol>"
+          : "";
+        const notes = (recipe.notes || []).length
+          ? "<ul class=\"recipe-notes\">" + recipe.notes.map((note) => "<li>" + escapeHtml(note) + "</li>").join("") + "</ul>"
+          : "";
+        const code = recipe.code
+          ? '<div class="recipe-code-wrap"><button class="btn btn-quiet recipe-copy" type="button" data-recipe-copy="' + escapeHtml(recipe.id) + '">Копировать</button><pre class="recipe-code"><code>' + escapeHtml(recipe.code) + "</code></pre></div>"
+          : "";
+        return `
+          <details class="recipe" data-recipe-id="${escapeHtml(recipe.id)}">
+            <summary>
+              <span class="recipe-num">${pad2(index + 1)}</span>
+              <span class="recipe-summary">
+                <span class="recipe-tag">${escapeHtml(recipe.tag || "Go")}</span>
+                <span class="recipe-title">${escapeHtml(recipe.title)}</span>
+              </span>
+              <span class="recipe-chevron" aria-hidden="true">+</span>
+            </summary>
+            <div class="recipe-body">
+              <p class="recipe-problem">${escapeHtml(recipe.problem)}</p>
+              ${steps}
+              ${code}
+              ${notes}
+            </div>
+          </details>`;
+      }).join("");
+    }
+
+    function renderReviewQueue() {
+      if (!dom.reviewList || !dom.reviewBlock) return;
+      const keys = dueReviewKeys();
+      if (dom.reviewCount) dom.reviewCount.textContent = keys.length + " " + plural(keys.length, "тема", "темы", "тем");
+      dom.reviewBlock.hidden = keys.length === 0;
+      if (!keys.length) {
+        dom.reviewList.innerHTML = "";
+        return;
+      }
+      dom.reviewList.innerHTML = keys.slice(0, 8).map((key) => {
+        const item = THEORY_INDEX.get(key);
+        if (!item) return "";
+        const entry = state.reviews[key];
+        return `
+          <div class="review-item">
+            <div class="review-info">
+              <span class="review-stage">${escapeHtml(item.stage.title)} · ${pad2(item.index + 1)}</span>
+              <span class="review-title">${escapeHtml(item.section.title)}</span>
+              <span class="review-meta">следующее: ${escapeHtml(reviewIntervalLabel(entry.step))}</span>
+            </div>
+            <div class="review-actions">
+              <button class="btn btn-secondary" type="button" data-review-open="${escapeHtml(key)}">Открыть</button>
+              <button class="btn btn-primary" type="button" data-review-done="${escapeHtml(key)}">Повторил</button>
+            </div>
+          </div>`;
+      }).join("") + (keys.length > 8 ? '<p class="review-more">И ещё ' + (keys.length - 8) + '. Закройте эти — появятся следующие.</p>' : "");
+    }
+
+    function openTheoryLesson(key) {
+      const item = THEORY_INDEX.get(key);
+      if (!item) return;
+      openTheoryStages.add(item.stage.id);
+      renderTheory();
+      switchTab("theory");
+      requestAnimationFrame(() => {
+        const lesson = dom.theoryList.querySelector(
+          '.lesson[data-lesson-key="' + cssEscape(key) + '"]'
+        );
+        if (!lesson) return;
+        lesson.scrollIntoView({ behavior: "smooth", block: "start" });
+        lesson.classList.add("is-flash");
+        setTimeout(() => lesson.classList.remove("is-flash"), 1800);
+      });
     }
 
     function renderTheory() {
@@ -2184,6 +2750,44 @@
           const qa = (section.qa || []).map((pair) =>
             "<details><summary>" + escapeHtml(pair[0]) + "</summary><p>" + escapeHtml(pair[1]) + "</p></details>"
           ).join("");
+          const mistakes = (section.mistakes || []).length
+            ? '<div class="lesson-mistakes"><span class="lesson-sub-title">Частые ошибки</span><ul>' +
+              section.mistakes.map((item) => "<li>" + escapeHtml(item) + "</li>").join("") + "</ul></div>"
+            : "";
+          const interview = (section.interview || []).length
+            ? '<div class="lesson-interview"><span class="lesson-sub-title">Что спросят</span>' +
+              section.interview.map((pair) =>
+                "<details><summary>" + escapeHtml(pair[0]) + "</summary><p>" + escapeHtml(pair[1]) + "</p></details>"
+              ).join("") + "</div>"
+            : "";
+
+          const topicExercises = Array.isArray(EXERCISES[key]) ? EXERCISES[key] : [];
+          const solvedExercises = topicExercises.reduce((count, _, exIndex) =>
+            count + (state.exercises[exerciseKey(key, exIndex)] ? 1 : 0), 0);
+          const exercises = topicExercises.length ? `
+            <div class="lesson-ex">
+              <div class="lesson-ex-head">
+                <span class="lesson-ex-title">Упражнения</span>
+                <span class="lesson-ex-count" data-ex-count>${solvedExercises}/${topicExercises.length}</span>
+              </div>
+              ${topicExercises.map((ex, exIndex) => {
+                const exKey = exerciseKey(key, exIndex);
+                const solved = Boolean(state.exercises[exKey]);
+                const canSandbox = ex.code && (ex.starter || ex.solution);
+                return `
+                  <div class="exercise${solved ? " is-solved" : ""}" data-exercise-wrap="${escapeHtml(exKey)}">
+                    <label class="exercise-check">
+                      <input type="checkbox" data-exercise="${escapeHtml(exKey)}" aria-label="Решено: ${escapeHtml(ex.title)}"${solved ? " checked" : ""}>
+                      <span class="check-box" aria-hidden="true"></span>
+                      <span class="exercise-name">${escapeHtml(ex.title)}</span>
+                    </label>
+                    <p class="exercise-task">${escapeHtml(ex.task)}</p>
+                    ${ex.hint ? '<details class="exercise-details"><summary>Подсказка</summary><p>' + escapeHtml(ex.hint) + "</p></details>" : ""}
+                    <details class="exercise-details exercise-solution"><summary>Решение</summary><pre><code>${escapeHtml(ex.solution)}</code></pre></details>
+                    ${canSandbox ? '<div class="exercise-actions"><button class="btn btn-secondary" type="button" data-ex-sandbox="' + escapeHtml(exKey) + '">Открыть в песочнице</button><span class="exercise-lang">' + escapeHtml(ex.lang || "go") + "</span></div>" : '<div class="exercise-actions"><span class="exercise-lang">' + escapeHtml(ex.lang || "text") + "</span></div>"}
+                  </div>`;
+              }).join("")}
+            </div>` : "";
 
           return `
             <article class="lesson${read ? " is-read" : ""}" data-lesson-key="${escapeHtml(key)}">
@@ -2201,8 +2805,11 @@
               <div class="lesson-text">${paragraphs}</div>
               ${points}
               ${code}
+              ${mistakes}
               <div class="lesson-source">Источник: ${sources || "не указан"}</div>
               ${qa ? '<div class="lesson-qa"><span class="lesson-qa-title">Вопросы для самопроверки</span>' + qa + "</div>" : ""}
+              ${interview}
+              ${exercises}
             </article>`;
         }).join("");
 
@@ -2235,6 +2842,7 @@
       }).join("");
 
       updateTheorySummary();
+      renderReviewQueue();
     }
 
     function updateTheoryUI(stageId) {
@@ -2282,19 +2890,52 @@
       if (!key) return;
       if (input.checked) {
         state.theory[key] = true;
+        scheduleReview(key);
         bumpActivity();
       } else {
         delete state.theory[key];
+        delete state.reviews[key];
       }
       const lesson = input.closest(".lesson");
       if (lesson) lesson.classList.toggle("is-read", input.checked);
       const stageId = key.split(":")[0];
       updateTheoryUI(stageId);
       updateTheorySummary();
+      renderReviewQueue();
       updateOverview();
       const titleNode = lesson ? lesson.querySelector("h3") : null;
       if (input.checked) pushLog("theory read: " + (titleNode ? titleNode.textContent : key), "k");
       else pushLog("theory unread: " + (titleNode ? titleNode.textContent : key));
+      markChanged();
+    }
+
+    function handleExerciseChange(input) {
+      const key = input.dataset.exercise;
+      if (!key || !EXERCISE_KEYS.has(key)) return;
+      if (input.checked) {
+        state.exercises[key] = true;
+        bumpActivity();
+      } else {
+        delete state.exercises[key];
+      }
+      const wrap = input.closest(".exercise");
+      if (wrap) wrap.classList.toggle("is-solved", input.checked);
+
+      const parts = key.split(":");
+      const topicKey = parts[0] + ":" + parts[1];
+      const lesson = input.closest(".lesson");
+      const topicExercises = Array.isArray(EXERCISES[topicKey]) ? EXERCISES[topicKey] : [];
+      if (lesson) {
+        const solved = topicExercises.reduce((count, _, index) =>
+          count + (state.exercises[exerciseKey(topicKey, index)] ? 1 : 0), 0);
+        const countNode = lesson.querySelector("[data-ex-count]");
+        if (countNode) countNode.textContent = solved + "/" + topicExercises.length;
+      }
+      updateTheorySummary();
+      updateOverview();
+      const exercise = EXERCISE_INDEX.get(key);
+      pushLog((input.checked ? "exercise solved: " : "exercise reopened: ") +
+        (exercise ? exercise.title : key), input.checked ? "k" : "");
       markChanged();
     }
 
@@ -2363,6 +3004,289 @@
       const stageMeter = article.querySelector("[data-stage-meter]");
       if (stageMeter) stageMeter.setAttribute("aria-valuenow", String(percent));
       article.querySelector("[data-stage-progress]").textContent = "выполнено " + done + " из " + total;
+    }
+
+
+    // ---------- Песочница ----------
+    const SANDBOX_DRAFT_KEY = "go-roadmap-sandbox-v1";
+    const SANDBOX_TEMPLATES = {
+      hello: `package main
+
+import "fmt"
+
+func main() {
+\tfmt.Println("Привет, Go!")
+}
+`,
+      stdin: `package main
+
+import (
+\t"bufio"
+\t"fmt"
+\t"os"
+)
+
+func main() {
+\tscanner := bufio.NewScanner(os.Stdin)
+\tfor scanner.Scan() {
+\t\tfmt.Println("→", scanner.Text())
+\t}
+\tif err := scanner.Err(); err != nil {
+\t\tfmt.Fprintln(os.Stderr, "read error:", err)
+\t}
+}
+`,
+      algo: `package main
+
+import "fmt"
+
+// Solve returns the answer for the given input.
+func Solve(nums []int) int {
+\t// TODO: implement
+\treturn 0
+}
+
+func main() {
+\tcases := []struct {
+\t\tin   []int
+\t\twant int
+\t}{
+\t\t{[]int{1, 2, 3}, 0},
+\t\t{[]int{}, 0},
+\t}
+\tfor _, tc := range cases {
+\t\tgot := Solve(tc.in)
+\t\tstatus := "ok"
+\t\tif got != tc.want {
+\t\t\tstatus = "FAIL"
+\t\t}
+\t\tfmt.Printf("%v → %d (want %d) %s\\n", tc.in, got, tc.want, status)
+\t}
+}
+`
+    };
+
+    let sandboxEditingId = "";
+    let sandboxDraftTimer = null;
+    let sandboxLastTemplate = "hello";
+
+    function sandboxFromTemplate(name) {
+      return SANDBOX_TEMPLATES[name] || SANDBOX_TEMPLATES.hello;
+    }
+
+    function sandboxDraftState() {
+      return {
+        title: dom.snippetTitle ? dom.snippetTitle.value : "",
+        code: dom.sandboxCode ? dom.sandboxCode.value : "",
+        editingId: sandboxEditingId
+      };
+    }
+
+    function saveSandboxDraft() {
+      try {
+        localStorage.setItem(SANDBOX_DRAFT_KEY, JSON.stringify(sandboxDraftState()));
+      } catch (error) {}
+    }
+
+    function scheduleSandboxDraft() {
+      clearTimeout(sandboxDraftTimer);
+      sandboxDraftTimer = setTimeout(saveSandboxDraft, 400);
+    }
+
+    function sandboxLines(code) {
+      return String(code || "").split("\n").length;
+    }
+
+    function renderSnippets() {
+      if (!dom.savedSnippets) return;
+      if (dom.snippetCount) dom.snippetCount.textContent = String(state.snippets.length);
+      if (!state.snippets.length) {
+        dom.savedSnippets.innerHTML = '<p class="sandbox-empty">Пока пусто. Напишите код и нажмите «Сохранить» — сниппет появится здесь.</p>';
+        return;
+      }
+      dom.savedSnippets.innerHTML = state.snippets.map((item) => {
+        const lines = sandboxLines(item.code);
+        const date = item.updatedAt ? formatDateTime(item.updatedAt) : "";
+        return `
+          <div class="snippet-item"${item.id === sandboxEditingId ? ' data-active="true"' : ""}>
+            <button class="snippet-load" type="button" data-snippet-load="${escapeHtml(item.id)}">
+              <span class="snippet-title">${escapeHtml(item.title || "Без названия")}</span>
+              <span class="snippet-meta">${lines} ${plural(lines, "строка", "строки", "строк")}${date ? " · " + escapeHtml(date) : ""}</span>
+            </button>
+            <button class="snippet-del" type="button" data-snippet-del="${escapeHtml(item.id)}" aria-label="Удалить сниппет «${escapeHtml(item.title || "Без названия")}»">×</button>
+          </div>`;
+      }).join("");
+    }
+
+    function loadSandboxCode(code, title, options) {
+      if (!dom.sandboxCode) return;
+      dom.sandboxCode.value = code;
+      dom.snippetTitle.value = title || "";
+      sandboxEditingId = options && options.editingId ? options.editingId : "";
+      saveSandboxDraft();
+      renderSnippets();
+      switchTab("practice");
+      requestAnimationFrame(() => {
+        if (!dom.sandboxCard) return;
+        dom.sandboxCard.scrollIntoView({ behavior: "smooth", block: "start" });
+        dom.sandboxCode.focus({ preventScroll: true });
+      });
+    }
+
+    function saveSnippet() {
+      const code = dom.sandboxCode.value;
+      if (!code.trim()) {
+        showToast("Сначала напишите код", "error");
+        dom.sandboxCode.focus();
+        return;
+      }
+      const title = (dom.snippetTitle.value || "").trim() ||
+        "Сниппет " + (state.snippets.length + 1);
+      const stamp = nowIso();
+      if (sandboxEditingId) {
+        const item = state.snippets.find((entry) => entry.id === sandboxEditingId);
+        if (item) {
+          item.title = title.slice(0, 80);
+          item.code = code.slice(0, 20000);
+          item.updatedAt = stamp;
+        } else {
+          sandboxEditingId = "";
+        }
+      }
+      if (!sandboxEditingId) {
+        sandboxEditingId = "snip-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+        state.snippets.unshift({
+          id: sandboxEditingId,
+          title: title.slice(0, 80),
+          code: code.slice(0, 20000),
+          updatedAt: stamp
+        });
+        state.snippets = state.snippets.slice(0, 50);
+      }
+      dom.snippetTitle.value = title;
+      saveSandboxDraft();
+      renderSnippets();
+      markChanged();
+      showToast("Сниппет сохранён");
+    }
+
+    function deleteSnippet(id) {
+      const item = state.snippets.find((entry) => entry.id === id);
+      if (!item) return;
+      if (!window.confirm("Удалить сниппет «" + (item.title || "Без названия") + "»?")) return;
+      state.snippets = state.snippets.filter((entry) => entry.id !== id);
+      if (sandboxEditingId === id) {
+        sandboxEditingId = "";
+        saveSandboxDraft();
+      }
+      renderSnippets();
+      markChanged();
+      showToast("Сниппет удалён");
+    }
+
+    function copyText(text) {
+      const fallback = () => {
+        const area = document.createElement("textarea");
+        area.value = text;
+        area.setAttribute("readonly", "");
+        area.style.position = "fixed";
+        area.style.top = "-1000px";
+        area.style.opacity = "0";
+        document.body.appendChild(area);
+        area.select();
+        let ok = false;
+        try { ok = document.execCommand("copy"); } catch (error) { ok = false; }
+        area.remove();
+        return ok;
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text)
+          .then(() => true)
+          .catch(() => fallback());
+      }
+      return Promise.resolve(fallback());
+    }
+
+    function openSandboxInPlayground() {
+      const code = dom.sandboxCode.value;
+      if (!code.trim()) {
+        showToast("Сначала напишите код", "error");
+        dom.sandboxCode.focus();
+        return;
+      }
+      window.open("https://go.dev/play/", "_blank");
+      copyText(code).then((ok) => {
+        if (ok) showToast("Код скопирован. Вставьте его в Playground: Ctrl+V или долгое нажатие.");
+        else showToast("Откройте Playground и скопируйте код кнопкой «Копировать»", "error");
+      });
+    }
+
+    function copySandboxCode() {
+      copyText(dom.sandboxCode.value).then((ok) => {
+        showToast(ok ? "Код скопирован" : "Не удалось скопировать. Выделите код вручную.", ok ? "" : "error");
+      });
+    }
+
+    function downloadSnippet() {
+      const code = dom.sandboxCode.value;
+      if (!code.trim()) {
+        showToast("Сначала напишите код", "error");
+        return;
+      }
+      const title = (dom.snippetTitle.value || "snippet").trim() || "snippet";
+      const slug = title.toLowerCase()
+        .replace(/[^a-z0-9а-яё]+/gi, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 40) || "snippet";
+      const blob = new Blob([code], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = slug + ".go";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1200);
+      showToast("Файл .go скачан");
+    }
+
+    function applySandboxTemplate(name) {
+      const code = sandboxFromTemplate(name);
+      if (dom.sandboxCode.value.trim() && dom.sandboxCode.value !== code &&
+          !window.confirm("Заменить текущий код шаблоном? Несохранённый код будет потерян.")) {
+        dom.snippetTemplate.value = sandboxLastTemplate;
+        return;
+      }
+      dom.sandboxCode.value = code;
+      sandboxEditingId = "";
+      sandboxLastTemplate = name;
+      saveSandboxDraft();
+      renderSnippets();
+      showToast("Шаблон загружен");
+    }
+
+    function clearSandbox() {
+      if ((dom.sandboxCode.value.trim() || dom.snippetTitle.value.trim()) &&
+          !window.confirm("Очистить редактор? Несохранённый код будет потерян.")) return;
+      dom.sandboxCode.value = "";
+      dom.snippetTitle.value = "";
+      sandboxEditingId = "";
+      saveSandboxDraft();
+      renderSnippets();
+      dom.sandboxCode.focus();
+    }
+
+    function initSandbox() {
+      if (!dom.sandboxCode) return;
+      const draft = readStorage(SANDBOX_DRAFT_KEY);
+      if (draft && typeof draft.code === "string" && draft.code.trim()) {
+        dom.sandboxCode.value = draft.code;
+        dom.snippetTitle.value = typeof draft.title === "string" ? draft.title : "";
+        sandboxEditingId = typeof draft.editingId === "string" ? draft.editingId : "";
+      } else {
+        dom.sandboxCode.value = SANDBOX_TEMPLATES.hello;
+      }
+      renderSnippets();
     }
 
     // ---------- Отрисовка: практика ----------
@@ -2921,7 +3845,7 @@
 
     function resetProgress() {
       if (!window.confirm(
-        "Сбросить задачи, теорию, практику, ачивки, заметки и чек-лист? Это действие нельзя отменить."
+        "Сбросить задачи, теорию, упражнения, повторения, сниппеты, практику, ачивки, заметки и чек-лист? Это действие нельзя отменить."
       )) return;
       const theme = state.theme;
       const lcUsername = state.leetcode ? state.leetcode.username : "";
@@ -2930,6 +3854,11 @@
       state.theme = theme;
       state.leetcode.username = lcUsername;
       state.updatedAt = nowIso();
+      sandboxEditingId = "";
+      try { localStorage.removeItem(SANDBOX_DRAFT_KEY); } catch (error) {}
+      if (dom.sandboxCode) dom.sandboxCode.value = SANDBOX_TEMPLATES.hello;
+      if (dom.snippetTitle) dom.snippetTitle.value = "";
+      renderSnippets();
       openStages = new Set([ROADMAP[0].id]);
       openTopics = new Set([PRACTICE[0].id]);
       openTheoryStages = new Set(THEORY.length ? [THEORY[0].id] : []);
@@ -3283,11 +4212,56 @@
 
       dom.theoryList.addEventListener("click", (event) => {
         const toggle = event.target.closest(".theory-toggle");
-        if (toggle) toggleTheoryStage(toggle);
+        if (toggle) {
+          toggleTheoryStage(toggle);
+          return;
+        }
+        const exBtn = event.target.closest("[data-ex-sandbox]");
+        if (!exBtn) return;
+        const exercise = EXERCISE_INDEX.get(exBtn.dataset.exSandbox);
+        if (!exercise) return;
+        loadSandboxCode(exercise.starter || exercise.solution, exercise.title, {});
+        showToast("Код открыт в песочнице");
       });
 
       dom.theoryList.addEventListener("change", (event) => {
-        if (event.target.matches("input[data-theory]")) handleTheoryChange(event.target);
+        if (event.target.matches("input[data-theory]")) {
+          handleTheoryChange(event.target);
+          return;
+        }
+        if (event.target.matches("input[data-exercise]")) handleExerciseChange(event.target);
+      });
+
+      if (dom.recipesList) {
+        dom.recipesList.addEventListener("click", (event) => {
+          const btn = event.target.closest("[data-recipe-copy]");
+          if (!btn) return;
+          const recipe = RECIPES.find((item) => item.id === btn.dataset.recipeCopy);
+          if (!recipe || !recipe.code) return;
+          copyText(recipe.code).then((ok) => {
+            showToast(ok ? "Код рецепта скопирован" : "Не удалось скопировать", ok ? "" : "error");
+          });
+        });
+      }
+
+      dom.reviewList.addEventListener("click", (event) => {
+        const openBtn = event.target.closest("[data-review-open]");
+        if (openBtn) {
+          openTheoryLesson(openBtn.dataset.reviewOpen);
+          return;
+        }
+        const doneBtn = event.target.closest("[data-review-done]");
+        if (!doneBtn) return;
+        const key = doneBtn.dataset.reviewDone;
+        const item = THEORY_INDEX.get(key);
+        const entry = completeReview(key);
+        if (!entry) return;
+        bumpActivity();
+        renderReviewQueue();
+        updateOverview();
+        pushLog("theory review: " + (item ? item.section.title : key), "k");
+        markChanged();
+        showToast("Повторение записано. Следующее " + reviewIntervalLabel(entry.step) + ".");
       });
 
       dom.practiceList.addEventListener("click", (event) => {
@@ -3300,6 +4274,46 @@
       });
 
       dom.suggestBtn.addEventListener("click", pickSuggestion);
+
+      if (dom.sandboxRunBtn) {
+        dom.sandboxRunBtn.addEventListener("click", openSandboxInPlayground);
+        dom.sandboxSaveBtn.addEventListener("click", saveSnippet);
+        dom.sandboxCopyBtn.addEventListener("click", copySandboxCode);
+        dom.sandboxDownloadBtn.addEventListener("click", downloadSnippet);
+        dom.sandboxNewBtn.addEventListener("click", clearSandbox);
+        dom.snippetTemplate.addEventListener("change", () => applySandboxTemplate(dom.snippetTemplate.value));
+        dom.sandboxCode.addEventListener("input", scheduleSandboxDraft);
+        dom.snippetTitle.addEventListener("input", scheduleSandboxDraft);
+        dom.sandboxCode.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+            event.preventDefault();
+            openSandboxInPlayground();
+            return;
+          }
+          if (event.key === "Tab") {
+            event.preventDefault();
+            const start = dom.sandboxCode.selectionStart;
+            const end = dom.sandboxCode.selectionEnd;
+            const value = dom.sandboxCode.value;
+            dom.sandboxCode.value = value.slice(0, start) + "\t" + value.slice(end);
+            dom.sandboxCode.selectionStart = dom.sandboxCode.selectionEnd = start + 1;
+            scheduleSandboxDraft();
+          }
+        });
+        dom.savedSnippets.addEventListener("click", (event) => {
+          const load = event.target.closest("[data-snippet-load]");
+          if (load) {
+            const item = state.snippets.find((entry) => entry.id === load.dataset.snippetLoad);
+            if (item) {
+              loadSandboxCode(item.code, item.title, { editingId: item.id });
+              showToast("Сниппет загружен в редактор");
+            }
+            return;
+          }
+          const del = event.target.closest("[data-snippet-del]");
+          if (del) deleteSnippet(del.dataset.snippetDel);
+        });
+      }
 
       dom.suggestResult.addEventListener("click", (event) => {
         const button = event.target.closest("[data-mark-done]");
@@ -3368,6 +4382,7 @@
 
       window.addEventListener("pagehide", () => {
         flushNotes();
+        saveSandboxDraft();
         saveStateLocal();
       });
 
@@ -3413,6 +4428,8 @@
       openTheoryStages = new Set(THEORY.length ? [THEORY[0].id] : []);
       applyTheme();
       renderAll();
+      renderRecipes();
+      initSandbox();
       pushLog("session ready · " + TOTAL_TASKS + " задач в роадмапе", "k");
       bindEvents();
       updateSyncControls();
