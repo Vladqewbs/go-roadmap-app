@@ -899,5 +899,445 @@ window.GO_ROADMAP_EXERCISES = {
       "code": false,
       "lang": "text"
     }
+  ],
+  "advanced-go:0": [
+    {
+      "title": "GOMAXPROCS на практике",
+      "task": "Запустите один и тот же CPU-бенчмарк с GOMAXPROCS=1 и GOMAXPROCS=4. Объясните разницу во времени и почему она не всегда четырёхкратная.",
+      "hint": "Используйте go test -bench=. -cpu=1,4. Посмотрите, есть ли общие мьютексы или аллокации.",
+      "solution": "GOMAXPROCS=1 выполняет горутины конкурентно, но не параллельно: в один момент работает один P. При 4 процессорных ядрах CPU-bound код может ускориться почти в 4 раза, но рост ограничен законом Амдала, contention на мьютексах, аллокациями и миграцией горутин. Если бенчмарк упирается в общий счётчик под mutex, добавление P не поможет.",
+      "starter": "go test -run=^$ -bench=BenchmarkSum -cpu=1,2,4 -benchmem",
+      "code": false,
+      "lang": "bash"
+    }
+  ],
+  "advanced-go:1": [
+    {
+      "title": "Найти escape и убрать его",
+      "task": "Функция возвращает *int, из-за чего значение уходит в кучу. Перепишите API так, чтобы маленькое значение оставалось на стеке, и проверьте через -gcflags=-m.",
+      "hint": "Возвращайте значение, а не указатель, если вызывающему не нужна идентичность.",
+      "solution": "Было:\nfunc inc(x int) *int { x++; return &x }\n\nСтало:\nfunc inc(x int) int { return x + 1 }\n\nПроверка: go build -gcflags='-m' ./... покажет moved to heap для старой версии. Указатель нужен только если объект большой, разделяемый или должен менять состояние.",
+      "starter": "package main\n\nfunc inc(x int) *int {\n    x++\n    return &x\n}\n\nfunc main() { _ = inc(1) }",
+      "code": true,
+      "lang": "go"
+    }
+  ],
+  "advanced-go:2": [
+    {
+      "title": "Снять CPU-профиль",
+      "task": "Добавьте pprof в HTTP-сервис и снимите 30-секундный CPU-профиль. Какие три функции оказались самыми дорогими?",
+      "hint": "Импортируйте net/http/pprof и откройте /debug/pprof/profile?seconds=30.",
+      "solution": "import _ \"net/http/pprof\"\n\n// затем:\n// go tool pprof -http=:8080 'http://localhost:6060/debug/pprof/profile?seconds=30'\n\nВ top смотрите flat и cum. Flat — время в самой функции, cum — включая потомков. Оптимизируйте функцию с высоким flat на горячем пути, а не случайную из списка.",
+      "starter": "package main\n\nimport (\n    \"net/http\"\n)\n\nfunc main() {\n    http.ListenAndServe(\":6060\", nil)\n}",
+      "code": true,
+      "lang": "go"
+    }
+  ],
+  "advanced-go:3": [
+    {
+      "title": "Кэш метаданных reflect",
+      "task": "Ускорьте чтение поля структуры через reflect: найдите индекс поля один раз и переиспользуйте его вместо FieldByName на каждом вызове.",
+      "hint": "reflect.TypeOf(...).FieldByName возвращает StructField с Index []int.",
+      "solution": "var emailIndex = func() []int {\n    f, ok := reflect.TypeOf(User{}).FieldByName(\"Email\")\n    if !ok { panic(\"no Email\") }\n    return f.Index\n}()\n\nfunc Email(v any) string {\n    return reflect.ValueOf(v).FieldByIndex(emailIndex).String()\n}\n\nКэш убирает линейный поиск по имени. Для горячего пути лучше кодогенерация или явный интерфейс.",
+      "starter": "package main\n\nimport \"reflect\"\n\ntype User struct{ Name, Email string }\n\nfunc Email(v any) string {\n    return reflect.ValueOf(v).FieldByName(\"Email\").String()\n}",
+      "code": true,
+      "lang": "go"
+    }
+  ],
+  "advanced-go:4": [
+    {
+      "title": "Fuzz-тест парсера",
+      "task": "Напишите FuzzParse для функции Parse(s string) (int, error), которая принимает только цифры. Инвариант: либо ошибка, либо неотрицательное число.",
+      "hint": "Добавьте seed-корпуса f.Add и проверяйте инвариант в f.Fuzz.",
+      "solution": "func FuzzParse(f *testing.F) {\n    f.Add(\"0\")\n    f.Add(\"123\")\n    f.Add(\"-1\")\n    f.Fuzz(func(t *testing.T, s string) {\n        n, err := Parse(s)\n        if err != nil { return }\n        if n < 0 { t.Fatalf(\"negative %d for %q\", n, s) }\n    })\n}\n\nЗапуск: go test -fuzz=FuzzParse -fuzztime=30s. Падение сохраняется в testdata/fuzz и воспроизводится обычным go test.",
+      "starter": "package main\n\nimport \"testing\"\n\nfunc Parse(s string) (int, error) {\n    // TODO\n    return 0, nil\n}\n\nfunc FuzzParse(f *testing.F) {\n    // TODO\n}",
+      "code": true,
+      "lang": "go"
+    }
+  ],
+  "architecture:0": [
+    {
+      "title": "Вынести хранилище за интерфейс",
+      "task": "Обработчик напрямую вызывает *sql.DB. Вынесите нужный метод в интерфейс рядом с сервисом и сделайте фейк для теста.",
+      "hint": "Интерфейс должен содержать только методы, которые реально нужны сервису.",
+      "solution": "type TaskStore interface {\n    Create(ctx context.Context, title string) (Task, error)\n}\n\ntype Service struct{ store TaskStore }\n\ntype fakeStore struct{ got string }\nfunc (f *fakeStore) Create(_ context.Context, title string) (Task, error) {\n    f.got = title\n    return Task{ID: 1, Title: title}, nil\n}\n\nТеперь тест сервиса не требует Postgres, а SQL-реализация проверяется отдельно.",
+      "starter": "type Service struct{ db *sql.DB }\n\nfunc (s *Service) Create(ctx context.Context, title string) (Task, error) {\n    // TODO: вынести SQL за интерфейс\n}",
+      "code": true,
+      "lang": "go"
+    }
+  ],
+  "architecture:1": [
+    {
+      "title": "Границы модулей",
+      "task": "В монолите есть пакеты orders, billing и inventory, которые читают таблицы друг друга. Предложите три шага, чтобы сделать границы явными, не переписывая всё.",
+      "hint": "Начните с владения данными и интерфейсов, а не с разделения на сервисы.",
+      "solution": "1. Определите владельца каждой таблицы: orders владеет orders, billing — invoices, inventory — stock.\n2. Запретите прямые SQL-запросы к чужим таблицам: замените их вызовами интерфейсов в коде.\n3. Для асинхронных побочных эффектов добавьте события/outbox.\n\nВынос в отдельный сервис — последний шаг, когда границы стабильны и есть отдельная нагрузка или команда.",
+      "starter": "",
+      "code": false,
+      "lang": "text"
+    }
+  ],
+  "architecture:2": [
+    {
+      "title": "Спроектировать контракт API",
+      "task": "Для создания заказа спроектируйте метод, тело, успешный ответ и ошибки. Учтите идемпотентность и валидацию.",
+      "hint": "POST /orders, Idempotency-Key, 201 + Location, 409 при конфликте, 422 при бизнес-валидации.",
+      "solution": "POST /v1/orders\nIdempotency-Key: <uuid>\n{ \"items\": [{\"sku\":\"A1\",\"qty\":2}], \"address_id\": 10 }\n\n201 Created\nLocation: /v1/orders/123\n{ \"id\":123,\"status\":\"pending\",\"total\":1990 }\n\n400 — битый JSON, 422 — пустой items или недоступный адрес, 409 — повтор с другим телом при том же ключе, 429 — лимит.",
+      "starter": "",
+      "code": false,
+      "lang": "http"
+    }
+  ],
+  "architecture:3": [
+    {
+      "title": "Outbox вместо двойной записи",
+      "task": "Сервис сохраняет заказ и публикует событие в Kafka. Опишите, как не потерять событие при падении между коммитом и отправкой.",
+      "hint": "Запись в outbox должна быть в той же транзакции, что и заказ.",
+      "solution": "BEGIN;\nINSERT INTO orders (...) VALUES (...);\nINSERT INTO outbox (topic, payload, created_at) VALUES ('orders', $1, now());\nCOMMIT;\n\nОтдельный публикатор читает неотправленные строки, публикует и помечает sent_at. Публикация at-least-once, потребитель дедуплицирует по event_id. Так событие не теряется и не уходит при откате.",
+      "starter": "",
+      "code": false,
+      "lang": "sql"
+    }
+  ],
+  "architecture:4": [
+    {
+      "title": "Singleflight для горячего ключа",
+      "task": "Тысяча запросов одновременно промахивается по одному ключу кэша. Добавьте singleflight, чтобы в БД ушёл один запрос.",
+      "hint": "golang.org/x/sync/singleflight, ключ — ID пользователя.",
+      "solution": "v, err, _ := group.Do(strconv.Itoa(id), func() (any, error) {\n    u, err := repo.Get(ctx, id)\n    if err != nil { return nil, err }\n    cache.Set(id, u, time.Minute)\n    return u, nil\n})\nif err != nil { return User{}, err }\nreturn v.(User), nil\n\nОстальные запросы дождутся результата первого. Важно: ошибка тоже распространяется на всех, поэтому не кэшируйте её надолго.",
+      "starter": "",
+      "code": false,
+      "lang": "go"
+    }
+  ],
+  "data-scale:0": [
+    {
+      "title": "Прочитать план запроса",
+      "task": "Запрос фильтрует tasks по user_id и status, сортирует по created_at. Предложите индекс и проверьте план через EXPLAIN ANALYZE.",
+      "hint": "Составной индекс: сначала равенства, потом сортировка.",
+      "solution": "CREATE INDEX CONCURRENTLY idx_tasks_user_status_created\nON tasks (user_id, status, created_at DESC);\n\nEXPLAIN (ANALYZE, BUFFERS)\nSELECT id, title FROM tasks\nWHERE user_id = $1 AND status = 'open'\nORDER BY created_at DESC LIMIT 20;\n\nОжидаем Index Scan без Sort. Смотрите actual rows и buffers, а не только cost.",
+      "starter": "",
+      "code": false,
+      "lang": "sql"
+    }
+  ],
+  "data-scale:1": [
+    {
+      "title": "Защита от lost update",
+      "task": "Два запроса одновременно списывают деньги с одного счёта. Напишите UPDATE, который не позволит уйти в минус без отдельного SELECT.",
+      "hint": "Проверьте баланс в условии UPDATE и смотрите RowsAffected.",
+      "solution": "res, err := tx.ExecContext(ctx,\n    \"UPDATE accounts SET balance = balance - $1 WHERE id = $2 AND balance >= $1\",\n    amount, id)\nif err != nil { return err }\nif n, _ := res.RowsAffected(); n != 1 {\n    return ErrInsufficientFunds\n}\n\nУсловие проверяется атомарно под блокировкой строки. При serialization failure повторите транзакцию.",
+      "starter": "",
+      "code": false,
+      "lang": "sql"
+    }
+  ],
+  "data-scale:2": [
+    {
+      "title": "Безопасное переименование колонки",
+      "task": "Нужно переименовать users.email в users.email_normalized без простоя. Распишите релизы по шагам.",
+      "hint": "Expand/contract: добавить, писать в оба, backfill, переключить чтение, удалить старое.",
+      "solution": "1. ALTER TABLE users ADD COLUMN email_normalized text;\n2. Код пишет в оба поля, читает из старого.\n3. Backfill батчами: UPDATE ... WHERE id IN (SELECT id ... LIMIT 1000).\n4. Переключить чтение на новое поле, проверить метрики.\n5. Перестать писать в старое.\n6. ALTER TABLE users DROP COLUMN email.\n\nКаждый шаг совместим с предыдущей версией приложения.",
+      "starter": "",
+      "code": false,
+      "lang": "sql"
+    }
+  ],
+  "data-scale:3": [
+    {
+      "title": "Блокировка с владельцем",
+      "task": "Реализуйте захват Redis-блокировки с TTL и безопасное освобождение, чтобы чужой процесс не снял ваш лок.",
+      "hint": "SET NX PX и Lua-сравнение значения.",
+      "solution": "token := uuid.NewString()\nok, err := rdb.SetNX(ctx, \"lock:job:\"+id, token, 30*time.Second).Result()\nif err != nil || !ok { return ErrLocked }\n\ndefer rdb.Eval(ctx, `\nif redis.call(\"get\", KEYS[1]) == ARGV[1] then\n  return redis.call(\"del\", KEYS[1])\nend`, []string{\"lock:job:\" + id}, token)\n\nTTL спасает от вечной блокировки, сравнение токена — от удаления чужого лока.",
+      "starter": "",
+      "code": false,
+      "lang": "go"
+    }
+  ],
+  "data-scale:4": [
+    {
+      "title": "Keyset-пагинация",
+      "task": "Замените OFFSET 100000 на keyset-пагинацию по (created_at, id). Напишите SQL и объясните, почему он быстрее.",
+      "hint": "WHERE (created_at, id) < ($1, $2) ORDER BY created_at DESC, id DESC LIMIT $3.",
+      "solution": "SELECT id, title, created_at\nFROM tasks\nWHERE (created_at, id) < ($1, $2)\nORDER BY created_at DESC, id DESC\nLIMIT $3;\n\nOFFSET читает и выбрасывает все предыдущие строки. Keyset идёт по индексу от последней пары и читает только страницу. Курсор — последняя пара (created_at, id).",
+      "starter": "",
+      "code": false,
+      "lang": "sql"
+    }
+  ],
+  "observability:0": [
+    {
+      "title": "Структурный лог запроса",
+      "task": "Замените текстовый лог на slog с request_id, методом, путём, статусом и длительностью.",
+      "hint": "Оберните ResponseWriter, чтобы знать статус, и замерьте time.Since.",
+      "solution": "start := time.Now()\nrec := &statusRecorder{ResponseWriter: w, status: 200}\nnext.ServeHTTP(rec, r)\nslog.Info(\"request\",\n    \"request_id\", requestID(r.Context()),\n    \"method\", r.Method,\n    \"path\", r.URL.Path,\n    \"status\", rec.status,\n    \"duration_ms\", time.Since(start).Milliseconds(),\n)\n\nНе логируйте Authorization и тело запроса.",
+      "starter": "",
+      "code": false,
+      "lang": "go"
+    }
+  ],
+  "observability:1": [
+    {
+      "title": "Гистограмма latency",
+      "task": "Добавьте гистограмму длительности HTTP-запросов с метками route, method, status и посчитайте p95 в PromQL.",
+      "hint": "Buckets вокруг SLO-порога, затем histogram_quantile по sum by (le).",
+      "solution": "histogram_quantile(0.95,\n  sum by (le) (rate(http_request_duration_seconds_bucket[5m]))\n)\n\nМетки route/method/status дают разбивку. Не добавляйте user_id: кардинальность взорвётся. Buckets: .05, .1, .25, .5, 1, 2, 5.",
+      "starter": "",
+      "code": false,
+      "lang": "promql"
+    }
+  ],
+  "observability:2": [
+    {
+      "title": "Span вокруг вызова",
+      "task": "Оберните вызов репозитория в span, добавьте атрибуты и запишите ошибку.",
+      "hint": "tracer.Start(ctx, ...), defer span.End(), RecordError и SetStatus.",
+      "solution": "ctx, span := tracer.Start(ctx, \"users.Get\")\ndefer span.End()\nspan.SetAttributes(attribute.Int(\"user.id\", id))\n\nu, err := repo.Get(ctx, id)\nif err != nil {\n    span.RecordError(err)\n    span.SetStatus(codes.Error, err.Error())\n    return User{}, err\n}\nreturn u, nil\n\nПередавайте ctx дальше, иначе дочерние спаны потеряют родителя.",
+      "starter": "",
+      "code": false,
+      "lang": "go"
+    }
+  ],
+  "observability:3": [
+    {
+      "title": "Runbook для 5xx",
+      "task": "Напишите короткий runbook для алерта «доля 5xx выше 2% в течение 10 минут».",
+      "hint": "Проверки: деплой, зависимости, насыщение, откат, эскалация.",
+      "solution": "# Runbook: HighErrorRate\n1. Открыть дашборд: error rate по route, latency, saturation.\n2. Проверить последние деплои и фича-флаги.\n3. Проверить БД, Redis, внешние API и таймауты.\n4. Если ошибки начались после релиза — откатить.\n5. Если зависимость недоступна — включить деградацию/кэш.\n6. Эскалировать владельцу через 15 минут без улучшения.\n7. После — postmortem с действиями и сроками.",
+      "starter": "",
+      "code": false,
+      "lang": "text"
+    }
+  ],
+  "observability:4": [
+    {
+      "title": "Ступенчатый нагрузочный тест",
+      "task": "Опишите сценарий k6: 30 секунд до 50 VU, минута на 50, затем до 200. Что будете смотреть кроме RPS?",
+      "hint": "stages в options; смотрите p95/p99, ошибки, saturation.",
+      "solution": "export const options = {\n  stages: [\n    { duration: '30s', target: 50 },\n    { duration: '1m', target: 50 },\n    { duration: '30s', target: 200 },\n  ],\n  thresholds: { http_req_failed: ['rate<0.01'], http_req_duration: ['p(95)<300'] },\n};\n\nКроме RPS: p95/p99, доля ошибок, таймауты, загрузка CPU/памяти, пул соединений, lag БД. Ищите колено, где latency начинает расти нелинейно.",
+      "starter": "",
+      "code": false,
+      "lang": "js"
+    }
+  ],
+  "security:0": [
+    {
+      "title": "Строгая проверка JWT",
+      "task": "Напишите проверку JWT: фиксированный алгоритм, подпись, issuer, audience и срок действия.",
+      "hint": "Не доверяйте alg из токена; проверяйте ключ и claims.",
+      "solution": "claims := &Claims{}\ntok, err := jwt.ParseWithClaims(raw, claims, func(t *jwt.Token) (any, error) {\n    if t.Method.Alg() != jwt.SigningMethodRS256.Alg() {\n        return nil, errors.New(\"unexpected alg\")\n    }\n    return publicKey, nil\n})\nif err != nil || !tok.Valid() { return ErrUnauthorized }\nif claims.Issuer != issuer || !claims.Audience.Contains(audience) {\n    return ErrUnauthorized\n}\n\nСекрет не храните в коде; ключ — из secret manager.",
+      "starter": "",
+      "code": false,
+      "lang": "go"
+    }
+  ],
+  "security:1": [
+    {
+      "title": "Убрать SQLi и XSS",
+      "task": "Найдите две уязвимости: query := \"SELECT ... WHERE name = '\" + name + \"'\" и w.Write([]byte(\"<p>\" + comment + \"</p>\")). Исправьте обе.",
+      "hint": "Параметры вместо склейки; html/template вместо ручной конкатенации.",
+      "solution": "row := db.QueryRowContext(ctx,\n    \"SELECT id FROM users WHERE name = $1\", name)\n\ntmpl := template.Must(template.New(\"c\").Parse(`<p>{{.}}</p>`))\ntmpl.Execute(w, comment)\n\nПараметры отделяют данные от SQL. html/template экранирует по контексту. Для богатого HTML нужен санитайзер, а не отключение экранирования.",
+      "starter": "",
+      "code": false,
+      "lang": "go"
+    }
+  ],
+  "security:2": [
+    {
+      "title": "Валидация конфига на старте",
+      "task": "Соберите конфиг из env и упадите до запуска сервера, если DATABASE_URL пуст или READ_TIMEOUT не парсится.",
+      "hint": "Отдельная структура, env-хелпер, errors с контекстом.",
+      "solution": "type Config struct { DatabaseURL string; ReadTimeout time.Duration }\n\nfunc Load() (Config, error) {\n    cfg := Config{DatabaseURL: os.Getenv(\"DATABASE_URL\"), ReadTimeout: 5*time.Second}\n    if cfg.DatabaseURL == \"\" { return cfg, errors.New(\"DATABASE_URL is required\") }\n    if raw := os.Getenv(\"READ_TIMEOUT\"); raw != \"\" {\n        d, err := time.ParseDuration(raw)\n        if err != nil { return cfg, fmt.Errorf(\"READ_TIMEOUT: %w\", err) }\n        cfg.ReadTimeout = d\n    }\n    return cfg, nil\n}",
+      "starter": "",
+      "code": false,
+      "lang": "go"
+    }
+  ],
+  "security:3": [
+    {
+      "title": "Rate limit по ключу",
+      "task": "Ограничьте 5 запросов в секунду на пользователя с burst 10. Что вернёте при превышении?",
+      "hint": "rate.NewLimiter и map с мьютексом; 429 + Retry-After.",
+      "solution": "lim := rate.NewLimiter(5, 10)\nif !lim.Allow() {\n    w.Header().Set(\"Retry-After\", \"1\")\n    http.Error(w, \"too many requests\", http.StatusTooManyRequests)\n    return\n}\n\nДля нескольких инстансов нужен общий Redis-счётчик. За прокси берите реальный IP только из доверенного заголовка.",
+      "starter": "",
+      "code": false,
+      "lang": "go"
+    }
+  ],
+  "security:4": [
+    {
+      "title": "Проверка уязвимостей в CI",
+      "task": "Добавьте шаг CI, который блокирует merge при достижимых critical/high уязвимостях, и генерацию SBOM.",
+      "hint": "govulncheck ./... и syft; политика по severity.",
+      "solution": "- name: vulncheck\n  run: |\n    go install golang.org/x/vuln/cmd/govulncheck@latest\n    govulncheck ./...\n\n- name: sbom\n  run: syft . -o spdx-json > sbom.json\n\ngovulncheck учитывает call graph и меньше шумит. SBOM храните с артефактом релиза, чтобы быстро найти затронутые версии.",
+      "starter": "",
+      "code": false,
+      "lang": "yaml"
+    }
+  ],
+  "system-design:0": [
+    {
+      "title": "Оценка нагрузки",
+      "task": "10 млн DAU, 20 чтений и 1 запись на пользователя в день. Оцените средний и пиковый QPS.",
+      "hint": "Делите на 86400 и умножьте пик на 2–5.",
+      "solution": "reads = 10_000_000 * 20 / 86400 ≈ 2315 QPS\nwrites = 10_000_000 * 1 / 86400 ≈ 116 QPS\n\nПик при коэффициенте 3: ~7000 read QPS и ~350 write QPS. Дальше оцените объём: 10 млн записей × размер × репликация. Эти числа определяют, нужен ли кэш и шардирование.",
+      "starter": "",
+      "code": false,
+      "lang": "text"
+    }
+  ],
+  "system-design:1": [
+    {
+      "title": "Схема сокращателя",
+      "task": "Спроектируйте таблицу ссылок и запрос редиректа с учётом срока жизни и уникальности кода.",
+      "hint": "PK code, уникальный индекс, expires_at, выборка по коду.",
+      "solution": "CREATE TABLE links (\n  code text PRIMARY KEY,\n  url text NOT NULL,\n  created_at timestamptz NOT NULL DEFAULT now(),\n  expires_at timestamptz\n);\n\nSELECT url FROM links\nWHERE code = $1 AND (expires_at IS NULL OR expires_at > now());\n\nPK гарантирует уникальность. Для статистики не пишите в эту таблицу на каждом клике — отправляйте событие в очередь.",
+      "starter": "",
+      "code": false,
+      "lang": "sql"
+    }
+  ],
+  "system-design:2": [
+    {
+      "title": "Гибридный fan-out",
+      "task": "У пользователя 10 млн подписчиков. Почему fan-out on write плох и как сделать гибрид?",
+      "hint": "Обычные пользователи — precompute, знаменитости — on read.",
+      "solution": "Fan-out on write создаст 10 млн записей на один пост: дорого по CPU, памяти и времени. Гибрид:\n1. Для обычных авторов заранее пишем post_id в ленты подписчиков.\n2. Для знаменитостей храним посты отдельно и подмешиваем при чтении.\n3. При сборке объединяем источники, дедуплицируем, сортируем и отдаём курсор.\n\nТак читатель получает быструю ленту, а публикация не порождает лавину записей.",
+      "starter": "",
+      "code": false,
+      "lang": "text"
+    }
+  ],
+  "system-design:3": [
+    {
+      "title": "Sequence в чате",
+      "task": "Клиент переподключился после обрыва. Как ему получить пропущенные сообщения и не потерять порядок?",
+      "hint": "Серверный sequence на комнату, last_seq у клиента, запрос after_seq.",
+      "solution": "SELECT id, seq, sender_id, body, sent_at\nFROM messages\nWHERE room_id = $1 AND seq > $2\nORDER BY seq ASC\nLIMIT 100;\n\nКлиент хранит last_seq и подтверждает получение. Время клиента не используется для порядка. При повторной доставке дедупликация по message_id.",
+      "starter": "",
+      "code": false,
+      "lang": "sql"
+    }
+  ],
+  "system-design:4": [
+    {
+      "title": "Идемпотентная отправка уведомлений",
+      "task": "Событие может прийти дважды. Сделайте так, чтобы письмо не отправилось повторно, но временная ошибка провайдера ретраилась.",
+      "hint": "Ключ event_id+channel, статус, retry только для временных ошибок.",
+      "solution": "ok, err := rdb.SetNX(ctx, \"notify:\"+eventID+\":email\", \"1\", 24*time.Hour).Result()\nif err != nil { return err }\nif !ok { return nil } // уже обработано\n\nif err := send(ctx, msg); err != nil {\n    rdb.Del(ctx, key) // разрешить повтор\n    if isTemporary(err) { return err } // очередь повторит\n    return nil // постоянная ошибка — в DLQ\n}\n\nДля строгой гарантии храните статус в БД и используйте outbox.",
+      "starter": "",
+      "code": false,
+      "lang": "go"
+    }
+  ],
+  "algorithms:0": [
+    {
+      "title": "Оценить сложность",
+      "task": "Для функции с двумя вложенными циклами по n и внутри — поиском в map, назовите время и память. Что изменится, если внутренний поиск заменить на сортировку и два указателя?",
+      "hint": "Внешний и внутренний циклы дают O(n^2); map-поиск O(1). Сортировка O(n log n) плюс проход O(n).",
+      "solution": "Время O(n^2), память O(n) на map. С сортировкой: O(n log n) на сортировку и O(n) на два указателя, память O(1) или O(n) в зависимости от сортировки. На интервью проговорите худший случай и константы.",
+      "starter": "",
+      "code": false,
+      "lang": "text"
+    }
+  ],
+  "algorithms:1": [
+    {
+      "title": "Сумма в отсортированном массиве",
+      "task": "Дан отсортированный массив. Найдите два числа с суммой target за O(n) и O(1) памяти.",
+      "hint": "Два указателя на концах.",
+      "solution": "func twoSum(a []int, target int) (int,int) {\n    l,r := 0,len(a)-1\n    for l<r {\n        s:=a[l]+a[r]\n        if s==target { return l,r }\n        if s<target { l++ } else { r-- }\n    }\n    return -1,-1\n}",
+      "starter": "func twoSum(a []int, target int) (int,int) {\n    // TODO\n    return -1,-1\n}",
+      "code": true,
+      "lang": "go"
+    }
+  ],
+  "algorithms:2": [
+    {
+      "title": "Группы анаграмм",
+      "task": "Сгруппируйте строки-анаграммы. Оцените сложность.",
+      "hint": "Ключ — отсортированные руны или счётчик частот.",
+      "solution": "func group(words []string) [][]string {\n    m:=map[string][]string{}\n    for _,w:=range words {\n        r:=[]rune(w); sort.Slice(r,func(i,j int)bool{return r[i]<r[j]})\n        k:=string(r); m[k]=append(m[k],w)\n    }\n    out:=make([][]string,0,len(m))\n    for _,g:=range m { out=append(out,g) }\n    return out\n}\n\nO(n · k log k), где k — длина слова; память O(n·k).",
+      "starter": "func group(words []string) [][]string {\n    // TODO\n    return nil\n}",
+      "code": true,
+      "lang": "go"
+    }
+  ],
+  "algorithms:3": [
+    {
+      "title": "Развернуть список",
+      "task": "Разверните односвязный список итеративно, не создавая новый.",
+      "hint": "prev, cur, next; на каждом шаге сохраняйте next.",
+      "solution": "func reverse(head *ListNode) *ListNode {\n    var prev *ListNode\n    for head != nil {\n        next:=head.Next\n        head.Next=prev\n        prev=head\n        head=next\n    }\n    return prev\n}\n\nO(n) времени, O(1) памяти.",
+      "starter": "type ListNode struct{ Val int; Next *ListNode }\n\nfunc reverse(head *ListNode) *ListNode {\n    // TODO\n    return head\n}",
+      "code": true,
+      "lang": "go"
+    }
+  ],
+  "algorithms:4": [
+    {
+      "title": "Кратчайший путь BFS",
+      "task": "Найдите кратчайшее число рёбер от start до target в невзвешенном графе.",
+      "hint": "Очередь и map расстояний; не добавляйте посещённые повторно.",
+      "solution": "func shortest(g map[int][]int, start, target int) int {\n    dist:=map[int]int{start:0}\n    q:=[]int{start}\n    for len(q)>0 {\n        v:=q[0]; q=q[1:]\n        if v==target { return dist[v] }\n        for _,to:=range g[v] {\n            if _,ok:=dist[to]; ok { continue }\n            dist[to]=dist[v]+1; q=append(q,to)\n        }\n    }\n    return -1\n}",
+      "starter": "func shortest(g map[int][]int, start, target int) int {\n    // TODO\n    return -1\n}",
+      "code": true,
+      "lang": "go"
+    }
+  ],
+  "tooling:0": [
+    {
+      "title": "Прогнать линтеры",
+      "task": "Напишите команду, которая форматирует код, запускает go vet и staticcheck, и падает при ошибке.",
+      "hint": "gofmt -l проверяет без записи; используйте &&.",
+      "solution": "gofmt -l . && go vet ./... && staticcheck ./...\n\nЕсли gofmt -l что-то вывел, код не отформатирован, и команда завершится ошибкой. В CI это блокирует merge.",
+      "starter": "",
+      "code": false,
+      "lang": "bash"
+    }
+  ],
+  "tooling:1": [
+    {
+      "title": "Makefile для тестов",
+      "task": "Добавьте цели test и lint: тесты с -race -count=1, линтеры из предыдущего упражнения.",
+      "hint": "PHONY и рецепты с табами.",
+      "solution": "APP:=app\n.PHONY: test lint\n\ntest:\n\tgo test -race -count=1 ./...\n\nlint:\n\tgofmt -l . && go vet ./... && staticcheck ./...",
+      "starter": "",
+      "code": false,
+      "lang": "make"
+    }
+  ],
+  "tooling:2": [
+    {
+      "title": "Точка останова в Delve",
+      "task": "Запустите dlv debug, поставьте breakpoint на main.main, выполните next и напечатайте переменную.",
+      "hint": "dlv debug ./cmd/app, break main.main, continue, next, print.",
+      "solution": "dlv debug ./cmd/app\n(dlv) break main.main\n(dlv) continue\n(dlv) next\n(dlv) print cfg\n(dlv) goroutines\n\nДля выхода — quit. Не оставляйте headless-отладчик на публичном порту.",
+      "starter": "",
+      "code": false,
+      "lang": "bash"
+    }
+  ],
+  "tooling:3": [
+    {
+      "title": "CI-workflow",
+      "task": "Напишите GitHub Actions job: checkout, setup-go с кэшем, go test -race -count=1, go vet.",
+      "hint": "actions/checkout@v4, actions/setup-go@v5, cache: true.",
+      "solution": "name: ci\non: [push, pull_request]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-go@v5\n        with:\n          go-version: '1.23'\n          cache: true\n      - run: go test -race -count=1 ./...\n      - run: go vet ./...",
+      "starter": "",
+      "code": false,
+      "lang": "yaml"
+    }
+  ],
+  "tooling:4": [
+    {
+      "title": "Версия в бинарнике",
+      "task": "Передайте версию и commit через -ldflags -X и выведите их по флагу --version.",
+      "hint": "var version, commit = \"dev\", \"none\" в main; -X main.version=...",
+      "solution": "// main.go\nvar version, commit = \"dev\", \"none\"\n\nfunc main() {\n    flag.Parse()\n    if *showVersion { fmt.Println(version, commit); return }\n}\n\n// сборка:\n// go build -trimpath -ldflags \"-X main.version=$(git describe --tags) -X main.commit=$(git rev-parse --short HEAD)\"",
+      "starter": "package main\n\nvar version, commit = \"dev\", \"none\"\n\nfunc main() {\n    // TODO: флаг --version\n}",
+      "code": true,
+      "lang": "go"
+    }
   ]
 };

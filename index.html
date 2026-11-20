@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#060912">
-  <meta name="description" content="Терминальный трекер роадмапа Go: этапы, конспекты теории с источниками, ошибками, вопросами и упражнениями, backend-рецепты, песочница Go, задачи LeetCode по темам, статистика профиля, ачивки, заметки, чек-лист и синхронизация через GitHub Gist.">
+  <meta name="description" content="Терминальный трекер роадмапа Go: этапы, конспекты теории с источниками, ошибками, вопросами и упражнениями, 8 дополнительных глав, backend-рецепты, песочница Go, задачи LeetCode по темам, статистика профиля, ачивки, заметки, чек-лист и синхронизация через GitHub Gist.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -485,6 +485,25 @@
     .theory-summary-top strong { font-family: var(--mono); font-size: 19px; font-weight: 800; }
     .theory-summary-top span { margin-left: 7px; font-size: 12.5px; color: var(--muted); }
     .theory-summary .meter > span { background: linear-gradient(90deg, var(--acc2), var(--acc)); }
+    .theory-advanced-summary { margin-top: 10px; padding-top: 9px; border-top: 1px dashed var(--line); }
+    .theory-advanced-label { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+    .theory-advanced-label b { font-family: var(--mono); font-size: 12px; color: var(--fg); }
+    .theory-advanced-label span { font-size: 11px; color: var(--muted); }
+    .theory-advanced-summary .meter > span { background: linear-gradient(90deg, var(--warn), var(--acc2)); }
+    .theory-divider {
+      margin: 22px 0 12px; padding: 14px 15px;
+      border: 1px dashed color-mix(in srgb, var(--warn) 45%, var(--line));
+      border-radius: var(--radius);
+      background: linear-gradient(165deg, var(--card) 55%, color-mix(in srgb, var(--warn) 8%, var(--card)));
+    }
+    .theory-divider-kicker {
+      display: block; margin-bottom: 4px;
+      font-family: var(--mono); font-size: 9px; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--warn);
+    }
+    .theory-divider h2 { font-size: 17px; font-weight: 800; }
+    .theory-divider p { margin-top: 5px; font-size: 12.5px; line-height: 1.55; color: var(--muted); }
+    .theory-stage.is-advanced .stage-index { color: var(--warn); }
     .theory-list { display: grid; gap: 12px; }
     .theory-stage {
       --hue: var(--acc);
@@ -672,6 +691,27 @@
     .lesson-text p { margin-top: 8px; font-size: 13.5px; line-height: 1.6; color: var(--fg); }
     .lesson-points { display: grid; gap: 6px; margin: 10px 0 0; padding: 0 0 0 18px; }
     .lesson-points li { font-size: 13px; line-height: 1.55; color: var(--muted); }
+    .lesson-deep { margin-top: 12px; }
+    .lesson-deep-block {
+      margin-top: 12px; padding: 12px 13px;
+      border-left: 2px solid color-mix(in srgb, var(--acc) 48%, var(--line));
+      border-radius: 0 10px 10px 0;
+      background: color-mix(in srgb, var(--acc) 4%, transparent);
+    }
+    .lesson-deep-block:first-child { margin-top: 0; }
+    .lesson-deep-block h4 {
+      margin-bottom: 7px;
+      font-family: var(--mono); font-size: 10px; font-weight: 700;
+      letter-spacing: .05em; text-transform: uppercase; color: var(--acc);
+    }
+    .lesson-deep-block p { margin-top: 7px; font-size: 13px; line-height: 1.62; color: var(--muted); }
+    .lesson-deep-block p:first-of-type { margin-top: 0; }
+    .lesson-deep-points { display: grid; gap: 5px; margin-top: 8px; padding-left: 17px; }
+    .lesson-deep-points li { font-size: 12.5px; line-height: 1.55; color: var(--muted); }
+    .lesson-deep-block .lesson-code { margin-top: 9px; }
+    @media (max-width: 430px) {
+      .lesson-deep-block { padding: 10px 11px; }
+    }
     .lesson-code {
       margin: 10px 0 0; padding: 10px 12px; max-width: 100%;
       border: 1px dashed var(--line); border-radius: 10px;
@@ -1204,7 +1244,7 @@
           <div class="stat"><b id="streakDays">0</b><span id="streakLabel">дней подряд</span></div>
           <div class="stat"><b><span id="stagesDone">0</span><span class="stat-sep">/</span>8</b><span>этапов</span></div>
           <div class="stat"><b id="practiceStat">0</b><span id="practiceUnit">задач</span></div>
-          <div class="stat"><b><span id="achievementStat">0</span><span class="stat-sep">/</span><span id="achievementTotal">30</span></b><span>ачивок</span></div>
+          <div class="stat"><b><span id="achievementStat">0</span><span class="stat-sep">/</span><span id="achievementTotal">32</span></b><span>ачивок</span></div>
         </div>
         <div class="streak-days" id="streakCalendar" role="img" aria-label="Активность за последние 14 дней"></div>
         <p class="daily-tip" id="dailyTip"></p>
@@ -1224,17 +1264,27 @@
     <section class="panel" id="panel-theory" role="tabpanel" aria-labelledby="tab-theory" tabindex="0" hidden>
       <div class="panel-head">
         <h2>theory --read</h2>
-        <p>Конспекты по каждому пункту роадмапа: главное, источники, частые ошибки, вопросы и упражнения. Сначала ответьте вслух, потом раскрывайте ответ и решение.</p>
+        <p>Конспекты по каждому пункту роадмапа: главное, углублённые подразделы, источники, частые ошибки, вопросы и упражнения. Сначала ответьте вслух, потом раскрывайте ответ и решение.</p>
+        <p>План на день: одна тема теории → ответы на вопросы вслух → упражнение → отметка «изучено». Дополнительные главы идут после основного блока и не заменяют его.</p>
       </div>
       <div class="card theory-summary">
         <div class="theory-summary-top">
-          <div><strong id="theoryCount">0 из 0</strong><span>тем изучено</span></div>
+          <div><strong id="theoryCount">0 из 0</strong><span>основных тем</span></div>
           <span class="achievement-medal" aria-hidden="true">📖</span>
         </div>
-        <div class="meter" role="progressbar" aria-label="Прогресс теории" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="theoryMeter">
+        <div class="meter" role="progressbar" aria-label="Прогресс основной теории" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="theoryMeter">
           <span id="theoryBar"></span>
         </div>
+        <div class="theory-advanced-summary" id="advancedSummary" hidden>
+          <div class="theory-advanced-label">
+            <b id="advancedCount">0 из 0</b><span>дополнительных глав</span>
+          </div>
+          <div class="meter" role="progressbar" aria-label="Прогресс дополнительных глав" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="advancedMeter">
+            <span id="advancedBar"></span>
+          </div>
+        </div>
         <p class="theory-ex-summary" id="exerciseSummary">0 из 0 упражнений решено</p>
+        <p class="theory-ex-summary" id="theoryMinutes">~0 мин чтения</p>
       </div>
       <div class="card recipes-card" id="recipesCard">
         <details class="recipes-wrap">
@@ -1639,6 +1689,12 @@
     // ---------- Данные: теория ----------
     const THEORY = Array.isArray(window.GO_ROADMAP_THEORY) ? window.GO_ROADMAP_THEORY : [];
     const TOTAL_THEORY = THEORY.reduce((sum, stage) => sum + stage.sections.length, 0);
+    const MAIN_THEORY_TOTAL = THEORY
+      .filter((stage) => !stage.advanced)
+      .reduce((sum, stage) => sum + stage.sections.length, 0);
+    const ADVANCED_THEORY_TOTAL = THEORY
+      .filter((stage) => stage.advanced)
+      .reduce((sum, stage) => sum + stage.sections.length, 0);
     const THEORY_KEYS = new Set(
       THEORY.flatMap((stage) => stage.sections.map((_, index) => stage.id + ":" + index))
     );
@@ -1875,7 +1931,9 @@
       { id: "checklist", icon: "👑", title: "Минимум закрыт", desc: "Весь чек-лист к собеседованию", metric: "checklist", target: CHECKLIST_MIN.length },
       { id: "theory-first", icon: "📖", title: "Первый конспект", desc: "Изучена первая тема теории", metric: "theory", target: 1 },
       { id: "theory-ten", icon: "🎓", title: "Теоретик", desc: "10 тем теории изучено", metric: "theory", target: 10 },
-      { id: "theory-all", icon: "🧠", title: "Эрудит", desc: "Вся теория роадмапа изучена", metric: "theory", target: TOTAL_THEORY },
+      { id: "theory-all", icon: "🧠", title: "Эрудит", desc: "Вся основная теория изучена", metric: "theory", target: MAIN_THEORY_TOTAL },
+      { id: "advanced-10", icon: "🏛", title: "Архитектор", desc: "10 уроков дополнительных глав", metric: "advanced", target: 10 },
+      { id: "advanced-all", icon: "🌌", title: "Полимат", desc: "Все дополнительные главы изучены", metric: "advanced", target: ADVANCED_THEORY_TOTAL },
       { id: "ex-first", icon: "🛠", title: "Руки в коде", desc: "Первое упражнение решено", metric: "exercises", target: 1 },
       { id: "ex-30", icon: "🧪", title: "Практик", desc: "30 упражнений решено", metric: "exercises", target: 30 },
       { id: "ex-all", icon: "🏗", title: "Мастерская", desc: "Все упражнения решены", metric: "exercises", target: TOTAL_EXERCISES },
@@ -1947,7 +2005,12 @@
       theoryCount: document.getElementById("theoryCount"),
       theoryBar: document.getElementById("theoryBar"),
       theoryMeter: document.getElementById("theoryMeter"),
+      advancedSummary: document.getElementById("advancedSummary"),
+      advancedCount: document.getElementById("advancedCount"),
+      advancedMeter: document.getElementById("advancedMeter"),
+      advancedBar: document.getElementById("advancedBar"),
       exerciseSummary: document.getElementById("exerciseSummary"),
+      theoryMinutes: document.getElementById("theoryMinutes"),
       recipesCard: document.getElementById("recipesCard"),
       recipesList: document.getElementById("recipesList"),
       recipesCount: document.getElementById("recipesCount"),
@@ -2428,9 +2491,12 @@
       const checklist = CHECKLIST_MIN.reduce((count, _, index) =>
         count + (state.checklist["min-" + index] ? 1 : 0), 0);
       let theory = 0;
+      let advanced = 0;
       THEORY.forEach((stage) => {
         stage.sections.forEach((_, index) => {
-          if (state.theory[theoryKey(stage.id, index)]) theory += 1;
+          if (!state.theory[theoryKey(stage.id, index)]) return;
+          if (stage.advanced) advanced += 1;
+          else theory += 1;
         });
       });
       let exercises = 0;
@@ -2459,6 +2525,7 @@
         stages: stages,
         checklist: checklist,
         theory: theory,
+        advanced: advanced,
         exercises: exercises,
         reviews: reviews,
         practice: practice,
@@ -2621,14 +2688,28 @@
 
     // ---------- Отрисовка: теория ----------
     function updateTheorySummary() {
-      const done = computeStats().theory;
-      const percent = TOTAL_THEORY ? Math.round((done / TOTAL_THEORY) * 100) : 0;
-      if (dom.theoryCount) dom.theoryCount.textContent = done + " из " + TOTAL_THEORY;
+      const stats = computeStats();
+      const done = stats.theory;
+      const percent = MAIN_THEORY_TOTAL ? Math.round((done / MAIN_THEORY_TOTAL) * 100) : 0;
+      if (dom.theoryCount) dom.theoryCount.textContent = done + " из " + MAIN_THEORY_TOTAL;
       if (dom.theoryBar) dom.theoryBar.style.width = percent + "%";
       if (dom.theoryMeter) dom.theoryMeter.setAttribute("aria-valuenow", String(percent));
+      if (dom.advancedSummary) {
+        dom.advancedSummary.hidden = ADVANCED_THEORY_TOTAL === 0;
+        const advancedPercent = ADVANCED_THEORY_TOTAL
+          ? Math.round((stats.advanced / ADVANCED_THEORY_TOTAL) * 100) : 0;
+        if (dom.advancedCount) dom.advancedCount.textContent = stats.advanced + " из " + ADVANCED_THEORY_TOTAL;
+        if (dom.advancedBar) dom.advancedBar.style.width = advancedPercent + "%";
+        if (dom.advancedMeter) dom.advancedMeter.setAttribute("aria-valuenow", String(advancedPercent));
+      }
       if (dom.exerciseSummary) {
-        const solved = computeStats().exercises;
+        const solved = stats.exercises;
         dom.exerciseSummary.textContent = solved + " из " + TOTAL_EXERCISES + " упражнений решено";
+      }
+      if (dom.theoryMinutes) {
+        const minutes = THEORY.reduce((sum, stage) =>
+          sum + stage.sections.reduce((stageSum, section) => stageSum + lessonReadMinutes(section), 0), 0);
+        dom.theoryMinutes.textContent = "~" + minutes + " мин чтения";
       }
     }
 
@@ -2717,6 +2798,26 @@
       });
     }
 
+    function lessonReadMinutes(section) {
+      let words = 0;
+      const add = (value) => {
+        if (typeof value === "string") words += value.trim().split(/\s+/).filter(Boolean).length;
+      };
+      (section.text || []).forEach(add);
+      (section.points || []).forEach(add);
+      (section.deep || []).forEach((block) => {
+        add(block.h);
+        (block.p || []).forEach(add);
+        (block.points || []).forEach(add);
+        add(block.code || "");
+      });
+      add(section.code || "");
+      (section.mistakes || []).forEach(add);
+      (section.qa || []).forEach((pair) => pair.forEach(add));
+      (section.interview || []).forEach((pair) => pair.forEach(add));
+      return Math.max(2, Math.round(words / 170));
+    }
+
     function renderTheory() {
       if (!dom.theoryList) return;
       if (!THEORY.length) {
@@ -2725,8 +2826,13 @@
         return;
       }
 
+      let advancedStarted = false;
       dom.theoryList.innerHTML = THEORY.map((stage, stageIndex) => {
         const isOpen = openTheoryStages.has(stage.id);
+        const advancedDivider = stage.advanced && !advancedStarted
+          ? '<div class="theory-divider"><span class="theory-divider-kicker">advanced --list</span><h2>Дополнительные главы</h2><p>Темы сверх роадмапа: внутренности Go, архитектура, данные, эксплуатация, безопасность, system design, алгоритмы и инструменты. Их можно читать после основного курса или параллельно.</p></div>'
+          : "";
+        if (stage.advanced) advancedStarted = true;
         const total = stage.sections.length;
         const done = stage.sections.reduce((count, _, index) =>
           count + (state.theory[theoryKey(stage.id, index)] ? 1 : 0), 0);
@@ -2740,6 +2846,19 @@
           const points = section.points && section.points.length
             ? '<ul class="lesson-points">' + section.points.map((point) => "<li>" + escapeHtml(point) + "</li>").join("") + "</ul>"
             : "";
+          const deep = (section.deep || []).map((block) => {
+            const paragraphs = (block.p || []).map((text) => "<p>" + escapeHtml(text) + "</p>").join("");
+            const deepPoints = (block.points || []).length
+              ? '<ul class="lesson-deep-points">' + block.points.map((point) => "<li>" + escapeHtml(point) + "</li>").join("") + "</ul>"
+              : "";
+            const deepCode = block.code
+              ? '<pre class="lesson-code"><code>' + escapeHtml(block.code) + "</code></pre>"
+              : "";
+            return '<section class="lesson-deep-block">' +
+              (block.h ? "<h4>" + escapeHtml(block.h) + "</h4>" : "") +
+              paragraphs + deepPoints + deepCode +
+              "</section>";
+          }).join("");
           const code = section.code
             ? '<pre class="lesson-code"><code>' + escapeHtml(section.code) + "</code></pre>"
             : "";
@@ -2793,7 +2912,7 @@
             <article class="lesson${read ? " is-read" : ""}" data-lesson-key="${escapeHtml(key)}">
               <div class="lesson-head">
                 <div>
-                  <span class="lesson-num">${pad2(index + 1)} / ${pad2(total)}</span>
+                  <span class="lesson-num">${pad2(index + 1)} / ${pad2(total)} · ~${lessonReadMinutes(section)} мин</span>
                   <h3>${escapeHtml(section.title)}</h3>
                 </div>
                 <label class="lesson-check" title="Отметить тему изученной">
@@ -2804,6 +2923,7 @@
               </div>
               <div class="lesson-text">${paragraphs}</div>
               ${points}
+              ${deep}
               ${code}
               ${mistakes}
               <div class="lesson-source">Источник: ${sources || "не указан"}</div>
@@ -2814,7 +2934,8 @@
         }).join("");
 
         return `
-          <article class="theory-stage${isOpen ? " is-open" : ""}${complete ? " is-complete" : ""}" data-theory-stage-id="${escapeHtml(stage.id)}">
+          ${advancedDivider}
+          <article class="theory-stage${isOpen ? " is-open" : ""}${complete ? " is-complete" : ""}${stage.advanced ? " is-advanced" : ""}" data-theory-stage-id="${escapeHtml(stage.id)}">
             <h2>
               <button class="theory-toggle" type="button" aria-expanded="${isOpen}" aria-controls="theory-body-${escapeHtml(stage.id)}">
                 <span class="stage-index" aria-hidden="true">${pad2(stageIndex + 1)}</span>
