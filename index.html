@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#060912">
-  <meta name="description" content="Терминальный трекер роадмапа Go: этапы, конспекты теории с вводным слоем для новичков, источниками, ошибками, вопросами и упражнениями, 8 дополнительных глав, backend-рецепты, песочница Go, задачи LeetCode по темам, статистика профиля, ачивки, заметки, чек-лист и синхронизация через GitHub Gist.">
+  <meta name="description" content="Терминальный трекер роадмапа Go: этапы, конспекты теории с вводным слоем и пошаговыми разборами для новичков, источниками, ошибками, вопросами и упражнениями, 8 дополнительных глав, backend-рецепты, песочница Go, задачи LeetCode по темам, статистика профиля, ачивки, заметки, чек-лист и синхронизация через GitHub Gist.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -784,6 +784,132 @@
     .lesson-terms-list { display: grid; gap: 4px; padding-left: 16px; }
     .lesson-terms-list li { font-size: 12px; line-height: 1.5; color: var(--muted); }
     .lesson-terms-list b { color: var(--fg); font-weight: 700; }
+    .lesson-guide {
+      margin-top: 12px; padding: 14px;
+      border: 1px solid color-mix(in srgb, var(--acc) 32%, var(--line));
+      border-radius: 12px;
+      background: linear-gradient(165deg, color-mix(in srgb, var(--acc) 6%, var(--panel)), var(--panel) 55%);
+    }
+    .lesson-guide-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      margin-bottom: 8px;
+    }
+    .lesson-guide-kicker {
+      font-family: var(--mono); font-size: 9px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase; color: var(--acc);
+    }
+    .lesson-guide-kicker::before { content: "> "; }
+    .lesson-guide-level {
+      font-family: var(--mono); font-size: 8.5px; letter-spacing: .05em;
+      text-transform: uppercase; color: var(--muted);
+      padding: 2px 6px; border: 1px solid var(--line); border-radius: 999px;
+    }
+    .guide-goal {
+      padding: 9px 11px; border-left: 2px solid var(--acc);
+      background: color-mix(in srgb, var(--acc) 6%, transparent);
+      font-size: 13px; line-height: 1.6; color: var(--fg);
+    }
+    .guide-goal b { color: var(--acc); font-family: var(--mono); font-size: 9.5px; letter-spacing: .04em; text-transform: uppercase; }
+    .guide-steps { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; margin-top: 12px; padding: 0; list-style: none; counter-reset: guide; }
+    .guide-step {
+      min-width: 0; padding: 11px 12px; border: 1px solid var(--line); border-radius: 10px;
+      background: color-mix(in srgb, var(--panel) 88%, var(--acc) 4%);
+    }
+    .guide-step-head { display: flex; align-items: flex-start; gap: 8px; }
+    .guide-step-num {
+      flex: none; padding-top: 1px;
+      font-family: var(--mono); font-size: 10px; font-weight: 800; color: var(--acc);
+    }
+    .guide-step-head h4 { min-width: 0; font-size: 13px; font-weight: 800; line-height: 1.4; color: var(--fg); overflow-wrap: anywhere; }
+    .guide-step-text { margin-top: 6px; font-size: 13px; line-height: 1.62; color: var(--fg); overflow-wrap: anywhere; }
+    .guide-inline {
+      padding: 1px 4px; border-radius: 4px;
+      background: color-mix(in srgb, var(--acc2) 13%, transparent);
+      font-family: var(--mono); font-size: .88em; color: var(--fg);
+      overflow-wrap: anywhere;
+    }
+    .guide-code {
+      min-width: 0; margin: 9px 0 0; padding: 9px 11px; max-width: 100%;
+      border: 1px dashed color-mix(in srgb, var(--acc2) 40%, var(--line)); border-radius: 8px;
+      background: rgba(0, 0, 0, .3); overflow-x: auto;
+      font-family: var(--mono); font-size: 11px; line-height: 1.55; color: var(--fg);
+      -webkit-overflow-scrolling: touch;
+    }
+    :root[data-theme="light"] .guide-code { background: rgba(29, 36, 51, .05); }
+    .guide-out {
+      margin-top: 8px; padding: 8px 10px;
+      border: 1px solid color-mix(in srgb, var(--ok) 30%, var(--line)); border-radius: 8px;
+      background: color-mix(in srgb, var(--ok) 7%, transparent);
+    }
+    .guide-out-label {
+      display: block; margin-bottom: 4px;
+      font-family: var(--mono); font-size: 8.5px; font-weight: 700;
+      letter-spacing: .07em; text-transform: uppercase; color: var(--ok);
+    }
+    .guide-out pre {
+      min-width: 0; margin: 0; padding: 0; max-width: 100%; overflow-x: auto;
+      font-family: var(--mono); font-size: 10.5px; line-height: 1.5; color: var(--fg);
+    }
+    .guide-why {
+      margin-top: 8px; padding-top: 7px; border-top: 1px dashed var(--line);
+      font-size: 12px !important; line-height: 1.55 !important; color: var(--muted) !important;
+      overflow-wrap: anywhere;
+    }
+    .guide-why b { color: var(--acc2); font-family: var(--mono); font-size: 9px; letter-spacing: .04em; text-transform: uppercase; }
+    .guide-practice {
+      margin-top: 12px; padding: 11px 12px;
+      border: 1px solid color-mix(in srgb, var(--warn) 32%, var(--line)); border-radius: 10px;
+      background: color-mix(in srgb, var(--warn) 5%, transparent);
+    }
+    .guide-sub-title {
+      display: block; margin-bottom: 7px;
+      font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase; color: var(--warn);
+    }
+    .guide-practice ol { display: grid; gap: 8px; padding-left: 18px; }
+    .guide-practice li { font-size: 12.5px; line-height: 1.55; color: var(--fg); overflow-wrap: anywhere; }
+    .guide-practice li p { margin: 0; }
+    .guide-hint { margin-top: 6px; }
+    .guide-hint summary {
+      cursor: pointer; font-family: var(--mono); font-size: 9.5px;
+      color: var(--acc2); list-style: none;
+    }
+    .guide-hint summary::-webkit-details-marker { display: none; }
+    .guide-hint summary::before { content: "+ "; }
+    .guide-hint[open] summary::before { content: "− "; }
+    .guide-hint p { margin-top: 4px; font-size: 12px; color: var(--muted); }
+    .guide-check { margin-top: 5px !important; font-size: 11.5px !important; color: var(--muted) !important; overflow-wrap: anywhere; }
+    .guide-check b { color: var(--ok); font-family: var(--mono); font-size: 9px; letter-spacing: .04em; text-transform: uppercase; }
+    .guide-use {
+      margin-top: 10px; padding-top: 9px; border-top: 1px dashed var(--line);
+    }
+    .guide-use .guide-sub-title { color: var(--acc2); }
+    .guide-use ul { display: flex; flex-wrap: wrap; gap: 5px; padding: 0; list-style: none; }
+    .guide-use li {
+      padding: 3px 7px; border: 1px solid var(--line); border-radius: 999px;
+      font-size: 10.5px; line-height: 1.4; color: var(--muted);
+    }
+    .guide-cheat { margin-top: 10px; border-top: 1px dashed var(--line); }
+    .guide-cheat > summary {
+      padding-top: 9px; cursor: pointer;
+      font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+      letter-spacing: .05em; text-transform: uppercase; color: var(--acc2);
+    }
+    .guide-cheat dl { display: grid; gap: 4px; margin-top: 8px; }
+    .guide-cheat dl > div {
+      display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 8px;
+      padding-bottom: 4px; border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+    }
+    .guide-cheat dt { font-family: var(--mono); font-size: 10.5px; color: var(--fg); overflow-wrap: anywhere; }
+    .guide-cheat dd { font-size: 11.5px; line-height: 1.45; color: var(--muted); }
+    @media (max-width: 430px) {
+      .lesson-guide { padding: 11px; }
+      .guide-step { padding: 9px 10px; }
+      .guide-cheat dl > div { grid-template-columns: 110px minmax(0, 1fr); }
+    }
+    @media (max-width: 360px) {
+      .guide-cheat dl > div { grid-template-columns: 1fr; gap: 1px; }
+    }
     @media (max-width: 430px) {
       .lesson-beginner { padding: 11px 12px; }
     }
@@ -2958,6 +3084,23 @@
         add(block.code || "");
       });
       add(section.code || "");
+      if (section.beginner) {
+        add(section.beginner.why);
+        add(section.beginner.prereq);
+        (section.beginner.simple || []).forEach(add);
+        (section.beginner.terms || []).forEach((pair) => pair.forEach(add));
+      }
+      if (section.guide) {
+        add(section.guide.goal);
+        (section.guide.steps || []).forEach((step) => {
+          add(step.h); add(step.p); add(step.code); add(step.out); add(step.why);
+        });
+        (section.guide.practice || []).forEach((item) => {
+          add(item.task); add(item.hint); add(item.check);
+        });
+        (section.guide.use || []).forEach(add);
+        (section.guide.cheat || []).forEach((pair) => pair.forEach(add));
+      }
       (section.mistakes || []).forEach(add);
       (section.qa || []).forEach((pair) => pair.forEach(add));
       (section.interview || []).forEach((pair) => pair.forEach(add));
@@ -3042,6 +3185,49 @@
               simple + why + prereq + terms + "</div>";
           })() : "";
 
+          const guide = section.guide ? (() => {
+            const g = section.guide;
+            const inline = (value) => escapeHtml(value || "").replace(/`([^`]+)`/g, '<code class="guide-inline">$1</code>');
+            const steps = (g.steps || []).map((step, stepIndex) => {
+              const code = step.code
+                ? '<pre class="guide-code"><code>' + escapeHtml(step.code) + "</code></pre>"
+                : "";
+              const out = step.out
+                ? '<div class="guide-out"><span class="guide-out-label">что увидите</span><pre><code>' + escapeHtml(step.out) + "</code></pre></div>"
+                : "";
+              const why = step.why
+                ? '<p class="guide-why"><b>Зачем:</b> ' + inline(step.why) + "</p>"
+                : "";
+              return '<li class="guide-step">' +
+                '<div class="guide-step-head"><span class="guide-step-num">' + pad2(stepIndex + 1) + "</span>" +
+                "<h4>" + inline(step.h) + "</h4></div>" +
+                '<p class="guide-step-text">' + inline(step.p) + "</p>" +
+                code + out + why + "</li>";
+            }).join("");
+            const practice = (g.practice || []).map((item) => {
+              const hint = item.hint
+                ? '<details class="guide-hint"><summary>Подсказка</summary><p>' + inline(item.hint) + "</p></details>"
+                : "";
+              const check = item.check
+                ? '<p class="guide-check"><b>Критерий:</b> ' + inline(item.check) + "</p>"
+                : "";
+              return "<li><p>" + inline(item.task) + "</p>" + hint + check + "</li>";
+            }).join("");
+            const use = (g.use || []).map((item) => "<li>" + inline(item) + "</li>").join("");
+            const cheat = (g.cheat || []).map((pair) =>
+              "<div><dt>" + escapeHtml(pair[0]) + "</dt><dd>" + escapeHtml(pair[1]) + "</dd></div>"
+            ).join("");
+            return '<section class="lesson-guide">' +
+              '<div class="lesson-guide-head"><span class="lesson-guide-kicker">пошаговый разбор</span>' +
+              '<span class="lesson-guide-level">делаем руками</span></div>' +
+              '<p class="guide-goal"><b>Цель урока:</b> ' + inline(g.goal) + "</p>" +
+              '<ol class="guide-steps">' + steps + "</ol>" +
+              (practice ? '<div class="guide-practice"><span class="guide-sub-title">Попробуйте сами</span><ol>' + practice + "</ol></div>" : "") +
+              (use ? '<div class="guide-use"><span class="guide-sub-title">Где пригодится</span><ul>' + use + "</ul></div>" : "") +
+              (cheat ? '<details class="guide-cheat"><summary>Шпаргалка · ' + (g.cheat || []).length + '</summary><dl>' + cheat + "</dl></details>" : "") +
+              "</section>";
+          })() : "";
+
           const topicExercises = Array.isArray(EXERCISES[key]) ? EXERCISES[key] : [];
           const solvedExercises = topicExercises.reduce((count, _, exIndex) =>
             count + (state.exercises[exerciseKey(key, exIndex)] ? 1 : 0), 0);
@@ -3084,6 +3270,7 @@
                 </label>
               </div>
               ${beginner}
+              ${guide}
               <div class="lesson-text">${paragraphs}</div>
               ${points}
               ${deep}

@@ -1,5 +1,5 @@
 // Service worker: офлайн-кэш приложения
-const CACHE_NAME = "go-roadmap-v11";
+const CACHE_NAME = "go-roadmap-v12";
 const CORE_ASSETS = [
   "./",
   "./index.html",
