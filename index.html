@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#060912">
-  <meta name="description" content="Терминальный трекер роадмапа Go: этапы, конспекты теории с вводным слоем и пошаговыми разборами для новичков, источниками, ошибками, вопросами и упражнениями, 8 дополнительных глав, backend-рецепты, песочница Go, задачи LeetCode по темам, статистика профиля, ачивки, заметки, чек-лист и синхронизация через GitHub Gist.">
+  <meta name="description" content="Терминальный трекер роадмапа Go: 9 блоков со статусами done, next и locked, пример кода и вопрос на понимание в каждой теме, конспекты теории с вводным слоем и пошаговыми разборами, упражнения, backend-рецепты, песочница Go, задачи LeetCode, ачивки, заметки, чек-лист и синхронизация через GitHub Gist.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -445,6 +445,132 @@
     .task.is-done { border-color: var(--c); background: color-mix(in srgb, var(--c) 12%, var(--panel)); }
     .task-text { min-width: 0; font-size: 14.5px; font-weight: 600; line-height: 1.45; overflow-wrap: anywhere; }
     .task.is-done .task-text, .problem.is-done .problem-title { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+
+    /* ================= УЧЕБНЫЙ МАРШРУТ ================= */
+    .learn-intro {
+      margin: 0 0 14px; padding: 16px;
+      border: 1px solid color-mix(in srgb, var(--acc) 30%, var(--line));
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, color-mix(in srgb, var(--acc) 7%, var(--card)), var(--card) 58%);
+    }
+    .learn-intro-head { max-width: 72ch; }
+    .learn-intro .eyebrow {
+      margin-bottom: 4px;
+      font-family: var(--mono); font-size: 10px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase; color: var(--acc);
+    }
+    .learn-intro h2 { font-size: 18px; font-weight: 800; letter-spacing: -.01em; line-height: 1.25; }
+    .learn-intro-head > p:last-child {
+      margin-top: 6px; font-size: 13px; line-height: 1.55; color: var(--muted);
+    }
+    .learn-rules {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 18px; margin: 12px 0 0; padding: 0; list-style: none;
+    }
+    .learn-rules li {
+      position: relative; padding-left: 15px;
+      font-size: 12.5px; line-height: 1.5; color: var(--muted);
+    }
+    .learn-rules li::before { content: "▸"; position: absolute; left: 0; color: var(--acc); }
+    .learn-rules b { color: var(--fg); }
+    .learn-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .legend-item {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line);
+      font-family: var(--mono); font-size: 10px; line-height: 1.3;
+    }
+    .legend-item.is-done { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 42%, var(--line)); }
+    .legend-item.is-next { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 48%, var(--line)); }
+    .legend-item.is-locked { color: var(--muted); filter: grayscale(1); }
+
+    .stage-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-top: 3px; }
+    .stage-topics-label { font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
+    .stage-meta .stage-count { padding: 2px 7px; font-size: 10px; }
+    .stage-status {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 7px; border-radius: 999px; border: 1px solid var(--line);
+      font-family: var(--mono); font-size: 9.5px; line-height: 1.4; white-space: nowrap;
+    }
+    .stage-status svg { width: 11px; height: 11px; }
+    .stage-status.is-done { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 42%, var(--line)); }
+    .stage-status.is-next, .stage-status.is-in_progress { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 48%, var(--line)); }
+    .stage-status.is-locked { color: var(--muted); }
+    .stage.is-status-locked .stage-title { color: var(--muted); }
+    .stage.is-status-in_progress { border-color: color-mix(in srgb, var(--warn) 30%, var(--line)); }
+
+    .plan-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .plan-topic { min-width: 0; }
+    .plan-topic-box {
+      border: 1px solid var(--line); border-radius: 12px; background: var(--panel);
+      transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+    .plan-topic-box:hover { border-color: color-mix(in srgb, var(--acc) 42%, var(--line)); }
+    .plan-topic.is-done .plan-topic-box {
+      border-color: color-mix(in srgb, var(--ok) 34%, var(--line));
+      background: color-mix(in srgb, var(--ok) 5%, var(--panel));
+    }
+    .plan-topic.is-next .plan-topic-box {
+      border-color: color-mix(in srgb, var(--warn) 58%, var(--line));
+      background: color-mix(in srgb, var(--warn) 7%, var(--panel));
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--warn) 18%, transparent);
+    }
+    .plan-topic.is-locked .plan-topic-box { background: color-mix(in srgb, var(--fg) 2%, var(--panel)); }
+    .plan-topic-summary {
+      display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center; gap: 10px;
+      min-height: 48px; padding: 9px 11px; cursor: pointer; list-style: none;
+    }
+    .plan-topic-summary::-webkit-details-marker { display: none; }
+    .plan-topic-summary:focus-visible { outline: 2px solid var(--acc); outline-offset: -2px; border-radius: 12px; }
+    .plan-topic-icon {
+      display: grid; place-items: center; width: 28px; height: 28px;
+      border-radius: 9px; border: 1px solid var(--line); color: var(--muted);
+    }
+    .plan-topic-icon svg { width: 15px; height: 15px; }
+    .plan-topic.is-done .plan-topic-icon {
+      color: var(--ok); border-color: color-mix(in srgb, var(--ok) 48%, var(--line));
+      background: color-mix(in srgb, var(--ok) 12%, transparent);
+    }
+    .plan-topic.is-next .plan-topic-icon {
+      color: var(--warn); border-color: color-mix(in srgb, var(--warn) 55%, var(--line));
+      background: color-mix(in srgb, var(--warn) 14%, transparent);
+    }
+    .plan-topic.is-locked .plan-topic-icon { color: var(--dim); }
+    .plan-topic-main { min-width: 0; display: grid; gap: 1px; }
+    .plan-topic-title { font-size: 13.5px; font-weight: 700; line-height: 1.4; overflow-wrap: anywhere; }
+    .plan-topic.is-done .plan-topic-title, .plan-topic.is-locked .plan-topic-title { color: var(--muted); }
+    .plan-topic-status {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .04em;
+      text-transform: uppercase; color: var(--dim);
+    }
+    .plan-topic.is-done .plan-topic-status { color: var(--ok); }
+    .plan-topic.is-next .plan-topic-status { color: var(--warn); }
+    .plan-topic-chevron {
+      color: var(--dim); font-family: var(--mono); font-size: 18px; line-height: 1;
+      transition: transform .2s ease;
+    }
+    .plan-topic-box[open] .plan-topic-chevron { transform: rotate(45deg); }
+    .plan-topic-body { padding: 10px 11px 12px; border-top: 1px dashed var(--line); margin-top: 2px; }
+    .plan-block { margin-top: 10px; }
+    .plan-block:first-child { margin-top: 0; }
+    .plan-label {
+      display: block; margin-bottom: 5px;
+      font-family: var(--mono); font-size: 9px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase; color: var(--acc);
+    }
+    .plan-code {
+      margin: 0; padding: 10px 11px; overflow-x: auto;
+      border: 1px solid var(--line); border-radius: 10px;
+      background: color-mix(in srgb, var(--bg) 72%, var(--panel));
+      color: var(--fg); font-family: var(--mono); font-size: 11px; line-height: 1.55; tab-size: 2;
+    }
+    .plan-question { margin: 0; font-size: 12.5px; line-height: 1.55; color: var(--fg); }
+    .plan-answer { margin-top: 7px; }
+    .plan-answer summary { cursor: pointer; font-family: var(--mono); font-size: 10px; color: var(--acc); }
+    .plan-answer p { margin: 6px 0 0; font-size: 12px; line-height: 1.55; color: var(--muted); }
+    .plan-done-btn { margin-top: 12px; width: 100%; min-height: 44px; }
+    .plan-note { margin: 10px 0 0; font-family: var(--mono); font-size: 10px; line-height: 1.5; color: var(--dim); }
+    .plan-note.is-done { color: var(--ok); }
     .notes-block { margin-top: 14px; }
     .notes-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
     .notes-head label { font-family: var(--mono); font-size: 11px; color: var(--dim); }
@@ -1391,8 +1517,19 @@
       .practice-top { grid-template-columns: minmax(0, 1fr); }
       .settings-grid { grid-template-columns: minmax(0, 1fr); }
     }
+    @media (max-width: 720px) {
+      .learn-rules { grid-template-columns: minmax(0, 1fr); }
+    }
     @media (max-width: 430px) {
       .shell { padding: 0 12px; }
+      .learn-intro { padding: 13px; }
+      .learn-intro h2 { font-size: 16px; }
+      .plan-topic-summary { gap: 8px; padding: 9px 10px; }
+      .plan-topic-icon { width: 26px; height: 26px; }
+      .plan-topic-title { font-size: 13px; }
+      .plan-topic-body { padding: 9px 10px 11px; }
+      .plan-code { font-size: 10.5px; }
+      .stage-meta { gap: 5px; }
       .stat { padding: 8px 4px; }
       .stat b { font-size: 15px; }
       .stat > span { font-size: 9.5px; }
@@ -1466,7 +1603,7 @@
         </div>
         <div class="stats">
           <div class="stat"><b id="streakDays">0</b><span id="streakLabel">дней подряд</span></div>
-          <div class="stat"><b><span id="stagesDone">0</span><span class="stat-sep">/</span>8</b><span>этапов</span></div>
+          <div class="stat"><b><span id="stagesDone">0</span><span class="stat-sep">/</span><span id="stagesTotal">9</span></b><span>этапов</span></div>
           <div class="stat"><b id="practiceStat">0</b><span id="practiceUnit">задач</span></div>
           <div class="stat"><b><span id="achievementStat">0</span><span class="stat-sep">/</span><span id="achievementTotal">32</span></b><span>ачивок</span></div>
         </div>
@@ -1474,9 +1611,29 @@
         <p class="daily-tip" id="dailyTip"></p>
       </section>
 
+      <section class="learn-intro" aria-labelledby="learnIntroTitle">
+        <div class="learn-intro-head">
+          <p class="eyebrow">how to learn</p>
+          <h2 id="learnIntroTitle">Спокойно, по-человечески</h2>
+          <p>Это не список галочек, а маршрут. В каждой теме есть маленький пример и вопрос. Сначала ответьте своими словами, потом открывайте ответ.</p>
+        </div>
+        <ul class="learn-rules">
+          <li><b>Аналогии из жизни.</b> Сначала бытовая картинка, потом термин.</li>
+          <li><b>Без снобизма.</b> Нет «очевидно» и «просто». Если непонятно — это нормально.</li>
+          <li><b>Термины по необходимости.</b> Новое слово появляется, когда без него не объяснить.</li>
+          <li><b>Ровный темп.</b> Одна тема — один маленький результат, без гонки.</li>
+          <li><b>Понимание важнее зубрёжки.</b> Цель — объяснить своими словами, а не запомнить текст.</li>
+        </ul>
+        <p class="learn-legend">
+          <span class="legend-item is-done">✓ пройдено</span>
+          <span class="legend-item is-next">→ следующая тема</span>
+          <span class="legend-item is-locked">🔒 ещё не начато</span>
+        </p>
+      </section>
+
       <div class="panel-head">
         <h2>ls stages</h2>
-        <p>Нажмите на этап, чтобы раскрыть темы. Отмечайте пройденное и записывайте заметки — всё сохраняется автоматически.</p>
+        <p>Нажмите на этап, чтобы раскрыть темы. <b>✓</b> пройдено, <b>→</b> следующая тема, <b>🔒</b> ещё не начато. Внутри каждой темы — пример и вопрос на понимание.</p>
       </div>
       <div class="stage-list" id="roadmapList"></div>
 
@@ -1488,8 +1645,8 @@
     <section class="panel" id="panel-theory" role="tabpanel" aria-labelledby="tab-theory" tabindex="0" hidden>
       <div class="panel-head">
         <h2>theory --read</h2>
-        <p>Конспекты по каждому пункту роадмапа: главное, углублённые подразделы, источники, частые ошибки, вопросы и упражнения. Сначала ответьте вслух, потом раскрывайте ответ и решение.</p>
-        <p>План на день: одна тема теории → ответы на вопросы вслух → упражнение → отметка «изучено». Дополнительные главы идут после основного блока и не заменяют его.</p>
+        <p>Теория — это справочник, а не обязательная очередь. Основной маршрут со статусами и примерами — во вкладке «Путь». Сюда заглядывайте, когда нужна глубина или повторение.</p>
+        <p>План на день: одна тема → ответы на вопросы вслух → упражнение → отметка «изучено». Дополнительные главы идут после основного блока и не заменяют его.</p>
       </div>
       <div class="card theory-summary">
         <div class="theory-summary-top">
@@ -1514,17 +1671,17 @@
         <details class="start-wrap" open>
           <summary>
             <span class="start-heading">start --here</span>
-            <span class="start-note">первая неделя и словарь</span>
+            <span class="start-note">как читать теорию</span>
           </summary>
-          <p class="start-lead">Не читайте всё подряд. Один урок — это 30–40 минут: сначала блок «простыми словами», потом основной текст, затем ответы вслух и упражнение. Если термин непонятен, загляните в словарь внизу.</p>
+          <p class="start-lead">Не читайте всё подряд. Сначала откройте вкладку «Путь» и посмотрите, какая тема следующая. Здесь найдите её разбор, ответьте на вопросы вслух и решите упражнение. Если термин непонятен — загляните в словарь внизу.</p>
           <ol class="start-route">
-            <li><b>День 1</b><span>Командная строка: навигация, файлы, переменные окружения. Отметьте урок и решите упражнение.</span></li>
-            <li><b>День 2</b><span>Git: init, commit, branch, merge, push. Сделайте первый репозиторий и коммит.</span></li>
-            <li><b>День 3</b><span>HTTP: метод, URL, статус-код, заголовки, JSON. Разберите один запрос в DevTools браузера.</span></li>
-            <li><b>День 4</b><span>SQL: SELECT, WHERE, JOIN, INSERT, UPDATE, GROUP BY. Сделайте таблицу и пять запросов.</span></li>
-            <li><b>День 5</b><span>Установка Go и команды go run, build, test, fmt, vet. Запустите первую программу.</span></li>
-            <li><b>День 6</b><span>Переменные, константы и базовые типы. Напишите калькулятор на if и switch.</span></li>
-            <li><b>День 7</b><span>Повторение: откройте review --today, перечитайте вопросы, доделайте упражнения. Новых тем не берите.</span></li>
+            <li><b>Шаг 1</b><span>package main, импорты, fmt. Запустите первую программу и объясните, что делает каждая строка.</span></li>
+            <li><b>Шаг 2</b><span>Массивы и слайсы. Сравните len и cap на одном примере.</span></li>
+            <li><b>Шаг 3</b><span>Maps и structs. Опишите словарём и структурой одну бытовую сущность.</span></li>
+            <li><b>Шаг 4</b><span>Функции. Напишите функцию с двумя возвращаемыми значениями.</span></li>
+            <li><b>Шаг 5</b><span>Указатели, интерфейсы, ошибки. Объясните своими словами, зачем каждый инструмент.</span></li>
+            <li><b>Шаг 6</b><span>Вернитесь во вкладку «Путь», отметьте тему пройденной и переходите к следующей.</span></li>
+            <li><b>Шаг 7</b><span>Повторение: review --today, вопросы вслух, без новых тем.</span></li>
           </ol>
           <p class="start-rule"><b>Правило:</b> не переходите дальше, пока не можете объяснить тему своими словами за минуту. «Прочитал» — не то же самое, что «понял».</p>
           <details class="start-glossary">
@@ -1756,7 +1913,7 @@
             <input type="file" id="importFile" accept="application/json,.json" hidden>
             <div class="danger-zone">
               <button class="btn btn-danger" type="button" id="resetBtn">Сбросить прогресс</button>
-              <p class="field-hint" style="margin-top: 8px;">Очистит задачи, теорию, практику, ачивки, заметки и чек-лист. Тема оформления и ник LeetCode останутся.</p>
+              <p class="field-hint" style="margin-top: 8px;">Очистит теорию, практику, ачивки, заметки и чек-лист. Роадмап вернётся к стартовым статусам плана. Тема оформления и ник LeetCode останутся.</p>
             </div>
           </div>
         </div>
@@ -1841,107 +1998,643 @@
     // ---------- Данные: роадмап ----------
     const ROADMAP = [
       {
-        id: "prep",
-        title: "Подготовка",
-        weeks: "1 неделя",
+        id: "fundamentals",
+        title: "Fundamentals (база языка)",
+        theory: "basics",
         tasks: [
-          "Командная строка: навигация, файлы, переменные окружения",
-          "Git: init, commit, branch, merge, push, pull request",
-          "Как работает HTTP: метод, URL, статус-код, заголовки, JSON",
-          "Базовый SQL: SELECT, WHERE, JOIN, INSERT, UPDATE, GROUP BY"
+          {
+            title: "package main, импорты, fmt",
+            status: "done",
+            example: `package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Привет, Go!")
+}`,
+            question: "Зачем в начале файла package main и что делает fmt.Println?",
+            answer: "package main говорит: это запускаемая программа. fmt — пакет форматирования, Println печатает строку и переводит курсор. Аналогия: package — папка с инструментами, import — взять нужный инструмент."
+          },
+          {
+            title: "Массивы (фиксированный размер)",
+            status: "done",
+            example: `var days [7]string
+days[0] = "пн"
+fmt.Println(len(days), days[0]) // 7 пн`,
+            question: "Почему у массива нельзя просто добавить восьмой элемент?",
+            answer: "Размер массива — часть его типа и фиксируется при создании. Как коробка на 7 ячеек: восьмую не впихнуть. Для изменяемого списка есть слайс."
+          },
+          {
+            title: "Слайсы: len, cap, append, срезы, range, copy",
+            status: "done",
+            example: `nums := []int{1, 2, 3}
+nums = append(nums, 4)
+fmt.Println(len(nums), cap(nums)) // 4 и обычно 6`,
+            question: "Чем len отличается от cap у слайса?",
+            answer: "len — сколько элементов реально лежит. cap — сколько поместится без перевыделения памяти. Аналогия: len — сколько книг на полке, cap — сколько полка вообще вмещает."
+          },
+          {
+            title: "Maps (словари)",
+            status: "done",
+            example: `ages := map[string]int{"Аня": 20}
+ages["Боря"] = 22
+age, ok := ages["Вася"]
+fmt.Println(age, ok) // 0 false`,
+            question: "Зачем при чтении из map проверять ok, а не только значение?",
+            answer: "Если ключа нет, Go вернёт нулевое значение (0 для int). ok показывает, был ли ключ на самом деле. Это как искать слово в словаре: пустая страница ещё не значит, что слово есть."
+          },
+          {
+            title: "Structs (свои типы данных)",
+            status: "done",
+            example: `type User struct {
+    Name string
+    Age  int
+}
+
+u := User{Name: "Аня", Age: 20}
+fmt.Println(u.Name)`,
+            question: "Зачем объединять поля в struct, если можно завести отдельные переменные?",
+            answer: "Struct связывает связанные данные в один тип: пользователь, товар, заказ. Так код говорит о предметной области, а не о разрозненных переменных. Это как анкета: поля разные, но это один документ."
+          },
+          {
+            title: "Функции: возврат нескольких значений, variadic",
+            status: "next",
+            example: `func divmod(a, b int) (int, int) {
+    return a / b, a % b
+}
+
+func sum(nums ...int) int {
+    total := 0
+    for _, n := range nums {
+        total += n
+    }
+    return total
+}`,
+            question: "Почему в Go удобно возвращать (результат, error) двумя значениями?",
+            answer: "Вызывающий код сразу видит и результат, и ошибку и обязан их обработать. Не нужно ловить исключения или проверять глобальное состояние. Это как получить чек и сдачу одной операцией."
+          },
+          {
+            title: "Указатели (адреса в памяти, зачем нужны)",
+            status: "locked",
+            example: `x := 10
+p := &x
+*p = 20
+fmt.Println(x) // 20`,
+            question: "Что означает &x и *p?",
+            answer: "&x берёт адрес переменной, *p разыменовывает указатель — идёт по адресу к значению. Аналогия: &x — записать адрес дома, *p — прийти по этому адресу."
+          },
+          {
+            title: "Интерфейсы (контракты типов)",
+            status: "locked",
+            example: `type Speaker interface {
+    Speak() string
+}
+
+type Dog struct{}
+
+func (Dog) Speak() string { return "Гав" }`,
+            question: "Почему Dog считается реализующим Speaker без слова implements?",
+            answer: "В Go интерфейс реализуется неявно: достаточно иметь все методы с нужными сигнатурами. Это как пройти собеседование по навыкам, а не по названию должности."
+          },
+          {
+            title: "Обработка ошибок (error, if err != nil)",
+            status: "locked",
+            example: `f, err := os.Open("data.txt")
+if err != nil {
+    return fmt.Errorf("open: %w", err)
+}
+defer f.Close()`,
+            question: "Зачем if err != nil проверяют сразу после вызова?",
+            answer: "Ошибка — обычное значение, а не исключение. Проверка сразу не даёт коду продолжить с пустым результатом. %w сохраняет исходную ошибку для errors.Is."
+          }
         ]
       },
       {
-        id: "basics",
-        title: "Основы Go",
-        weeks: "2–3 недели",
+        id: "algorithms",
+        title: "Алгоритмы и LeetCode (база для собеседований)",
+        theory: "algorithms",
         tasks: [
-          "Установка Go, команды go run, go build, go test, go fmt, go vet",
-          "Переменные, константы, базовые типы",
-          "Условия, циклы, switch",
-          "Функции, множественные возвращаемые значения, замыкания",
-          "Массивы, слайсы, map",
-          "Структуры, методы, указатели",
-          "Модули и пакеты: go mod init, импорты"
+          {
+            title: "Two Sum, Contains Duplicate (хэш-мапы)",
+            status: "locked",
+            example: `func twoSum(nums []int, target int) []int {
+    seen := map[int]int{}
+    for i, n := range nums {
+        if j, ok := seen[target-n]; ok {
+            return []int{j, i}
+        }
+        seen[n] = i
+    }
+    return nil
+}`,
+            question: "Почему map превращает поиск пары из O(n²) в O(n)?",
+            answer: "Вместо повторного прохода по всем числам мы за один проход запоминаем встреченные значения и сразу проверяем, есть ли дополнение до target. Map — как записная книжка с быстрым поиском по ключу."
+          },
+          {
+            title: "Палиндром, переворот строки (два указателя)",
+            status: "locked",
+            example: `func isPalindrome(s string) bool {
+    r := []rune(s)
+    for i, j := 0, len(r)-1; i < j; i, j = i+1, j-1 {
+        if r[i] != r[j] {
+            return false
+        }
+    }
+    return true
+}`,
+            question: "Зачем переводить строку в []rune, а не в []byte?",
+            answer: "Кириллица и эмодзи занимают несколько байт. rune — один символ Unicode, поэтому сравнение концов не развалится на середине символа."
+          },
+          {
+            title: "Бинарный поиск (Binary Search)",
+            status: "locked",
+            example: `func search(nums []int, target int) int {
+    lo, hi := 0, len(nums)-1
+    for lo <= hi {
+        mid := lo + (hi-lo)/2
+        switch {
+        case nums[mid] == target:
+            return mid
+        case nums[mid] < target:
+            lo = mid + 1
+        default:
+            hi = mid - 1
+        }
+    }
+    return -1
+}`,
+            question: "Какое обязательное условие у массива для бинарного поиска?",
+            answer: "Массив должен быть отсортирован. Алгоритм отбрасывает половину, только если знает, в какой стороне может быть ответ. Как искать слово в бумажном словаре: открываешь середину и идёшь в нужную половину."
+          },
+          {
+            title: "Сортировки (пузырьковая, быстрая, слиянием)",
+            status: "locked",
+            example: `nums := []int{3, 1, 2}
+sort.Ints(nums)
+fmt.Println(nums) // [1 2 3]`,
+            question: "Почему на практике чаще используют sort.Ints, а не пишут пузырёк?",
+            answer: "Стандартная сортировка быстрее и проверена. Свои сортировки нужны для учёбы и особых случаев. Пузырёк — O(n²), быстрая — в среднем O(n log n)."
+          },
+          {
+            title: "Связные списки (Linked List)",
+            status: "locked",
+            example: `type Node struct {
+    Val  int
+    Next *Node
+}
+
+head := &Node{Val: 1, Next: &Node{Val: 2}}`,
+            question: "Чем связный список отличается от слайса по доступу к элементу?",
+            answer: "В слайсе доступ по индексу O(1), в списке — идти по ссылкам O(n). Зато вставка в середину списка не сдвигает весь массив. Это как вагоны поезда: чтобы найти пятый, надо пройти первые четыре."
+          },
+          {
+            title: "Базовые задачи на слайсы и строки",
+            status: "locked",
+            example: `words := strings.Fields("go это просто")
+for i, w := range words {
+    fmt.Println(i, strings.ToUpper(w))
+}`,
+            question: "Почему range по строке даёт индексы байтов, а не всегда +1?",
+            answer: "Строка в Go — UTF-8. range перебирает руны, а индекс — позиция начала руны в байтах. Поэтому у кириллицы индекс может прыгать на 2."
+          }
         ]
       },
       {
-        id: "idiomatic",
-        title: "Идиоматичный Go",
-        weeks: "2–3 недели",
+        id: "tools",
+        title: "Инструменты и организация кода",
+        theory: "tooling",
         tasks: [
-          "Интерфейсы и неявная реализация",
-          "Обработка ошибок: error, fmt.Errorf с %w, errors.Is и errors.As",
-          "defer, panic, recover",
-          "Тесты: *_test.go, табличные тесты",
-          "Стандартная библиотека: strings, strconv, sort, time, os, io, encoding/json",
-          "Дженерики"
+          {
+            title: "Go modules (go mod init, go mod tidy)",
+            status: "locked",
+            example: `go mod init example.com/tasks
+go get github.com/jackc/pgx/v5
+go mod tidy`,
+            question: "Зачем go.mod и go.sum лежат в репозитории?",
+            answer: "go.mod фиксирует имя модуля и зависимости, go.sum — контрольные суммы. Так у всех одинаковые версии. Это как рецепт и чек покупок: что именно положили в проект."
+          },
+          {
+            title: "Git (базовый): clone, add, commit, push, pull",
+            status: "locked",
+            example: `git clone https://github.com/user/repo.git
+git add .
+git commit -m "add tasks api"
+git push`,
+            question: "Чем git add отличается от git commit?",
+            answer: "add готовит изменения к сохранению (сцена), commit делает снимок. push отправляет снимки на сервер. Как собрать вещи, закрыть коробку и отправить посылку."
+          },
+          {
+            title: "Терминал: go run, go build, go test",
+            status: "locked",
+            example: `go run ./cmd/api
+go build -o bin/api ./cmd/api
+go test ./...`,
+            question: "Зачем go build, если go run уже запускает программу?",
+            answer: "go run собирает во временный файл и запускает. go build оставляет готовый бинарник, который можно положить в Docker или отдать другому. go test запускает тесты."
+          },
+          {
+            title: "Линтеры и форматтеры (go vet, golangci-lint)",
+            status: "locked",
+            example: `gofmt -w .
+go vet ./...
+golangci-lint run`,
+            question: "Почему gofmt не спорит о вкусах?",
+            answer: "В Go один официальный формат. Это убирает ревью-шум и диффы из-за пробелов. Как общий шрифт в документе: читать проще, спорить не о чем."
+          },
+          {
+            title: "Отладка в VS Code (breakpoints, debug)",
+            status: "locked",
+            example: `{
+  "type": "go",
+  "request": "launch",
+  "name": "Debug API",
+  "program": "\${workspaceFolder}/cmd/api"
+}`,
+            question: "Зачем breakpoint, если можно добавить fmt.Println?",
+            answer: "Breakpoint останавливает программу и показывает все переменные и стек без правок кода. Это как заглянуть в работающий механизм, а не разбирать его ради одного вопроса."
+          }
         ]
       },
       {
         id: "concurrency",
-        title: "Конкурентность",
-        weeks: "2 недели",
+        title: "Concurrency (суперсила Go)",
+        theory: "concurrency",
         tasks: [
-          "Горутины",
-          "Каналы, close, range по каналу",
-          "select, таймауты",
-          "sync.WaitGroup, sync.Mutex, sync.Once",
-          "context",
-          "Утечки горутин, гонки данных, флаг go run -race",
-          "Паттерны: worker pool, fan-in / fan-out, pipeline"
+          {
+            title: "Горутины (go func)",
+            status: "locked",
+            example: `go func() {
+    fmt.Println("из горутины")
+}()
+time.Sleep(10 * time.Millisecond)`,
+            question: "Почему без ожидания горутина может не успеть выполниться?",
+            answer: "main завершает программу, не дожидаясь других горутин. Нужен WaitGroup или канал. Горутина — как параллельный сотрудник: если закрыть офис, он не доделает работу."
+          },
+          {
+            title: "Каналы (chan, send/receive)",
+            status: "locked",
+            example: `ch := make(chan int)
+go func() { ch <- 42 }()
+fmt.Println(<-ch)`,
+            question: "Что произойдёт при отправке в небуферизованный канал без получателя?",
+            answer: "Отправка заблокируется, пока кто-то не прочитает. Канал — как передача из рук в руки: без второй руки движение стоит."
+          },
+          {
+            title: "Select и таймауты",
+            status: "locked",
+            example: `select {
+case v := <-ch:
+    fmt.Println(v)
+case <-time.After(time.Second):
+    fmt.Println("таймаут")
+}`,
+            question: "Зачем select нужен больше одного канала?",
+            answer: "select ждёт первый готовый канал и позволяет добавить таймаут или отмену. Это как пульт: срабатывает та кнопка, которую нажали, а не все сразу."
+          },
+          {
+            title: "sync: WaitGroup, Mutex, race detector",
+            status: "locked",
+            example: `var wg sync.WaitGroup
+var mu sync.Mutex
+total := 0
+wg.Add(1)
+go func() {
+    defer wg.Done()
+    mu.Lock()
+    total++
+    mu.Unlock()
+}()
+wg.Wait()`,
+            question: "Что такое гонка данных и как её ловит -race?",
+            answer: "Две горутины читают и пишут одну переменную без синхронизации, результат непредсказуем. go run -race инструментирует доступы и сообщает о конфликте."
+          },
+          {
+            title: "Context: отмена и таймауты",
+            status: "locked",
+            example: `ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+defer cancel()
+
+select {
+case <-ctx.Done():
+    return ctx.Err()
+case res := <-work(ctx):
+    return res
+}`,
+            question: "Почему context передают первым аргументом?",
+            answer: "Это общий сигнал отмены и дедлайна для всей цепочки вызовов. Первый аргумент — договорённость Go, чтобы его было видно сразу."
+          },
+          {
+            title: "Worker pool (пул воркеров)",
+            status: "locked",
+            example: `jobs := make(chan int)
+for w := 0; w < 3; w++ {
+    go func() {
+        for j := range jobs {
+            fmt.Println("worker", j)
+        }
+    }()
+}`,
+            question: "Зачем ограничивать число воркеров, а не запускать горутину на каждую задачу?",
+            answer: "Слишком много горутин тратят память и перегружают БД/сеть. Пул — как очередь в кассу: несколько кассиров обслуживают поток по одному."
+          }
         ]
       },
       {
         id: "backend",
-        title: "Бэкенд на Go",
-        weeks: "3–4 недели",
+        title: "Backend и базы данных",
+        theory: "backend",
         tasks: [
-          "net/http: сервер, маршрутизация, middleware",
-          "REST API: CRUD, валидация, коды ответов",
-          "PostgreSQL через database/sql или pgx, миграции, индексы",
-          "Конфигурация через переменные окружения, log/slog",
-          "Graceful shutdown",
-          "Docker и docker-compose",
-          "Фреймворки (chi, Gin, Echo)"
+          {
+            title: "HTTP-сервер (net/http)",
+            status: "locked",
+            example: `http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+    w.Write([]byte("ok"))
+})
+log.Fatal(http.ListenAndServe(":8080", nil))`,
+            question: "Что такое http.ResponseWriter и *http.Request?",
+            answer: "ResponseWriter — куда писать ответ, Request — входящий запрос: метод, путь, заголовки, тело. Это как бланк ответа и письмо клиента."
+          },
+          {
+            title: "REST API: методы, статусы, JSON",
+            status: "locked",
+            example: `w.Header().Set("Content-Type", "application/json")
+w.WriteHeader(http.StatusCreated)
+json.NewEncoder(w).Encode(map[string]string{"status": "created"})`,
+            question: "Чем 201 Created лучше 200 OK после создания ресурса?",
+            answer: "Код точно говорит клиенту, что ресурс создан. REST использует статусы как язык: 200 — ок, 201 — создано, 400 — плохой запрос, 404 — не найдено."
+          },
+          {
+            title: "SQL: PostgreSQL, запросы, JOIN, транзакции",
+            status: "locked",
+            example: `SELECT u.name, COUNT(o.id) AS orders
+FROM users u
+LEFT JOIN orders o ON o.user_id = u.id
+GROUP BY u.name
+ORDER BY orders DESC;`,
+            question: "Почему LEFT JOIN может вернуть пользователя без заказов, а INNER JOIN — нет?",
+            answer: "LEFT JOIN сохраняет все строки левой таблицы и подставляет NULL справа. INNER JOIN оставляет только совпадения. Это как список всех учеников против списка только тех, кто сдал работу."
+          },
+          {
+            title: "database/sql + драйвер pq или pgx",
+            status: "locked",
+            example: `row := db.QueryRow("SELECT name FROM users WHERE id = $1", id)
+var name string
+if err := row.Scan(&name); err != nil {
+    return err
+}`,
+            question: "Зачем Scan и почему нельзя просто получить string из запроса?",
+            answer: "Драйвер возвращает строки и колонки; Scan раскладывает их по переменным. Это как распаковать посылку по ячейкам."
+          },
+          {
+            title: "Redis: кэширование (базово)",
+            status: "locked",
+            example: `val, err := rdb.Get(ctx, "user:42").Result()
+if err == redis.Nil {
+    // cache miss: сходить в БД и положить обратно
+}`,
+            question: "Почему кэш может отдавать устаревшие данные и что с этим делать?",
+            answer: "Данные в Redis живут отдельно от БД. Нужны TTL и инвалидация при изменении. Кэш — как записка на холодильнике: её надо обновлять, иначе ужин будет по старому рецепту."
+          },
+          {
+            title: "Тестирование API (Postman, curl)",
+            status: "locked",
+            example: `curl -X POST http://localhost:8080/tasks \\
+  -H "Content-Type: application/json" \\
+  -d '{"title":"learn go"}'`,
+            question: "Зачем проверять API через curl, если есть фронтенд?",
+            answer: "curl показывает сырой запрос и ответ без UI. Так видно статус, заголовки и тело. Это как проверить кран напрямую, а не через душ."
+          }
         ]
       },
       {
-        id: "projects",
-        title: "Pet-проекты",
-        weeks: "3–4 недели",
+        id: "testing",
+        title: "Тестирование и качество",
+        theory: "idiomatic",
         tasks: [
-          "CLI-утилита",
-          "REST API с БД, тестами и Docker",
-          "Конкурентный инструмент",
-          "README у каждого проекта"
+          {
+            title: "Unit-тесты (testing, table-driven)",
+            status: "locked",
+            example: `func TestAdd(t *testing.T) {
+    cases := []struct{ a, b, want int }{
+        {1, 2, 3},
+        {-1, 1, 0},
+    }
+    for _, c := range cases {
+        if got := Add(c.a, c.b); got != c.want {
+            t.Errorf("Add(%d,%d)=%d, want %d", c.a, c.b, got, c.want)
+        }
+    }
+}`,
+            question: "Почему табличные тесты удобнее набора отдельных функций?",
+            answer: "Один цикл проверяет много случаев, а новый кейс — одна строка. Это как чек-лист: добавить пункт проще, чем писать новый документ."
+          },
+          {
+            title: "Моки и интерфейсы в тестах",
+            status: "locked",
+            example: `type Store interface {
+    Save(ctx context.Context, t Task) error
+}
+
+type memStore struct{ items []Task }
+
+func (m *memStore) Save(ctx context.Context, t Task) error {
+    m.items = append(m.items, t)
+    return nil
+}`,
+            question: "Зачем в тестах подменять БД интерфейсом, а не поднимать настоящую?",
+            answer: "Тест становится быстрым и не зависит от сети. Интерфейс — розетка: в неё можно включить настоящую БД или учебную заглушку."
+          },
+          {
+            title: "Покрытие тестами (go test -cover)",
+            status: "locked",
+            example: `go test ./... -cover
+go test ./... -coverprofile=cover.out
+go tool cover -html=cover.out`,
+            question: "Означает ли 100% покрытие, что багов нет?",
+            answer: "Нет. Покрытие показывает, какие строки выполнились, но не проверяет все сценарии. Это как пройти по всем комнатам, не заглянув в шкафы."
+          }
+        ]
+      },
+      {
+        id: "devops",
+        title: "DevOps-минимум для стажёра",
+        theory: "tooling",
+        tasks: [
+          {
+            title: "Docker: Dockerfile, сборка образа",
+            status: "locked",
+            example: `FROM golang:1.23 AS build
+WORKDIR /src
+COPY . .
+RUN CGO_ENABLED=0 go build -o /app ./cmd/api
+
+FROM alpine:3.20
+COPY --from=build /app /app
+ENTRYPOINT ["/app"]`,
+            question: "Зачем multi-stage сборка, если можно собрать в одном образе?",
+            answer: "В финальный образ попадает только бинарник, без компилятора и исходников. Образ меньше и безопаснее. Это как привезти готовый шкаф, а не мастерскую."
+          },
+          {
+            title: "Docker Compose (app + db)",
+            status: "locked",
+            example: `services:
+  api:
+    build: .
+    ports: ["8080:8080"]
+    depends_on: [db]
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: secret`,
+            question: "Почему depends_on не гарантирует, что Postgres уже готов принимать запросы?",
+            answer: "Он ждёт только запуска контейнера, а не готовности БД. Нужны healthcheck и retry в приложении."
+          },
+          {
+            title: "CI: GitHub Actions (базовый пайплайн)",
+            status: "locked",
+            example: `name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with: { go-version: "1.23" }
+      - run: go test ./...`,
+            question: "Зачем запускать тесты в CI, если они проходят локально?",
+            answer: "CI проверяет чистую среду и каждый пуш, а не только ваш компьютер. Это как независимая примерка перед выходом на сцену."
+          }
         ]
       },
       {
         id: "interview",
-        title: "Подготовка к собеседованию",
-        weeks: "2 недели",
+        title: "Подготовка к собеседованию (Вопросы)",
+        theory: "interview",
         tasks: [
-          "Слайс и массив, map, значение и указатель",
-          "Горутины и каналы, context, утечки горутин",
-          "Свои проекты: объяснить архитектуру",
-          "40–60 задач Easy и Medium на LeetCode",
-          "Вопросы по HTTP, REST, БД, Git",
-          "Практика объяснения вслух"
+          {
+            title: "Чем слайс отличается от массива? (len/cap)",
+            status: "locked",
+            example: `var a [3]int      // массив: размер в типе
+s := []int{1, 2, 3} // слайс: заголовок + backing array
+s = append(s, 4)`,
+            question: "Что произойдёт с массивом при append, если cap уже исчерпан?",
+            answer: "Go выделит новый массив большего размера и скопирует элементы. Старые ссылки на прежний backing array останутся на старых данных."
+          },
+          {
+            title: "Как работает map внутри? (хэш-таблицы)",
+            status: "locked",
+            example: `m := make(map[string]int, 100) // подсказка по capacity
+m["go"] = 1
+delete(m, "go")`,
+            question: "Почему порядок обхода map не гарантирован?",
+            answer: "Map — хэш-таблица; порядок зависит от хэшей и внутреннего устройства. Go специально рандомизирует обход, чтобы код не полагался на случайный порядок."
+          },
+          {
+            title: "Что такое интерфейс и зачем он нужен?",
+            status: "locked",
+            example: `type Reader interface {
+    Read(p []byte) (int, error)
+}
+
+var r Reader = strings.NewReader("go")`,
+            question: "Почему интерфейс лучше описывать на стороне потребителя, а не производителя?",
+            answer: "Потребитель знает, какие методы ему нужны, и не тянет лишние зависимости. Это как заказывать «розетка 220В», а не конкретную модель электростанции."
+          },
+          {
+            title: "Горутины vs Потоки: в чем разница?",
+            status: "locked",
+            example: `for i := 0; i < 1000; i++ {
+    go worker(i)
+}`,
+            question: "Почему тысяча горутин дешевле тысячи потоков ОС?",
+            answer: "Горутины — лёгкие задачи, которые планирует runtime Go на небольшом числе потоков ОС. Стек растёт по необходимости."
+          },
+          {
+            title: "Как работает сборщик мусора (GC) в Go?",
+            status: "locked",
+            example: `runtime.GC()
+debug.SetGCPercent(50)`,
+            question: "Что означает, что Go использует конкурентный сборщик мусора?",
+            answer: "GC работает параллельно с программой и старается не останавливать её надолго. Это не «магия», а компромисс между паузами и памятью."
+          },
+          {
+            title: "Контекст (context) — когда и зачем использовать?",
+            status: "locked",
+            example: `ctx, cancel := context.WithCancel(context.Background())
+defer cancel()
+req = req.WithContext(ctx)`,
+            question: "Когда context действительно нужен, а когда это лишний шум?",
+            answer: "Нужен для отмены, дедлайнов и передачи request-scoped данных через границы API. Для простой функции без внешних вызовов он не обязателен."
+          },
+          {
+            title: "Плюсы и минусы Go по сравнению с другими языками",
+            status: "locked",
+            example: `var wg sync.WaitGroup
+wg.Add(1)
+go func() {
+    defer wg.Done()
+    fmt.Println("просто и параллельно")
+}()
+wg.Wait()`,
+            question: "Как честно ответить на «почему Go», не превращая ответ в рекламу?",
+            answer: "Назвать задачу: быстрый бэкенд, простой деплой, конкурентность. Признать ограничения: меньше библиотек, чем в Python, и некоторая многословность."
+          }
         ]
       },
       {
-        id: "internship",
-        title: "Поиск стажировки",
-        weeks: "постоянно",
+        id: "project",
+        title: "Финальный проект (для портфолио)",
+        theory: "projects",
         tasks: [
-          "Резюме на 1 страницу",
-          "GitHub с закреплёнными репозиториями",
-          "5–10 откликов в неделю",
-          "Рассказ о себе (1–2 мин) и о проектах (2–3 мин)"
+          {
+            title: "Мини-API на Go (CRUD + PostgreSQL + JWT auth)",
+            status: "locked",
+            example: `POST   /tasks
+GET    /tasks
+GET    /tasks/{id}
+PATCH  /tasks/{id}
+DELETE /tasks/{id}`,
+            question: "Почему сначала проектируют контракт API, а потом пишут код?",
+            answer: "Контракт фиксирует методы, пути, статусы и JSON. По нему можно параллельно делать клиент, тесты и документацию. Это как план комнаты до покупки мебели."
+          },
+          {
+            title: "Обернуть проект в Docker и Docker Compose",
+            status: "locked",
+            example: `docker compose up --build`,
+            question: "Что должно быть в README, чтобы проект запустился одной командой?",
+            answer: "Зависимости, переменные окружения, команда запуска, порты и примеры запросов. README — это инструкция, а не список файлов."
+          },
+          {
+            title: "Покрыть тестами (unit + integration)",
+            status: "locked",
+            example: `go test ./... -race -cover`,
+            question: "Чем integration-тест отличается от unit-теста?",
+            answer: "Unit проверяет маленькую функцию в изоляции, integration — связку с БД/HTTP/контейнером. Оба нужны: один ловит логику, другой — стыки."
+          },
+          {
+            title: "README + инструкция запуска",
+            status: "locked",
+            example: `git clone https://github.com/user/tasks-api.git
+cd tasks-api
+docker compose up --build`,
+            question: "Что читает рекрутер в README в первую очередь?",
+            answer: "Что это за проект, какую задачу решает, как запустить и что внутри. Скриншот/демо и стек — сразу после этого."
+          }
         ]
       }
     ];
+
+    const PLAN_VERSION = "2026-11-fundamentals";
+    const PLAN_SEED_DONE = ROADMAP.flatMap((stage) =>
+      stage.tasks.flatMap((topic, index) => topic.status === "done" ? [taskKey(stage.id, index)] : [])
+    );
+    const PLAN_STATUS_META = {
+      done: { label: "пройдено", tone: "done" },
+      next: { label: "следующая", tone: "next" },
+      locked: { label: "не начато", tone: "locked" },
+      in_progress: { label: "в работе", tone: "next" }
+    };
 
     // ---------- Данные: минимум к собеседованию ----------
     const CHECKLIST_MIN = [
@@ -2185,7 +2878,7 @@
       { id: "half-way", icon: "🧭", title: "Экватор", desc: "Половина роадмапа пройдена", metric: "percent", target: 50 },
       { id: "first-stage", icon: "🧱", title: "Фундамент", desc: "Первый этап закрыт полностью", metric: "stages", target: 1 },
       { id: "three-stages", icon: "🏗", title: "Строитель", desc: "Три этапа закрыты полностью", metric: "stages", target: 3 },
-      { id: "all-stages", icon: "🏆", title: "Весь роадмап", desc: "Все 8 этапов закрыты", metric: "stages", target: 8 },
+      { id: "all-stages", icon: "🏆", title: "Весь роадмап", desc: "Все 9 этапов закрыты", metric: "stages", target: 9 },
       { id: "first-practice", icon: "🧩", title: "Первая практика", desc: "Решена первая задача из практики", metric: "practice", target: 1 },
       { id: "practice-10", icon: "🔟", title: "Десяток практики", desc: "10 задач практики отмечено", metric: "practice", target: 10 },
       { id: "practice-30", icon: "🧠", title: "Алгоритмист", desc: "30 задач практики отмечено", metric: "practice", target: 30 },
@@ -2265,6 +2958,7 @@
       overallRing: document.getElementById("overallRing"),
       overallMeter: document.getElementById("overallMeter"),
       stagesDone: document.getElementById("stagesDone"),
+      stagesTotal: document.getElementById("stagesTotal"),
       practiceStat: document.getElementById("practiceStat"),
       practiceUnit: document.getElementById("practiceUnit"),
       achievementStat: document.getElementById("achievementStat"),
@@ -2348,7 +3042,7 @@
     let syncConfig = { token: "", gistId: "" };
     let openStages = new Set([ROADMAP[0].id]);
     let openTopics = new Set([PRACTICE[0].id]);
-    let openTheoryStages = new Set(THEORY.length ? [THEORY[0].id] : []);
+    let openTheoryStages = initialTheoryStages();
     const noteTimers = new Map();
     let noteFlushNeeded = false;
     let syncTimer = null;
@@ -2528,9 +3222,12 @@
 
     // ---------- Состояние и localStorage ----------
     function createState() {
+      const seedTasks = {};
+      PLAN_SEED_DONE.forEach((key) => { seedTasks[key] = true; });
       return {
-        version: 2,
-        tasks: {},
+        version: 3,
+        planVersion: PLAN_VERSION,
+        tasks: seedTasks,
         theory: {},
         exercises: {},
         reviews: {},
@@ -2704,10 +3401,64 @@
       writeStorage(SYNC_KEY, syncConfig);
     }
 
-    function firstIncompleteStage() {
-      return ROADMAP.find((stage) =>
+    function firstIncompleteStageIndex() {
+      return ROADMAP.findIndex((stage) =>
         stage.tasks.some((_, index) => !state.tasks[taskKey(stage.id, index)])
-      ) || ROADMAP[0];
+      );
+    }
+
+    function firstIncompleteStage() {
+      const index = firstIncompleteStageIndex();
+      return index >= 0 ? ROADMAP[index] : ROADMAP[0];
+    }
+
+    function stageDoneCount(stage) {
+      return stage.tasks.reduce((count, _, index) =>
+        count + (state.tasks[taskKey(stage.id, index)] ? 1 : 0), 0);
+    }
+
+    function initialTheoryStageId() {
+      const stage = firstIncompleteStage();
+      const id = stage && stage.theory;
+      if (id && THEORY.some((item) => item.id === id)) return id;
+      return THEORY.length ? THEORY[0].id : "";
+    }
+
+    function initialTheoryStages() {
+      const id = initialTheoryStageId();
+      return new Set(id ? [id] : []);
+    }
+
+    function planStageStatus(stageIndex) {
+      const first = firstIncompleteStageIndex();
+      if (first === -1) return "done";
+      if (stageIndex < first) return "done";
+      if (stageIndex === first) return "in_progress";
+      return "locked";
+    }
+
+    function planTopicStatus(stage, stageIndex, topicIndex) {
+      if (state.tasks[taskKey(stage.id, topicIndex)]) return "done";
+      const stageStatus = planStageStatus(stageIndex);
+      if (stageStatus === "done") return "done";
+      if (stageStatus === "locked") return "locked";
+      const nextIndex = stage.tasks.findIndex((_, index) =>
+        !state.tasks[taskKey(stage.id, index)]);
+      return topicIndex === nextIndex ? "next" : "locked";
+    }
+
+    function statusIcon(status) {
+      if (status === "done") {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+      }
+      if (status === "next" || status === "in_progress") {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>';
+      }
+      return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+    }
+
+    function statusLabel(status) {
+      return (PLAN_STATUS_META[status] || PLAN_STATUS_META.locked).label;
     }
 
     // ---------- Тема ----------
@@ -2755,8 +3506,7 @@
       let tasks = 0;
       let stages = 0;
       ROADMAP.forEach((stage) => {
-        const done = stage.tasks.reduce((count, _, index) =>
-          count + (state.tasks[taskKey(stage.id, index)] ? 1 : 0), 0);
+        const done = stageDoneCount(stage);
         tasks += done;
         if (done === stage.tasks.length) stages += 1;
       });
@@ -2898,31 +3648,68 @@
       dom.roadmapList.innerHTML = ROADMAP.map((stage, stageIndex) => {
         const isOpen = openStages.has(stage.id);
         const taskCount = stage.tasks.length;
-        const doneCount = stage.tasks.reduce((count, _, index) =>
-          count + (state.tasks[taskKey(stage.id, index)] ? 1 : 0), 0);
+        const doneCount = stageDoneCount(stage);
         const percent = taskCount ? Math.round((doneCount / taskCount) * 100) : 0;
         const complete = taskCount > 0 && doneCount === taskCount;
-        const tasks = stage.tasks.map((task, taskIndex) => {
-          const key = taskKey(stage.id, taskIndex);
-          const checked = Boolean(state.tasks[key]);
+        const stageStatus = planStageStatus(stageIndex);
+        const theoryStage = stage.theory
+          ? THEORY.find((item) => item.id === stage.theory)
+          : null;
+        const topicsLabel = taskCount + " " + plural(taskCount, "тема", "темы", "тем");
+
+        const tasks = stage.tasks.map((topic, topicIndex) => {
+          const key = taskKey(stage.id, topicIndex);
+          const status = planTopicStatus(stage, stageIndex, topicIndex);
           return `
-            <li>
-              <label class="task${checked ? " is-done" : ""}">
-                <input type="checkbox" data-task="${escapeHtml(key)}"${checked ? " checked" : ""}>
-                <span class="check-box" aria-hidden="true"></span>
-                <span class="task-text">${escapeHtml(task)}</span>
-              </label>
+            <li class="plan-topic is-${status}">
+              <details class="plan-topic-box"${status === "next" ? " open" : ""}>
+                <summary class="plan-topic-summary">
+                  <span class="plan-topic-icon" aria-hidden="true">${statusIcon(status)}</span>
+                  <span class="plan-topic-main">
+                    <span class="plan-topic-title">${escapeHtml(topic.title)}</span>
+                    <span class="plan-topic-status">${statusLabel(status)}</span>
+                  </span>
+                  <span class="plan-topic-chevron" aria-hidden="true">+</span>
+                </summary>
+                <div class="plan-topic-body">
+                  <div class="plan-block">
+                    <span class="plan-label">пример</span>
+                    <pre class="plan-code"><code>${escapeHtml(topic.example)}</code></pre>
+                  </div>
+                  <div class="plan-block">
+                    <span class="plan-label">вопрос на понимание</span>
+                    <p class="plan-question">${escapeHtml(topic.question)}</p>
+                    <details class="plan-answer">
+                      <summary>Показать ответ</summary>
+                      <p>${escapeHtml(topic.answer)}</p>
+                    </details>
+                  </div>
+                  ${status === "next"
+                    ? `<button class="btn btn-primary plan-done-btn" type="button" data-topic-done="${escapeHtml(key)}">Отметить пройденным</button>`
+                    : ""}
+                  ${status === "done"
+                    ? '<p class="plan-note is-done">Тема пройдена. Можно вернуться к примеру или вопросу.</p>'
+                    : ""}
+                  ${status === "locked"
+                    ? '<p class="plan-note is-locked">Откроется, когда дойдёте до этой темы по порядку.</p>'
+                    : ""}
+                </div>
+              </details>
             </li>`;
         }).join("");
 
         return `
-          <article class="stage${isOpen ? " is-open" : ""}${complete ? " is-complete" : ""}" data-stage-id="${escapeHtml(stage.id)}">
+          <article class="stage is-status-${stageStatus}${isOpen ? " is-open" : ""}${complete ? " is-complete" : ""}" data-stage-id="${escapeHtml(stage.id)}" data-stage-status="${stageStatus}">
             <h2>
               <button class="stage-toggle" type="button" aria-expanded="${isOpen}" aria-controls="stage-body-${escapeHtml(stage.id)}">
                 <span class="stage-index" aria-hidden="true">${pad2(stageIndex + 1)}</span>
                 <span class="stage-heading">
                   <span class="stage-title">${escapeHtml(stage.title)}</span>
-                  <span class="stage-weeks"><span class="stage-count" data-stage-count>${doneCount}/${taskCount}</span> · ${escapeHtml(stage.weeks)}</span>
+                  <span class="stage-meta">
+                    <span class="stage-count" data-stage-count>${doneCount}/${taskCount}</span>
+                    <span class="stage-topics-label">${topicsLabel}</span>
+                    <span class="stage-status is-${stageStatus}">${statusIcon(stageStatus)}<span>${statusLabel(stageStatus)}</span></span>
+                  </span>
                   <span class="stage-barline" aria-hidden="true"><span data-stage-bar style="width:${percent}%"></span></span>
                 </span>
                 <span class="stage-chevron" aria-hidden="true">
@@ -2937,10 +3724,12 @@
                 </div>
                 <span class="stage-progress-text" data-stage-progress>выполнено ${doneCount} из ${taskCount}</span>
               </div>
-              <ul class="task-list">${tasks}</ul>
-              <button class="stage-theory-link" type="button" data-theory-jump="${escapeHtml(stage.id)}">
-                <span aria-hidden="true">📖</span> Теория этапа
-              </button>
+              <ul class="plan-list">${tasks}</ul>
+              ${theoryStage
+                ? `<button class="stage-theory-link" type="button" data-theory-jump="${escapeHtml(theoryStage.id)}">
+                    <span aria-hidden="true">📖</span> Теория: ${escapeHtml(theoryStage.title)}
+                  </button>`
+                : ""}
               <div class="notes-block">
                 <div class="notes-head">
                   <label for="notes-${escapeHtml(stage.id)}">Заметки</label>
@@ -3433,6 +4222,7 @@
       dom.overallBar.style.width = stats.percent + "%";
       dom.overallMeter.setAttribute("aria-valuenow", String(stats.percent));
       dom.stagesDone.textContent = String(stats.stages);
+      if (dom.stagesTotal) dom.stagesTotal.textContent = String(ROADMAP.length);
       dom.practiceStat.textContent = String(stats.practice);
       if (dom.practiceUnit) dom.practiceUnit.textContent = plural(stats.practice, "задача", "задачи", "задач");
       dom.achievementStat.textContent = String(Object.keys(state.achievements).length);
@@ -3449,32 +4239,6 @@
       dom.checklistCount.textContent = "выполнено " + done + " из " + CHECKLIST_MIN.length;
       dom.checklistBar.style.width = percent + "%";
       dom.checklistMeter.setAttribute("aria-valuenow", String(percent));
-    }
-
-    function updateStageUI(stageId) {
-      const stage = findStage(stageId);
-      const article = dom.roadmapList.querySelector(
-        '.stage[data-stage-id="' + cssEscape(stageId) + '"]'
-      );
-      if (!stage || !article) return;
-      const done = stage.tasks.reduce((count, _, index) =>
-        count + (state.tasks[taskKey(stage.id, index)] ? 1 : 0), 0);
-      const total = stage.tasks.length;
-      const percent = total ? Math.round((done / total) * 100) : 0;
-      const complete = total > 0 && done === total;
-      const wasComplete = article.classList.contains("is-complete");
-      article.classList.toggle("is-complete", complete);
-      if (complete && !wasComplete) {
-        pushLog("stage complete: " + stage.title, "k");
-        confetti();
-      }
-      article.querySelector("[data-stage-count]").textContent = done + "/" + total;
-      article.querySelectorAll("[data-stage-bar]").forEach((bar) => {
-        bar.style.width = percent + "%";
-      });
-      const stageMeter = article.querySelector("[data-stage-meter]");
-      if (stageMeter) stageMeter.setAttribute("aria-valuenow", String(percent));
-      article.querySelector("[data-stage-progress]").textContent = "выполнено " + done + " из " + total;
     }
 
 
@@ -4163,23 +4927,38 @@ func main() {
       noteFlushNeeded = false;
     }
 
-    function handleTaskChange(input) {
-      const key = input.dataset.task;
-      if (!key) return;
-      if (input.checked) {
-        state.tasks[key] = true;
-        bumpActivity();
-      } else {
-        delete state.tasks[key];
+    function handleTopicDone(key) {
+      const parts = String(key).split(":");
+      const stageId = parts[0];
+      const topicIndex = Number(parts[1]);
+      const stage = findStage(stageId);
+      if (!stage || !Number.isInteger(topicIndex) || !stage.tasks[topicIndex]) return;
+      const stageIndex = ROADMAP.indexOf(stage);
+      if (planTopicStatus(stage, stageIndex, topicIndex) !== "next") {
+        showToast("Сначала пройдите предыдущую тему");
+        return;
       }
-      const item = input.closest(".task");
-      if (item) item.classList.toggle("is-done", input.checked);
-      const stageId = key.split(":")[0];
-      updateStageUI(stageId);
+      const topic = stage.tasks[topicIndex];
+      state.tasks[key] = true;
+      bumpActivity();
+      const stageComplete = stageDoneCount(stage) === stage.tasks.length;
+      openStages.add(stage.id);
+      if (firstIncompleteStageIndex() !== -1) openStages.add(firstIncompleteStage().id);
+      const scrollY = window.scrollY;
+      renderRoadmap();
+      window.scrollTo({ top: scrollY, left: 0, behavior: "instant" });
       updateOverview();
-      const label = item ? item.querySelector(".task-text") : null;
-      if (input.checked) pushLog("task done: " + (label ? label.textContent : key), "k");
-      else pushLog("task undone: " + (label ? label.textContent : key));
+      pushLog("topic done: " + topic.title, "k");
+      if (stageComplete) {
+        pushLog("stage complete: " + stage.title, "k");
+        confetti();
+        showToast("Этап пройден: " + stage.title);
+      } else {
+        const nextIndex = stage.tasks.findIndex((_, index) =>
+          !state.tasks[taskKey(stage.id, index)]);
+        const nextTitle = nextIndex >= 0 ? stage.tasks[nextIndex].title : "";
+        showToast(nextTitle ? "Тема отмечена. Дальше: " + nextTitle : "Тема отмечена");
+      }
       markChanged();
     }
 
@@ -4306,7 +5085,7 @@ func main() {
       state.updatedAt = nowIso();
       openStages = new Set([firstIncompleteStage().id]);
       openTopics = new Set([PRACTICE[0].id]);
-      openTheoryStages = new Set(THEORY.length ? [THEORY[0].id] : []);
+      openTheoryStages = initialTheoryStages();
       saveStateLocal();
       applyTheme();
       renderAll();
@@ -4316,7 +5095,7 @@ func main() {
 
     function resetProgress() {
       if (!window.confirm(
-        "Сбросить задачи, теорию, упражнения, повторения, сниппеты, практику, ачивки, заметки и чек-лист? Это действие нельзя отменить."
+        "Сбросить теорию, упражнения, повторения, сниппеты, практику, ачивки, заметки и чек-лист? Роадмап вернётся к стартовым статусам плана. Это действие нельзя отменить."
       )) return;
       const theme = state.theme;
       const lcUsername = state.leetcode ? state.leetcode.username : "";
@@ -4332,7 +5111,7 @@ func main() {
       renderSnippets();
       openStages = new Set([ROADMAP[0].id]);
       openTopics = new Set([PRACTICE[0].id]);
-      openTheoryStages = new Set(THEORY.length ? [THEORY[0].id] : []);
+      openTheoryStages = initialTheoryStages();
       saveStateLocal();
       applyTheme();
       renderAll();
@@ -4651,6 +5430,11 @@ func main() {
     // ---------- События ----------
     function bindEvents() {
       dom.roadmapList.addEventListener("click", (event) => {
+        const doneBtn = event.target.closest("[data-topic-done]");
+        if (doneBtn) {
+          handleTopicDone(doneBtn.dataset.topicDone);
+          return;
+        }
         const jump = event.target.closest("[data-theory-jump]");
         if (jump) {
           const stageId = jump.dataset.theoryJump;
@@ -4673,9 +5457,6 @@ func main() {
         if (toggle) toggleStage(toggle);
       });
 
-      dom.roadmapList.addEventListener("change", (event) => {
-        if (event.target.matches("input[data-task]")) handleTaskChange(event.target);
-      });
 
       dom.roadmapList.addEventListener("input", (event) => {
         if (event.target.matches("textarea[data-notes]")) handleNoteInput(event.target);
@@ -4896,7 +5677,7 @@ func main() {
       dom.gistId.value = syncConfig.gistId;
       openStages = new Set([firstIncompleteStage().id]);
       openTopics = new Set([PRACTICE[0].id]);
-      openTheoryStages = new Set(THEORY.length ? [THEORY[0].id] : []);
+      openTheoryStages = initialTheoryStages();
       applyTheme();
       renderAll();
       renderRecipes();
